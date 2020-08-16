@@ -44,7 +44,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "c.hash = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
           + "WHERE c.timestamp >= {2} WITH c ORDER BY c.timestamp DESC WITH collect(c) as commits "
-          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c) RETURN collect(f) as deletes', {commits: commits}) "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: 2}]->(c) RETURN collect(f) as deletes', {commits: commits}) "
           + "YIELD value WITH commits, value.deletes as deletes "
           + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN]-(f) WHERE NOT(f IN {deletes}) "
           + "AND any(x IN includes WHERE f.path =~ x) AND none(x IN excludes WHERE f.path =~ x) "

@@ -51,7 +51,7 @@
                   <button mat-menu-item routerLink="/project-edit/{{p.project.id}}">Edit</button>
                   <button mat-menu-item routerLink="/project-configure/{{p.project.id}}">Configure</button>
                   <button mat-menu-item (click)="openAddToTeamDialog(p.project)">Add to team</button>
-                  <button (click)="openProjectDeletionDialog(p.project)" mat-menu-item>Remove</button>
+                  <button (click)="openProjectDeletionDialog(p)" mat-menu-item>Remove</button>
                 </mat-menu>
               </mat-card-title>
             </mat-card-header>

@@ -54,9 +54,10 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
    * @param commitHash The hash of the commit to move the branch to.
    */
   @Query(
-      "MATCH (p)-[:HAS_BRANCH]->(b) WHERE b.name = {1} WITH p, b LIMIT 1 "
+      "MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} AND b.name = {1} WITH p, b LIMIT 1 "
           + "OPTIONAL MATCH (b)-[r:POINTS_TO]->() DELETE r WITH p, b "
-          + "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.hash = {2} WITH c, b LIMIT 1 CREATE (b)-[r1:POINTS_TO]->(c) SET b.commitHash = c.hash")
+          + "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.hash = {2} WITH c, b LIMIT 1 "
+          + "CREATE (b)-[r1:POINTS_TO]->(c) SET b.commitHash = c.hash")
   void moveBranchToCommit(long projectId, @NonNull String branchName, @NonNull String commitHash);
 
   @Query(

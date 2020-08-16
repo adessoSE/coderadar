@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
-import io.reflectoring.coderadar.plugin.api.ChangeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,9 +20,7 @@ import org.springframework.data.neo4j.annotation.QueryResult;
 public class FileToCommitRelationshipEntity {
   private Long id;
 
-  @Property private ChangeType changeType;
-
-  @Property private String oldPath;
+  @Property private int changeType;
 
   @StartNode private FileEntity file;
 

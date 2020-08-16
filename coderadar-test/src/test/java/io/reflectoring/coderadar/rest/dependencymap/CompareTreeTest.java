@@ -67,7 +67,6 @@ class CompareTreeTest extends ControllerTestTemplate {
       CreateProjectCommand command = new CreateProjectCommand();
       command.setVcsUrl(testRepoURL.toString());
       command.setName("testSrc");
-      command.setVcsOnline(true);
       Project testProject = getProjectPort.get(createProjectUseCase.createProject(command));
       System.out.println(testProject.getId());
 

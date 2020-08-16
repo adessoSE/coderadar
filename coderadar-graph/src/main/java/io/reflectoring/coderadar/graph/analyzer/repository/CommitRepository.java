@@ -26,15 +26,15 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    *
    * @param projectId The id of the project.
    * @param includes The paths to include (regex)
-   * @param excludes The paths to exclude (regex)
+   * @param excludes The paths to exclude (regex)A
    * @return A list of commit entities with initialized FileToCommitRelationships.
    */
   @Query(
       "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c WHERE NOT c.analyzed "
-          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f) WHERE r.changeType <> \"DELETE\" AND any(x IN {2} WHERE f.path =~ x) "
-          + "AND none(x IN {3} WHERE f.path =~ x) RETURN c as commit, collect({path: f.path, id: ID(f)}) as files "
-          + "ORDER BY c.timestamp ASC")
+          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f) WHERE r.changeType <> 2 AND any(x IN {2} WHERE f.path =~ x) "
+          + "AND none(x IN {3} WHERE f.path =~ x) WITH c, collect({path: f.path, id: ID(f)}) as files ORDER BY c.timestamp ASC "
+          + "RETURN {id: ID(c), hash: c.hash} as commit, files")
   @NonNull
   List<Map<String, Object>> findByProjectIdNonAnalyzedWithFiles(
       long projectId,
@@ -105,13 +105,13 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * Creates [:CHANGED_IN] Relationships between files and commits.
    *
    * @param fileRels A list of maps, each containing the ids of the commit (commitId) and file
-   *     (fileId) as well as the change type (changeType) and old file path (oldPath).
+   *     (fileId) as well as the change type (changeType).
    */
   @Query(
       "UNWIND {0} as x "
           + "MATCH (c) WHERE ID(c) = x.commitId "
           + "MATCH (f) WHERE ID(f) = x.fileId "
-          + "CREATE (f)-[:CHANGED_IN {changeType: x.changeType, oldPath: x.oldPath}]->(c)")
+          + "CREATE (f)-[:CHANGED_IN {changeType: x.changeType}]->(c)")
   void createFileRelationships(List<HashMap<String, Object>> fileRels);
 
   /**
@@ -134,7 +134,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query(
       "MATCH (c) WHERE ID(c) = {0} WITH c "
           + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->(c) "
-          + "WHERE r.changeType = \"ADD\" OR r.changeType = \"RENAME\" DETACH DELETE c, f")
+          + "WHERE r.changeType = 0 OR r.changeType = 3 DETACH DELETE c, f")
   void deleteCommitAndAddedOrRenamedFiles(long commitId);
 
   @Query(

@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
-import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
@@ -60,9 +59,13 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     List<Commit> commits = new ArrayList<>(commitEntities.size());
     Map<Long, File> walkedFiles = new HashMap<>(commitEntities.size());
     for (Map<String, Object> result : commitEntities) {
-      var commitEntity = (CommitEntity) result.get("commit");
+      var commitEntity = (Map<String, Object>) result.get("commit");
       var files = (Object[]) result.get("files");
-      Commit commit = commitBaseDataMapper.mapGraphObject(commitEntity);
+      Commit commit =
+          new Commit()
+              .setId((Long) commitEntity.get("id"))
+              .setHash((String) commitEntity.get("hash"));
+
       commit.setTouchedFiles(new ArrayList<>(files.length));
       for (var val : files) {
         var filePathAndId = (Map) val;

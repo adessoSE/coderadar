@@ -25,7 +25,6 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsStart(new Date());
-    testProject.setVcsOnline(true);
     testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
 
@@ -33,7 +32,6 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
     testProject2.setVcsUrl("https://valid.url");
     testProject2.setName("project");
     testProject2.setVcsStart(new Date());
-    testProject2.setVcsOnline(true);
     testProject2.setVcsPassword("testPassword");
     testProject2.setVcsUsername("testUser");
 

@@ -8,12 +8,12 @@ import lombok.ToString;
 @Data
 public class Commit {
   private long id;
-  private String hash;
   private long timestamp;
+  private boolean analyzed;
+  private String hash;
   private String comment;
   private String author;
   private String authorEmail;
-  private boolean analyzed;
 
   @ToString.Exclude private List<Commit> parents;
 

@@ -194,7 +194,6 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
         files.put("commitId", commitEntity.getId());
         files.put("fileId", fileToCommitRelationship.getFile().getId());
         files.put("changeType", fileToCommitRelationship.getChangeType());
-        files.put("oldPath", fileToCommitRelationship.getOldPath());
         fileRels.add(files);
         if (fileRels.size() == fileBulkSaveChunk) {
           commitRepository.createFileRelationships(fileRels);
@@ -270,10 +269,10 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       }
       FileToCommitRelationshipEntity fileToCommitRelationshipEntity =
           new FileToCommitRelationshipEntity();
-      fileToCommitRelationshipEntity.setChangeType(fileToCommitRelationship.getChangeType());
+      fileToCommitRelationshipEntity.setChangeType(
+          fileToCommitRelationship.getChangeType().ordinal());
       fileToCommitRelationshipEntity.setCommit(commitEntity);
       fileToCommitRelationshipEntity.setFile(fileEntity);
-      fileToCommitRelationshipEntity.setOldPath(fileToCommitRelationship.getOldPath());
       rels.add(fileToCommitRelationshipEntity);
     }
     return rels;
@@ -304,8 +303,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
           new ArrayList<>(commit.getTouchedFiles().size());
       for (FileToCommitRelationship rel : commit.getTouchedFiles()) {
         FileToCommitRelationshipEntity newRel = new FileToCommitRelationshipEntity();
-        newRel.setChangeType(rel.getChangeType());
-        newRel.setOldPath(rel.getOldPath());
+        newRel.setChangeType(rel.getChangeType().ordinal());
         newRel.setCommit(commitEntity);
         FileEntity fileEntity =
             fileRepository.getFileInProjectBySequenceId(projectId, rel.getFile().getSequenceId());

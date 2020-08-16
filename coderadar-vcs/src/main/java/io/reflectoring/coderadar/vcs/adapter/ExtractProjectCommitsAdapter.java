@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
+
   /**
    * @param repositoryRoot The root path of the local repository.
    * @param range The date range in which to collect commits
@@ -36,7 +37,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    */
   public List<Commit> extractCommits(String repositoryRoot, DateRange range) {
     try (Git git = Git.open(new java.io.File(repositoryRoot))) {
-
       List<Commit> result = getCommits(range, repositoryRoot);
       setCommitsFiles(git, result);
       return result;
@@ -50,7 +50,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     List<RevCommit> revCommits = RevCommitHelper.getRevCommits(repositoryRoot);
 
     int revCommitsSize = revCommits.size();
-    HashMap<String, Commit> map = new HashMap<>(revCommitsSize);
+    Map<String, Commit> map = new HashMap<>(revCommitsSize);
     for (RevCommit rc : revCommits) {
       if (isInDateRange(range, rc)) {
         Commit commit = map.get(rc.getName());
@@ -80,12 +80,16 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
 
   private Commit mapRevCommitToCommit(RevCommit rc) {
     Commit commit = new Commit();
-    commit.setHash(rc.getName());
+    commit.setHash(rc.name());
+
     PersonIdent personIdent = rc.getAuthorIdent();
     commit.setAuthor(personIdent.getName());
     commit.setAuthorEmail(personIdent.getEmailAddress());
-    commit.setComment(rc.getShortMessage());
     commit.setTimestamp(personIdent.getWhen().getTime());
+
+    // We trim the message to 200 chars
+    String message = rc.getShortMessage();
+    commit.setComment(message.substring(0, Math.min(message.length(), 200)));
     return commit;
   }
 
@@ -96,9 +100,9 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @throws IOException Thrown if the commit tree cannot be walked.
    * @return The current sequence id.
    */
-  private long setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, List<File>> files)
+  private int setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, List<File>> files)
       throws IOException {
-    long sequenceId = 0;
+    int sequenceId = 0;
     RevCommit gitCommit = findCommit(git, firstCommit.getHash());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
       assert gitCommit != null;
@@ -110,7 +114,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         file.setPath(treeWalk.getPathString());
 
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-        fileToCommitRelationship.setOldPath("/dev/null");
         fileToCommitRelationship.setChangeType(ChangeType.ADD);
         fileToCommitRelationship.setFile(file);
 
@@ -133,7 +136,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     int commitsSize = commits.size();
     HashMap<String, List<File>> files = new HashMap<>((int) (commitsSize / 0.75) + 1);
     commits.get(0).setTouchedFiles(new ArrayList<>(commitsSize));
-    long sequenceId = setFirstCommitFiles(git, commits.get(0), files);
+    int sequenceId = setFirstCommitFiles(git, commits.get(0), files);
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
     diffFormatter.setRepository(git.getRepository());
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
@@ -167,11 +170,11 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    *
    * @param diff The diff entry to process.
    * @param files All of the files walked so far.
-   * @param sequenceId One element array with the current file sequence number.
+   * @param sequenceId the current file sequence number.
    * @param commit The current commit.
    */
   private void processDiffEntry(
-      DiffEntry diff, HashMap<String, List<File>> files, Commit commit, long sequenceId) {
+      DiffEntry diff, HashMap<String, List<File>> files, Commit commit, int sequenceId) {
     ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
     if (changeType == ChangeType.UNCHANGED) {
       return;
@@ -179,7 +182,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     List<File> filesWithPath = computeFilesToSave(diff, files, sequenceId);
     for (File file : filesWithPath) {
       FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-      fileToCommitRelationship.setOldPath(diff.getOldPath());
       fileToCommitRelationship.setChangeType(changeType);
       fileToCommitRelationship.setFile(file);
       commit.getTouchedFiles().add(fileToCommitRelationship);
@@ -192,11 +194,11 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    *
    * @param diff The current diff entry.
    * @param files The list of walked files.
-   * @param sequenceId One element array with the current file sequence number.
+   * @param sequenceId the current file sequence number.
    * @return List of files to save.
    */
   private List<File> computeFilesToSave(
-      DiffEntry diff, HashMap<String, List<File>> files, long sequenceId) {
+      DiffEntry diff, HashMap<String, List<File>> files, int sequenceId) {
     String path = getFilepathFromDiffEntry(diff);
     List<File> existingFilesWithPath = files.get(path);
     List<File> filesToSave;
@@ -257,9 +259,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    */
   private RevCommit findCommit(Git gitClient, String commitName) {
     try {
-      ObjectId commitId = gitClient.getRepository().resolve(commitName);
-      Iterable<RevCommit> commits = gitClient.log().add(commitId).call();
-      return commits.iterator().next();
+      return gitClient.getRepository().parseCommit(ObjectId.fromString(commitName));
     } catch (MissingObjectException e) {
       return null;
     } catch (Exception e) {

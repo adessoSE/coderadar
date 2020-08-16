@@ -26,7 +26,6 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsStart(new Date());
-    testProject.setVcsOnline(true);
     testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
     testProject.setWorkdirName(UUID.randomUUID().toString());
@@ -49,7 +48,6 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
               Assertions.assertEquals("username", project.getVcsUsername());
               Assertions.assertEquals("password", project.getVcsPassword());
               Assertions.assertEquals("http://valid.url", project.getVcsUrl());
-              Assertions.assertTrue(project.isVcsOnline());
             })
         .andDo(document("projects/update"));
   }

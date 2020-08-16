@@ -86,7 +86,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     project.setName(command.getName());
     project.setVcsUsername(command.getVcsUsername());
     project.setVcsPassword(command.getVcsPassword());
-    project.setVcsOnline(command.isVcsOnline());
     boolean urlChanged = false;
 
     if (!project.getVcsUrl().equals(command.getVcsUrl())) {

@@ -63,16 +63,16 @@ export class MainDashboardComponent implements OnInit {
       });
   }
 
-  openProjectDeletionDialog(projectToBeDeleted: Project) {
+  openProjectDeletionDialog(projectToBeDeleted: ProjectWithRoles) {
     this.dialogRef = this.dialog.open(DeleteProjectDialogComponent, {
       data: {
-        project: projectToBeDeleted
+        project: projectToBeDeleted.project
       }
     });
 
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.deleteProject(result);
+        this.deleteProject(projectToBeDeleted);
       }
     });
   }

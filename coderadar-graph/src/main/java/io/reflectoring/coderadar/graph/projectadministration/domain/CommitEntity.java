@@ -15,11 +15,11 @@ import org.neo4j.ogm.annotation.Relationship;
 @ToString
 public class CommitEntity {
   private Long id;
-  private String hash;
   private long timestamp;
+  private boolean analyzed;
+  private String hash;
   private String comment;
   private String author;
-  private boolean analyzed;
 
   private String authorEmail;
 

@@ -11,6 +11,5 @@ import lombok.Data;
 @Data
 public class FileToCommitRelationship {
   private ChangeType changeType;
-  private String oldPath;
   private File file;
 }

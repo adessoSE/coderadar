@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class File {
   private long id;
+  private int sequenceId;
   private String path;
-  private long sequenceId;
 
   @EqualsAndHashCode.Exclude private List<File> oldFiles = Collections.emptyList();
 }

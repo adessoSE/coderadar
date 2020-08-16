@@ -19,7 +19,6 @@ class ProjectMapperTest {
             .setVcsStart(new Date(123L))
             .setVcsPassword("testPassword")
             .setVcsUsername("testUsername")
-            .setVcsOnline(true)
             .setWorkdirName("workdir")
             .setVcsUrl("testUrl");
 
@@ -30,7 +29,6 @@ class ProjectMapperTest {
     Assertions.assertEquals("testUrl", result.getVcsUrl());
     Assertions.assertEquals(new Date(123L), result.getVcsStart());
     Assertions.assertEquals("workdir", result.getWorkdirName());
-    Assertions.assertTrue(result.isVcsOnline());
     Assertions.assertNull(result.getId());
   }
 
@@ -43,7 +41,6 @@ class ProjectMapperTest {
             .setVcsStart(new Date(123L))
             .setVcsPassword("testPassword")
             .setVcsUsername("testUsername")
-            .setVcsOnline(true)
             .setWorkdirName("workdir")
             .setVcsUrl("testUrl");
     Project result = projectMapper.mapGraphObject(testProject);
@@ -53,7 +50,6 @@ class ProjectMapperTest {
     Assertions.assertEquals("testUrl", result.getVcsUrl());
     Assertions.assertEquals(new Date(123L), result.getVcsStart());
     Assertions.assertEquals("workdir", result.getWorkdirName());
-    Assertions.assertTrue(result.isVcsOnline());
     Assertions.assertEquals(1L, result.getId());
   }
 }

@@ -13,7 +13,6 @@ public class GetProjectResponseMapper {
         .setName(project.getName())
         .setId(project.getId())
         .setStartDate(project.getVcsStart())
-        .setVcsOnline(project.isVcsOnline())
         .setVcsUrl(project.getVcsUrl())
         .setVcsUsername(project.getVcsUsername());
   }

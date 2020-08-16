@@ -21,7 +21,6 @@ public class ProjectEntity {
   private String vcsUrl;
   private String vcsUsername;
   private String vcsPassword;
-  private boolean vcsOnline;
   private Date vcsStart;
 
   private boolean isBeingProcessed = false;
@@ -36,13 +35,17 @@ public class ProjectEntity {
 
   @Relationship(type = "CONTAINS")
   @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<FileEntity> files = new ArrayList<>();
 
   @Relationship(type = "CONTAINS_COMMIT")
   @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<CommitEntity> commits = new ArrayList<>();
 
   @Relationship(type = "HAS")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<FilePatternEntity> filePatterns = new ArrayList<>();
 
   @Relationship(type = "HAS")
@@ -51,5 +54,7 @@ public class ProjectEntity {
   private List<AnalyzerConfigurationEntity> analyzerConfigurations = new ArrayList<>();
 
   @Relationship(type = "HAS_BRANCH")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<BranchEntity> branches = new ArrayList<>();
 }

@@ -12,7 +12,6 @@ public class ProjectMapper implements Mapper<Project, ProjectEntity> {
     project.setId(nodeEntity.getId());
     project.setName(nodeEntity.getName());
     project.setVcsStart(nodeEntity.getVcsStart());
-    project.setVcsOnline(nodeEntity.isVcsOnline());
     project.setVcsUsername(nodeEntity.getVcsUsername());
     project.setVcsPassword(nodeEntity.getVcsPassword());
     project.setVcsUrl(nodeEntity.getVcsUrl());
@@ -25,7 +24,6 @@ public class ProjectMapper implements Mapper<Project, ProjectEntity> {
     ProjectEntity project = new ProjectEntity();
     project.setName(domainObject.getName());
     project.setVcsStart(domainObject.getVcsStart());
-    project.setVcsOnline(domainObject.isVcsOnline());
     project.setVcsUsername(domainObject.getVcsUsername());
     project.setVcsPassword(domainObject.getVcsPassword());
     project.setVcsUrl(domainObject.getVcsUrl());
