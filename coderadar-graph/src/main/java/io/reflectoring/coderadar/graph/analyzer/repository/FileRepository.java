@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.query.domain.FileAndCommitsForTimePeriodQueryResult;
-import java.util.HashMap;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -26,10 +25,10 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    */
   @Query(
       "UNWIND {0} as x "
-          + "MATCH (f1) WHERE ID(f1) = x.fileId1 "
-          + "MATCH (f2) WHERE ID(f2) = x.fileId2 "
+          + "MATCH (f1) WHERE ID(f1) = x[0] "
+          + "MATCH (f2) WHERE ID(f2) = x[1] "
           + "CREATE (f1)-[:RENAMED_FROM]->(f2)")
-  void createRenameRelationships(@NonNull List<HashMap<String, Object>> renameRels);
+  void createRenameRelationships(@NonNull List<long[]> renameRels);
 
   /**
    * @param projectId The project id.
@@ -44,7 +43,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "c.hash = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
           + "WHERE c.timestamp >= {2} WITH c ORDER BY c.timestamp DESC WITH collect(c) as commits "
-          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: 2}]->(c) RETURN collect(f) as deletes', {commits: commits}) "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:DELETED_IN]->(c) RETURN collect(f) as deletes', {commits: commits}) "
           + "YIELD value WITH commits, value.deletes as deletes "
           + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN]-(f) WHERE NOT(f IN {deletes}) "
           + "AND any(x IN includes WHERE f.path =~ x) AND none(x IN excludes WHERE f.path =~ x) "

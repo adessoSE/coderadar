@@ -5,7 +5,6 @@ import io.reflectoring.coderadar.graph.projectadministration.project.adapter.Com
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,7 +65,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
               .setId((Long) commitEntity.get("id"))
               .setHash((String) commitEntity.get("hash"));
 
-      commit.setTouchedFiles(new ArrayList<>(files.length));
+      commit.setChangedFiles(new ArrayList<>(files.length));
       for (var val : files) {
         var filePathAndId = (Map) val;
         var fileId = (Long) filePathAndId.get("id");
@@ -74,11 +73,9 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         if (fileId == null || filepath == null) {
           continue;
         }
-        FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
         File file =
             walkedFiles.computeIfAbsent(fileId, id -> new File().setId(id).setPath(filepath));
-        fileToCommitRelationship.setFile(file);
-        commit.getTouchedFiles().add(fileToCommitRelationship);
+        commit.getChangedFiles().add(file);
       }
       commits.add(commit);
     }

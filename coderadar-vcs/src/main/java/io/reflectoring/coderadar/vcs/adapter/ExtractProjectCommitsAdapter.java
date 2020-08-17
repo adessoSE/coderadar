@@ -4,7 +4,6 @@ import com.google.common.collect.Iterables;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
-import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
@@ -35,14 +34,11 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @return A list of fully initialized Commit objects (containing files and fileToCommit
    *     relationships).
    */
-  public List<Commit> extractCommits(String repositoryRoot, DateRange range) {
+  public List<Commit> extractCommits(String repositoryRoot, DateRange range) throws IOException {
     try (Git git = Git.open(new java.io.File(repositoryRoot))) {
       List<Commit> result = getCommits(range, repositoryRoot);
       setCommitsFiles(git, result);
       return result;
-    } catch (Exception e) {
-      throw new IllegalStateException(
-          String.format("Error accessing git repository at %s", repositoryRoot), e);
     }
   }
 
@@ -104,6 +100,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       throws IOException {
     int sequenceId = 0;
     RevCommit gitCommit = findCommit(git, firstCommit.getHash());
+    firstCommit.setChangedFiles(new ArrayList<>());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
       assert gitCommit != null;
       treeWalk.setRecursive(true);
@@ -112,12 +109,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         File file = new File();
         file.setSequenceId(sequenceId++);
         file.setPath(treeWalk.getPathString());
-
-        FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-        fileToCommitRelationship.setChangeType(ChangeType.ADD);
-        fileToCommitRelationship.setFile(file);
-
-        firstCommit.getTouchedFiles().add(fileToCommitRelationship);
+        firstCommit.getChangedFiles().add(file);
         List<File> fileList = new ArrayList<>(1);
         fileList.add(file);
         files.put(file.getPath(), fileList);
@@ -135,7 +127,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     commits.sort(Comparator.comparingLong(Commit::getTimestamp));
     int commitsSize = commits.size();
     HashMap<String, List<File>> files = new HashMap<>((int) (commitsSize / 0.75) + 1);
-    commits.get(0).setTouchedFiles(new ArrayList<>(commitsSize));
     int sequenceId = setFirstCommitFiles(git, commits.get(0), files);
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
     diffFormatter.setRepository(git.getRepository());
@@ -155,12 +146,11 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
             }
           }
         }
-        commits.get(i).setTouchedFiles(new ArrayList<>(diffs.size()));
+        commits.get(i).setChangedFiles(new ArrayList<>(diffs.size()));
+        commits.get(i).setDeletedFiles(new ArrayList<>());
         for (DiffEntry diff : diffs) {
           processDiffEntry(diff, files, commits.get(i), sequenceId++);
         }
-      } else {
-        commits.get(i).setTouchedFiles(Collections.emptyList());
       }
     }
   }
@@ -181,10 +171,11 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     }
     List<File> filesWithPath = computeFilesToSave(diff, files, sequenceId);
     for (File file : filesWithPath) {
-      FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-      fileToCommitRelationship.setChangeType(changeType);
-      fileToCommitRelationship.setFile(file);
-      commit.getTouchedFiles().add(fileToCommitRelationship);
+      if (!changeType.equals(ChangeType.DELETE)) {
+        commit.getChangedFiles().add(file);
+      } else {
+        commit.getDeletedFiles().add(file);
+      }
     }
   }
 

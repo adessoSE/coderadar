@@ -4,8 +4,6 @@ import static io.reflectoring.coderadar.projectadministration.service.project.Cr
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
-import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
@@ -19,7 +17,6 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.get.Li
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
-import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
@@ -131,9 +128,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
                 createModulePort.createModule(module.getPath(), projectId);
               }
 
-            } catch (UnableToUpdateRepositoryException
-                | ModuleAlreadyExistsException
-                | ModulePathInvalidException e) {
+            } catch (Exception e) {
               logger.error("Unable to update project! {}", e.getMessage());
             }
           },

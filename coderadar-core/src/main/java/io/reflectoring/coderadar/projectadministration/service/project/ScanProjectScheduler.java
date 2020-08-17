@@ -4,8 +4,6 @@ import static io.reflectoring.coderadar.projectadministration.service.project.Cr
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.service.AnalyzingService;
-import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
@@ -19,7 +17,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
-import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
@@ -103,11 +100,11 @@ public class ScanProjectScheduler {
 
   /** Starts update tasks for all projects that don't have one running already. */
   private void scheduleCheckTask() {
-    for (Project project : listProjectsPort.getProjects()) {
+    /*    for (Project project : listProjectsPort.getProjects()) {
       if (!tasks.containsKey(project.getId())) {
         scheduleUpdateTask(project.getId());
       }
-    }
+    }*/
   }
 
   /**
@@ -192,9 +189,7 @@ public class ScanProjectScheduler {
         }
       }
       return updatedBranches.stream().map(Branch::getName).collect(Collectors.toList());
-    } catch (UnableToUpdateRepositoryException
-        | ModuleAlreadyExistsException
-        | ModulePathInvalidException e) {
+    } catch (Exception e) {
       logger.error("Unable to update the project: {}", e.getMessage());
     }
     return Collections.emptyList();

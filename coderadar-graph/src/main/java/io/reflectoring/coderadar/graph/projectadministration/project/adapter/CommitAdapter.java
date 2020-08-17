@@ -7,12 +7,10 @@ import io.reflectoring.coderadar.graph.projectadministration.ForceUpdateChecker;
 import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
-import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
-import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import java.util.*;
@@ -132,77 +130,108 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
    * Sets the [:IS_CHILD_OF] relationship between commit nodes
    *
    * @param commitEntities All of the (already saved) commit entities.
-   * @param commitBulkSaveChunk The amount of commit parent relationships to save at once.
+   * @param saveChunk The amount of commit parent relationships to save at once.
    */
-  private void saveCommitParentsRelationships(
-      List<CommitEntity> commitEntities, int commitBulkSaveChunk) {
-    commitBulkSaveChunk = commitBulkSaveChunk / 2 + commitBulkSaveChunk;
-    List<HashMap<String, Object>> parentRels = new ArrayList<>(commitBulkSaveChunk);
+  private void saveCommitParentsRelationships(List<CommitEntity> commitEntities, int saveChunk) {
+
+    List<Long[]> parentRels = new ArrayList<>(saveChunk);
+
+    // Instead of creating lots of arrays in the loops below, we just
+    // fill the list now and reuse the arrays later.
+    for (int i = 0; i < saveChunk; i++) {
+      parentRels.add(new Long[] {0L, 0L, 0L});
+    }
+
+    int i = 0;
     for (CommitEntity commitEntity : commitEntities) {
+      long j = 0;
       for (CommitEntity parent : commitEntity.getParents()) {
-        HashMap<String, Object> parents = new HashMap<>(4);
-        parents.put("id1", commitEntity.getId());
-        parents.put("id2", parent.getId());
-        parentRels.add(parents);
-        if (parentRels.size() == commitBulkSaveChunk) {
+        parentRels.get(i)[0] = commitEntity.getId();
+        parentRels.get(i)[1] = parent.getId();
+        parentRels.get(i++)[2] = commitEntity.getParents().size() == 1 ? null : j++;
+        if (i == saveChunk) {
           commitRepository.createParentRelationships(parentRels);
-          parentRels.clear();
+          i = 0;
         }
       }
     }
-    commitRepository.createParentRelationships(parentRels);
+    commitRepository.createParentRelationships(parentRels.subList(0, i));
   }
 
   /**
    * Sets the [:RENAMED_FROM] relationship between file nodes
    *
    * @param fileEntities All of the (already saved) file entities.
-   * @param fileBulkSaveChunk The amount of file rename relationships to save at once.
+   * @param saveChunk The amount of file rename relationships to save at once.
    */
-  private void saveFileRenameRelationships(List<FileEntity> fileEntities, int fileBulkSaveChunk) {
-    List<HashMap<String, Object>> renameRels = new ArrayList<>(fileBulkSaveChunk);
+  private void saveFileRenameRelationships(List<FileEntity> fileEntities, int saveChunk) {
+    List<long[]> renameRels = new ArrayList<>(saveChunk);
+
+    // Instead of creating lots of arrays in the loops below, we just
+    // fill the list now and reuse the arrays later.
+    for (int i = 0; i < saveChunk; i++) {
+      renameRels.add(new long[] {0L, 0L});
+    }
+
+    int i = 0;
     for (FileEntity fileEntity : fileEntities) {
       for (FileEntity oldFile : fileEntity.getOldFiles()) {
-        HashMap<String, Object> rename = new HashMap<>(4);
-        rename.put("fileId1", fileEntity.getId());
-        rename.put("fileId2", oldFile.getId());
-        renameRels.add(rename);
-      }
-      if (renameRels.size() == fileBulkSaveChunk) {
-        fileRepository.createRenameRelationships(renameRels);
-        renameRels.clear();
+        renameRels.get(i)[0] = fileEntity.getId();
+        renameRels.get(i++)[1] = oldFile.getId();
+        if (i == saveChunk) {
+          fileRepository.createRenameRelationships(renameRels);
+          i = 0;
+        }
       }
     }
-    fileRepository.createRenameRelationships(renameRels);
+    fileRepository.createRenameRelationships(renameRels.subList(0, i));
   }
 
   /**
-   * Sets the [:CHANGED_IN] relationships between file and commit nodes
+   * Sets the [:CHANGED_IN] and [:DELETED_IN] relationships between file and commit nodes
    *
    * @param commitEntities All of the (already saved) commit entities.
    * @param fileBulkSaveChunk The amount of file to commits relationships to save at once.
    */
   private void saveFileToCommitRelationships(
       List<CommitEntity> commitEntities, int fileBulkSaveChunk) {
-    List<HashMap<String, Object>> fileRels = new ArrayList<>(fileBulkSaveChunk);
-    int entitiesAmount = commitEntities.size();
-    for (int i = 0; i < entitiesAmount; i++) {
-      CommitEntity commitEntity = commitEntities.get(i);
-      for (FileToCommitRelationshipEntity fileToCommitRelationship :
-          commitEntity.getTouchedFiles()) {
-        HashMap<String, Object> files = new HashMap<>(8);
-        files.put("commitId", commitEntity.getId());
-        files.put("fileId", fileToCommitRelationship.getFile().getId());
-        files.put("changeType", fileToCommitRelationship.getChangeType());
-        fileRels.add(files);
-        if (fileRels.size() == fileBulkSaveChunk) {
+    List<long[]> fileRels = new ArrayList<>(fileBulkSaveChunk);
+
+    // Instead of creating lots of arrays in the loops below, we just
+    // fill the list now and reuse the arrays later.
+    for (int i = 0; i < fileBulkSaveChunk; i++) {
+      fileRels.add(new long[] {0L, 0L});
+    }
+
+    // Saving must be done in chunks to prevent out-of-memory errors in neo4j.
+
+    // Save the changed files (everything except deletes)
+    int i = 0;
+    for (CommitEntity commitEntity : commitEntities) {
+      for (FileEntity fileEntity : commitEntity.getChangedFiles()) {
+        fileRels.get(i)[0] = commitEntity.getId();
+        fileRels.get(i++)[1] = fileEntity.getId();
+        if (i == fileBulkSaveChunk) {
           commitRepository.createFileRelationships(fileRels);
-          fileRels.clear();
+          i = 0;
         }
-        commitEntities.set(i, null);
       }
     }
-    commitRepository.createFileRelationships(fileRels);
+    commitRepository.createFileRelationships(fileRels.subList(0, i));
+
+    // Save DELETED_IN relationships
+    i = 0;
+    for (CommitEntity commitEntity : commitEntities) {
+      for (FileEntity fileEntity : commitEntity.getDeletedFiles()) {
+        fileRels.get(i)[0] = commitEntity.getId();
+        fileRels.get(i++)[1] = fileEntity.getId();
+        if (i == fileBulkSaveChunk) {
+          commitRepository.createFileDeleteRelationships(fileRels);
+          i = 0;
+        }
+      }
+    }
+    commitRepository.createFileDeleteRelationships(fileRels.subList(0, i));
   }
 
   /**
@@ -236,7 +265,8 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
         }
         commitEntity.setParents(parents);
       }
-      commitEntity.setTouchedFiles(getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles));
+      commitEntity.setChangedFiles(getFileEntities(commit.getChangedFiles(), walkedFiles));
+      commitEntity.setDeletedFiles(getFileEntities(commit.getDeletedFiles(), walkedFiles));
     }
     return result;
   }
@@ -244,43 +274,33 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   /**
    * Maps FileToCommitRelationships to FileToCommitRelationshipEntities.
    *
-   * @param relationships The relationships that we have to map to DB entities.
-   * @param commitEntity The target commitEntity
+   * @param files The files that we have to map to DB entities.
    * @param walkedFiles Files we have already walked. We need this to prevent endless recursion.
    * @return A list of FileToCommitRelationshipEntity objects with initialized FileEntity fields.
    */
-  private List<FileToCommitRelationshipEntity> getFiles(
-      List<FileToCommitRelationship> relationships,
-      CommitEntity commitEntity,
-      IdentityHashMap<File, FileEntity> walkedFiles) {
+  private List<FileEntity> getFileEntities(
+      List<File> files, IdentityHashMap<File, FileEntity> walkedFiles) {
 
-    List<FileToCommitRelationshipEntity> rels = new ArrayList<>(relationships.size());
-    for (FileToCommitRelationship fileToCommitRelationship : relationships) {
-      FileEntity fileEntity = walkedFiles.get(fileToCommitRelationship.getFile());
+    List<FileEntity> rels = new ArrayList<>(files.size());
+    for (File file : files) {
+      FileEntity fileEntity = walkedFiles.get(file);
       if (fileEntity == null) {
-        fileEntity = fileBaseDataMapper.mapDomainObject(fileToCommitRelationship.getFile());
-        walkedFiles.put(fileToCommitRelationship.getFile(), fileEntity);
-        List<FileEntity> oldFiles =
-            new ArrayList<>(fileToCommitRelationship.getFile().getOldFiles().size());
-        for (File oldFile : fileToCommitRelationship.getFile().getOldFiles()) {
+        fileEntity = fileBaseDataMapper.mapDomainObject(file);
+        walkedFiles.put(file, fileEntity);
+        List<FileEntity> oldFiles = new ArrayList<>(file.getOldFiles().size());
+        for (File oldFile : file.getOldFiles()) {
           oldFiles.add(walkedFiles.get(oldFile));
         }
         fileEntity.setOldFiles(oldFiles);
       }
-      FileToCommitRelationshipEntity fileToCommitRelationshipEntity =
-          new FileToCommitRelationshipEntity();
-      fileToCommitRelationshipEntity.setChangeType(
-          fileToCommitRelationship.getChangeType().ordinal());
-      fileToCommitRelationshipEntity.setCommit(commitEntity);
-      fileToCommitRelationshipEntity.setFile(fileEntity);
-      rels.add(fileToCommitRelationshipEntity);
+      rels.add(fileEntity);
     }
     return rels;
   }
 
   private void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
 
-    // Get all of the existing commits and save them in a map
+    /* // Get all of the existing commits and save them in a map
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
     IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
     commitRepository.findByProjectId(projectId).forEach(c -> walkedCommits.put(c.getHash(), c));
@@ -327,7 +347,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       newCommitEntities.add(commitEntity);
     }
     List<FileEntity> newFileEntities = new ArrayList<>(walkedFiles.values());
-    saveCommitAndFileEntities(projectId, newCommitEntities, newFileEntities, updatedBranches);
+    saveCommitAndFileEntities(projectId, newCommitEntities, newFileEntities, updatedBranches);*/
   }
 
   private void saveCommitAndFileEntities(
@@ -345,14 +365,16 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       fileBulkSaveChunk = fileEntities.size();
     }
 
+    // Parent rels = amount of commits * 1.5
+
     saveCommitsWithDepthZero(commitEntities, commitBulkSaveChunk);
     saveFilesWithDepthZero(fileEntities, fileBulkSaveChunk);
     attachCommitsAndFilesToProject(
         projectId, commitEntities, fileEntities, commitBulkSaveChunk, fileBulkSaveChunk);
     setBranchPointers(projectId, branches);
-    saveCommitParentsRelationships(commitEntities, commitBulkSaveChunk);
+    saveCommitParentsRelationships(commitEntities, commitBulkSaveChunk / 2 + commitBulkSaveChunk);
     saveFileToCommitRelationships(commitEntities, fileBulkSaveChunk);
-    saveFileRenameRelationships(fileEntities, fileBulkSaveChunk);
+    saveFileRenameRelationships(fileEntities, fileBulkSaveChunk / 2);
   }
 
   @Override

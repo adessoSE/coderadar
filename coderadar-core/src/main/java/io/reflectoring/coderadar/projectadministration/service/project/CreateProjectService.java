@@ -128,7 +128,7 @@ public class CreateProjectService implements CreateProjectUseCase {
             saveCommitPort.saveCommits(commits, branches, project.getId());
             logger.info("Saved project {}", project.getName());
           } catch (Exception e) {
-            logger.error("Unable to create project: {}", e.getCause().getMessage());
+            logger.error("Unable to create project: {}", e.getMessage());
           }
         },
         project.getId());

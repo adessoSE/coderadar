@@ -9,7 +9,6 @@ import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
-import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
@@ -48,10 +47,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
   public List<MetricValue> analyzeCommit(
       Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
     List<MetricValue> metricValues = new ArrayList<>();
-    List<File> files = new ArrayList<>(commit.getTouchedFiles().size());
-    for (FileToCommitRelationship ftr : commit.getTouchedFiles()) {
-      files.add(ftr.getFile());
-    }
+    List<File> files = commit.getChangedFiles();
 
     analyzeBulk(commit.getHash(), files, analyzers, project)
         .forEach(

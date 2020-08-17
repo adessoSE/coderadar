@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +26,12 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @param projectId The id of the project.
    * @param includes The paths to include (regex)
    * @param excludes The paths to exclude (regex)A
-   * @return A list of commit entities with initialized FileToCommitRelationships.
+   * @return A list of commit entities with initialized changedFiles except deletes.
    */
   @Query(
       "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c WHERE NOT c.analyzed "
-          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f) WHERE r.changeType <> 2 AND any(x IN {2} WHERE f.path =~ x) "
+          + "OPTIONAL MATCH (c)<-[:CHANGED_IN]-(f) WHERE any(x IN {2} WHERE f.path =~ x) "
           + "AND none(x IN {3} WHERE f.path =~ x) WITH c, collect({path: f.path, id: ID(f)}) as files ORDER BY c.timestamp ASC "
           + "RETURN {id: ID(c), hash: c.hash} as commit, files")
   @NonNull
@@ -96,10 +95,10 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    */
   @Query(
       "UNWIND {0} as c "
-          + "MATCH (c1) WHERE ID(c1) = c.id1 "
-          + "MATCH (c2) WHERE ID(c2) = c.id2 "
-          + "CREATE (c1)-[:IS_CHILD_OF {parentOrder: c.parentOrder}]->(c2)")
-  void createParentRelationships(List<HashMap<String, Object>> parentRels);
+          + "MATCH (c1) WHERE ID(c1) = c[0] "
+          + "MATCH (c2) WHERE ID(c2) = c[1] "
+          + "CREATE (c1)-[:IS_CHILD_OF {parentOrder: c[2]}]->(c2)")
+  void createParentRelationships(List<Long[]> parentRels);
 
   /**
    * Creates [:CHANGED_IN] Relationships between files and commits.
@@ -109,10 +108,17 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    */
   @Query(
       "UNWIND {0} as x "
-          + "MATCH (c) WHERE ID(c) = x.commitId "
-          + "MATCH (f) WHERE ID(f) = x.fileId "
-          + "CREATE (f)-[:CHANGED_IN {changeType: x.changeType}]->(c)")
-  void createFileRelationships(List<HashMap<String, Object>> fileRels);
+          + "MATCH (c) WHERE ID(c) = x[0] "
+          + "MATCH (f) WHERE ID(f) = x[1] "
+          + "CREATE (f)-[:CHANGED_IN]->(c)")
+  void createFileRelationships(List<long[]> fileRels);
+
+  @Query(
+      "UNWIND {0} as x "
+          + "MATCH (c) WHERE ID(c) = x[0] "
+          + "MATCH (f) WHERE ID(f) = x[1] "
+          + "CREATE (f)-[:DELETED_IN]->(c)")
+  void createFileDeleteRelationships(List<long[]> fileRels);
 
   /**
    * @param commit1 The full hash of the first commit.

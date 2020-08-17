@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.FileIdAndMetricQueryResult;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
-import java.util.HashMap;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -31,11 +30,11 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    */
   @Query(
       "UNWIND {0} as x "
-          + "MATCH (m) WHERE ID(m) = x.metricId "
-          + "MATCH (f) WHERE ID(f) = x.fileId "
-          + "MATCH (c) WHERE ID(c) = x.commitId "
+          + "MATCH (m) WHERE ID(m) = x[0] "
+          + "MATCH (f) WHERE ID(f) = x[1] "
+          + "MATCH (c) WHERE ID(c) = x[2] "
           + "CREATE (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c)")
-  void createFileAndCommitRelationships(List<HashMap<String, Object>> commitAndFileRels);
+  void createFileAndCommitRelationships(List<long[]> commitAndFileRels);
 
   /**
    * Uses APOC.
@@ -49,7 +48,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
           + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN]->(c) RETURN collect(f) as renames', {commits: commits}) "
           + "YIELD value WITH commits, value.renames as renames "
-          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: 2}]->(c) "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:DELETED_IN]->(c) "
           + "RETURN collect(f) as deletes', {commits: commits}) YIELD value WITH commits, renames, value.deletes as deletes "
           + "UNWIND commits as c "
           + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) WHERE "

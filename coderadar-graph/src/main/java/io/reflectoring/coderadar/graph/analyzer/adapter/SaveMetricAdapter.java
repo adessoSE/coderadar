@@ -31,13 +31,14 @@ public class SaveMetricAdapter implements SaveMetricPort {
       metricValueEntities.add(metricValueEntity);
     }
     metricRepository.save(metricValueEntities, 0);
-    List<HashMap<String, Object>> commitAndFileRels = new ArrayList<>(metricValuesSize);
+    List<long[]> commitAndFileRels = new ArrayList<>(metricValuesSize);
     for (int i = 0; i < metricValuesSize; i++) {
-      HashMap<String, Object> commitAndFileRel = new HashMap<>(6);
-      commitAndFileRel.put("metricId", metricValueEntities.get(i).getId());
-      commitAndFileRel.put("commitId", metricValues.get(i).getCommitId());
-      commitAndFileRel.put("fileId", metricValues.get(i).getFileId());
-      commitAndFileRels.add(commitAndFileRel);
+      commitAndFileRels.add(
+          new long[] {
+            metricValueEntities.get(i).getId(),
+            metricValues.get(i).getFileId(),
+            metricValues.get(i).getCommitId()
+          });
     }
     metricRepository.createFileAndCommitRelationships(commitAndFileRels);
   }

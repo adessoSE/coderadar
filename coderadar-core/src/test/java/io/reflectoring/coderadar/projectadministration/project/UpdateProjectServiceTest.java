@@ -24,6 +24,7 @@ import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -112,7 +113,7 @@ class UpdateProjectServiceTest {
 
   @Test
   void updateProjectSuccessfullyUpdatesProjectIfNameIsUnique(@Mock Commit commitMock)
-      throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException {
+      throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException, IOException {
 
     // given
     long projectId = 1L;

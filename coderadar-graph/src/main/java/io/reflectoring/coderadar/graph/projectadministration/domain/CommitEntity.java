@@ -20,7 +20,6 @@ public class CommitEntity {
   private String hash;
   private String comment;
   private String author;
-
   private String authorEmail;
 
   @Relationship(type = "IS_CHILD_OF")
@@ -31,5 +30,10 @@ public class CommitEntity {
   @Relationship(direction = Relationship.INCOMING, type = "CHANGED_IN")
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  private List<FileToCommitRelationshipEntity> touchedFiles = Collections.emptyList();
+  private List<FileEntity> changedFiles = Collections.emptyList();
+
+  @Relationship(direction = Relationship.INCOMING, type = "DELETED_IN")
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  private List<FileEntity> deletedFiles = Collections.emptyList();
 }

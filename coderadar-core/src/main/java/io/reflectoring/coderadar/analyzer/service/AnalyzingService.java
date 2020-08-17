@@ -171,9 +171,8 @@ public class AnalyzingService
   private void zeroOutMissingMetrics(
       Commit commit, List<MetricValue> metrics, Map<Long, List<MetricValue>> fileMetrics) {
 
-    for (FileToCommitRelationship relationship : commit.getTouchedFiles()) {
-      List<MetricValue> values =
-          fileMetrics.getOrDefault(relationship.getFile().getId(), Collections.emptyList());
+    for (File file : commit.getChangedFiles()) {
+      List<MetricValue> values = fileMetrics.getOrDefault(file.getId(), Collections.emptyList());
 
       for (MetricValue value : values) {
         if (value.getValue() != 0
