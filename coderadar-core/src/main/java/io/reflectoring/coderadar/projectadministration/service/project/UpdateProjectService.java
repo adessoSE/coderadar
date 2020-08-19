@@ -21,15 +21,11 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.get.Li
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
-import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
-
-import java.time.ZoneId;
-import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,22 +54,22 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private static final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
   public UpdateProjectService(
-          GetProjectPort getProjectPort,
-          UpdateProjectPort updateProjectPort,
-          UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
-          CoderadarConfigurationProperties coderadarConfigurationProperties,
-          ProcessProjectService processProjectService,
-          ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
-          SaveCommitPort saveCommitPort,
-          ListModulesOfProjectUseCase listModulesOfProjectUseCase,
-          ResetAnalysisPort resetAnalysisPort,
-          CreateModulePort createModulePort,
-          GetAvailableBranchesPort getAvailableBranchesPort,
-          DeleteProjectPort deleteProjectPort,
-          ComputeContributorsPort computeContributorsPort,
-          SaveContributorsPort saveContributorsPort,
-          DetachContributorPort detachContributorPort,
-          ListContributorsPort listContributorsPort) {
+      GetProjectPort getProjectPort,
+      UpdateProjectPort updateProjectPort,
+      UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
+      CoderadarConfigurationProperties coderadarConfigurationProperties,
+      ProcessProjectService processProjectService,
+      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
+      SaveCommitPort saveCommitPort,
+      ListModulesOfProjectUseCase listModulesOfProjectUseCase,
+      ResetAnalysisPort resetAnalysisPort,
+      CreateModulePort createModulePort,
+      GetAvailableBranchesPort getAvailableBranchesPort,
+      DeleteProjectPort deleteProjectPort,
+      ComputeContributorsPort computeContributorsPort,
+      SaveContributorsPort saveContributorsPort,
+      DetachContributorPort detachContributorPort,
+      ListContributorsPort listContributorsPort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
     this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
@@ -152,12 +148,15 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
               // Get contributors anew
               detachContributorPort.detachContributorsFromProject(
-                      listContributorsPort.listAllByProjectId(projectId), projectId);
-              List<Contributor> contributors = computeContributorsPort.computeContributors(
-                      coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName(),
-                      listContributorsPort.listAll(), getProjectDateRange(project));
+                  listContributorsPort.listAllByProjectId(projectId), projectId);
+              List<Contributor> contributors =
+                  computeContributorsPort.computeContributors(
+                      coderadarConfigurationProperties.getWorkdir()
+                          + "/projects/"
+                          + project.getWorkdirName(),
+                      listContributorsPort.listAll(),
+                      getProjectDateRange(project));
               saveContributorsPort.save(contributors, projectId);
-
 
             } catch (UnableToUpdateRepositoryException
                 | ModuleAlreadyExistsException

@@ -4,12 +4,10 @@ import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -20,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class ComputeContributorAdapter implements ComputeContributorsPort {
   @Override
   public List<Contributor> computeContributors(
-          String repositoryRoot, List<Contributor> existingContributors, DateRange dateRange) {
+      String repositoryRoot, List<Contributor> existingContributors, DateRange dateRange) {
     List<RevCommit> revCommits = RevCommitHelper.getRevCommits(repositoryRoot);
 
     Map<String, Set<String>> newContributors = new HashMap<>();
@@ -30,8 +28,7 @@ public class ComputeContributorAdapter implements ComputeContributorsPort {
       PersonIdent author = rc.getAuthorIdent();
       String name = author.getName();
       String email = author.getEmailAddress().toLowerCase();
-      if(!dateRange.containsDate(date))
-        continue;
+      if (!dateRange.containsDate(date)) continue;
       if (newContributors.containsKey(email)) {
         newContributors.get(email).add(name);
       } else {
@@ -41,8 +38,10 @@ public class ComputeContributorAdapter implements ComputeContributorsPort {
     return mergeExistingContributors(existingContributors, newContributors);
   }
 
-  private LocalDate getCommitDate(RevCommit revCommit){
-    return Instant.ofEpochSecond(revCommit.getCommitTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+  private LocalDate getCommitDate(RevCommit revCommit) {
+    return Instant.ofEpochSecond(revCommit.getCommitTime())
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate();
   }
 
   private List<Contributor> mergeExistingContributors(
