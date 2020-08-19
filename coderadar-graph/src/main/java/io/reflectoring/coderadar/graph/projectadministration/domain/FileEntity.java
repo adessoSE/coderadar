@@ -13,7 +13,6 @@ import org.neo4j.ogm.annotation.Relationship;
 @EqualsAndHashCode
 public class FileEntity {
   private Long id;
-  private int sequenceId;
   private String path;
 
   @EqualsAndHashCode.Exclude

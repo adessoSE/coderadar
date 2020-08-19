@@ -8,22 +8,23 @@ import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
 import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
-import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
@@ -37,7 +38,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   public List<Commit> extractCommits(String repositoryRoot, DateRange range) throws IOException {
     try (Git git = Git.open(new java.io.File(repositoryRoot))) {
       List<Commit> result = getCommits(range, repositoryRoot);
-      setCommitsFiles(git, result);
+      setCommitsFiles(git.getRepository(), result);
       return result;
     }
   }
@@ -76,7 +77,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
 
   private Commit mapRevCommitToCommit(RevCommit rc) {
     Commit commit = new Commit();
-    commit.setHash(rc.name());
+    commit.setHash(rc.name().substring(0, 20));
 
     PersonIdent personIdent = rc.getAuthorIdent();
     commit.setAuthor(personIdent.getName());
@@ -90,24 +91,21 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   }
 
   /**
-   * @param git The git API object.
+   * @param repository The git Repository object.
    * @param firstCommit The firstCommit of the repository.
    * @param files A HashMap containing files already created for the project.
    * @throws IOException Thrown if the commit tree cannot be walked.
-   * @return The current sequence id.
    */
-  private int setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, List<File>> files)
+  private void setFirstCommitFiles(Repository repository, Commit firstCommit, HashMap<String, List<File>> files)
       throws IOException {
-    int sequenceId = 0;
-    RevCommit gitCommit = findCommit(git, firstCommit.getHash());
+    RevCommit gitCommit = findCommit(repository, firstCommit.getHash());
     firstCommit.setChangedFiles(new ArrayList<>());
-    try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
+    try (TreeWalk treeWalk = new TreeWalk(repository)) {
       assert gitCommit != null;
       treeWalk.setRecursive(true);
       treeWalk.addTree(gitCommit.getTree());
       while (treeWalk.next()) {
         File file = new File();
-        file.setSequenceId(sequenceId++);
         file.setPath(treeWalk.getPathString());
         firstCommit.getChangedFiles().add(file);
         List<File> fileList = new ArrayList<>(1);
@@ -115,25 +113,24 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         files.put(file.getPath(), fileList);
       }
     }
-    return sequenceId;
   }
 
   /**
-   * @param git The git API object .
+   * @param repository The git Repository object .
    * @param commits A list of commits.
    * @throws IOException Thrown if a commit cannot be processed.
    */
-  private void setCommitsFiles(Git git, List<Commit> commits) throws IOException {
+  private void setCommitsFiles(Repository repository, List<Commit> commits) throws IOException {
     commits.sort(Comparator.comparingLong(Commit::getTimestamp));
     int commitsSize = commits.size();
     HashMap<String, List<File>> files = new HashMap<>((int) (commitsSize / 0.75) + 1);
-    int sequenceId = setFirstCommitFiles(git, commits.get(0), files);
+    setFirstCommitFiles(repository, commits.get(0), files);
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
-    diffFormatter.setRepository(git.getRepository());
+    diffFormatter.setRepository(repository);
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
     for (int i = 1; i < commitsSize; i++) {
-      RevCommit gitCommit = findCommit(git, commits.get(i).getHash());
+      RevCommit gitCommit = findCommit(repository, commits.get(i).getHash());
       if (gitCommit != null && gitCommit.getParentCount() > 0) {
         List<DiffEntry> diffs =
             new ArrayList<>(diffFormatter.scan(gitCommit.getParent(0), gitCommit));
@@ -149,7 +146,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         commits.get(i).setChangedFiles(new ArrayList<>(diffs.size()));
         commits.get(i).setDeletedFiles(new ArrayList<>());
         for (DiffEntry diff : diffs) {
-          processDiffEntry(diff, files, commits.get(i), sequenceId++);
+          processDiffEntry(diff, files, commits.get(i));
         }
       }
     }
@@ -160,16 +157,15 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    *
    * @param diff The diff entry to process.
    * @param files All of the files walked so far.
-   * @param sequenceId the current file sequence number.
    * @param commit The current commit.
    */
   private void processDiffEntry(
-      DiffEntry diff, HashMap<String, List<File>> files, Commit commit, int sequenceId) {
+      DiffEntry diff, HashMap<String, List<File>> files, Commit commit) {
     ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
     if (changeType == ChangeType.UNCHANGED) {
       return;
     }
-    List<File> filesWithPath = computeFilesToSave(diff, files, sequenceId);
+    List<File> filesWithPath = computeFilesToSave(diff, files);
     for (File file : filesWithPath) {
       if (!changeType.equals(ChangeType.DELETE)) {
         commit.getChangedFiles().add(file);
@@ -185,16 +181,14 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    *
    * @param diff The current diff entry.
    * @param files The list of walked files.
-   * @param sequenceId the current file sequence number.
    * @return List of files to save.
    */
   private List<File> computeFilesToSave(
-      DiffEntry diff, HashMap<String, List<File>> files, int sequenceId) {
+      DiffEntry diff, HashMap<String, List<File>> files) {
     String path = getFilepathFromDiffEntry(diff);
     List<File> existingFilesWithPath = files.get(path);
     List<File> filesToSave;
     File file = new File();
-    file.setSequenceId(sequenceId);
     file.setPath(path);
     if (existingFilesWithPath == null) {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
@@ -244,20 +238,20 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   }
 
   /**
-   * @param gitClient The git API object.
+   * @param repository The git Repository object.
    * @param commitName The name (hash) of the commit to look for.
    * @return A fully initialized RevCommit object
    */
-  private RevCommit findCommit(Git gitClient, String commitName) {
+  private RevCommit findCommit(Repository repository, String commitName) {
     try {
-      return gitClient.getRepository().parseCommit(ObjectId.fromString(commitName));
+      return repository.parseCommit(repository.resolve(commitName));
     } catch (MissingObjectException e) {
       return null;
     } catch (Exception e) {
       throw new IllegalStateException(
           String.format(
               "Error accessing git repository at %s",
-              gitClient.getRepository().getDirectory().getAbsolutePath()),
+                  repository.getDirectory().getAbsolutePath()),
           e);
     }
   }

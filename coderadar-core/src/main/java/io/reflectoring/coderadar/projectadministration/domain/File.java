@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /** Represents a file in a VCS repository. */
 @NoArgsConstructor
@@ -12,8 +13,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class File {
   private long id;
-  private int sequenceId;
   private String path;
 
-  @EqualsAndHashCode.Exclude private List<File> oldFiles = Collections.emptyList();
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  private List<File> oldFiles = Collections.emptyList();
 }

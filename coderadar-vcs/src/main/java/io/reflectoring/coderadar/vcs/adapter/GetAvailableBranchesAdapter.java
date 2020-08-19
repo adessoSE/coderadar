@@ -38,7 +38,7 @@ public class GetAvailableBranchesAdapter implements GetAvailableBranchesPort {
         result.add(
             new Branch()
                 .setName(truncatedName)
-                .setCommitHash(ref.getObjectId().getName())
+                .setCommitHash(ref.getObjectId().name().substring(0, 20))
                 .setTag(isTag));
       }
     }
