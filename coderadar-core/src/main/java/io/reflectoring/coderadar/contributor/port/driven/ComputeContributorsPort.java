@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.contributor.port.driven;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
+import io.reflectoring.coderadar.query.domain.DateRange;
+
 import java.util.List;
 
 public interface ComputeContributorsPort {
@@ -16,5 +18,5 @@ public interface ComputeContributorsPort {
    * @return List of contributors who worked on the specific repository.
    */
   List<Contributor> computeContributors(
-      String repositoryRoot, List<Contributor> existingContributors);
+          String repositoryRoot, List<Contributor> existingContributors, DateRange dateRange);
 }

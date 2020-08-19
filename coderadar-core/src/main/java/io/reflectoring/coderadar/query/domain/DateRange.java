@@ -24,4 +24,10 @@ public class DateRange {
   @JsonSerialize(using = LocalDateSerializer.class)
   @JsonDeserialize(using = LocalDateDeserializer.class)
   private LocalDate endDate;
+
+
+  public boolean containsDate(LocalDate date){
+    return startDate.isBefore(date) && endDate.isAfter(date);
+  }
+
 }
