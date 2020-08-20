@@ -8,12 +8,10 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 public class ComputeContributorAdapter implements ComputeContributorsPort {
   @Override
