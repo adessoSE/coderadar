@@ -51,7 +51,7 @@ public class ComputeContributorAdapterTest {
   }
 
   @Test
-  public void contributorsNotCommitedInDateRangeAreNotAddedTest() {
+  void contributorsNotCommitedInDateRangeAreNotAddedTest() {
     ComputeContributorAdapter computeContributorAdapter = new ComputeContributorAdapter();
     List<Contributor> contributors =
         computeContributorAdapter.computeContributors(
