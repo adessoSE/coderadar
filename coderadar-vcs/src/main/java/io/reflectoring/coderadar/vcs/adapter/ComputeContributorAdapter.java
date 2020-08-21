@@ -23,10 +23,10 @@ public class ComputeContributorAdapter implements ComputeContributorsPort {
 
     for (RevCommit rc : revCommits) {
       LocalDate date = getCommitDate(rc);
+      if (!dateRange.containsDate(date)) continue;
       PersonIdent author = rc.getAuthorIdent();
       String name = author.getName();
       String email = author.getEmailAddress().toLowerCase();
-      if (!dateRange.containsDate(date)) continue;
       if (newContributors.containsKey(email)) {
         newContributors.get(email).add(name);
       } else {
