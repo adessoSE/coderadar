@@ -8,16 +8,16 @@ public interface DetachContributorPort {
   /**
    * Deletes the "works on" relationship between the contributor and the project
    *
-   * @param contributor
-   * @param projectId
+   * @param contributor contributor to be detached from the project
+   * @param projectId project the contributor is to be detached from
    */
   void detachContributorFromProject(Contributor contributor, long projectId);
 
   /**
    * Deletes the "works on" relationship between the contributors and the project
    *
-   * @param contributors
-   * @param projectId
+   * @param contributors contributors to be detached from the project
+   * @param projectId project the contributors are to be detached from
    */
   void detachContributorsFromProject(List<Contributor> contributors, long projectId);
 }
