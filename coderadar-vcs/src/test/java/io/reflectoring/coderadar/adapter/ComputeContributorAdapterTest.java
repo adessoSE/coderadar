@@ -48,6 +48,7 @@ public class ComputeContributorAdapterTest {
     Assertions.assertThat(contributors.get(1).getNames()).containsExactly("maximAtanasov");
     Assertions.assertThat(contributors.get(1).getEmailAddresses())
         .containsExactly("maksim.atanasov@adesso.de");
+    Assertions.assertThat(contributors.size()).isEqualTo(1);
   }
 
   @Test
