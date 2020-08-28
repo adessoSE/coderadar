@@ -2,8 +2,13 @@ package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
+import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.springframework.stereotype.Service;
 
@@ -11,23 +16,30 @@ import org.springframework.stereotype.Service;
 public class ComputeContributorAdapter implements ComputeContributorsPort {
   @Override
   public List<Contributor> computeContributors(
-      String repositoryRoot, List<Contributor> existingContributors) {
+      String repositoryRoot, List<Contributor> existingContributors, DateRange dateRange) {
     List<RevCommit> revCommits = RevCommitHelper.getRevCommits(repositoryRoot);
 
     Map<String, Set<String>> newContributors = new HashMap<>();
 
     for (RevCommit rc : revCommits) {
-      String name = rc.getAuthorIdent().getName();
-      String email = rc.getAuthorIdent().getEmailAddress().toLowerCase();
-
+      LocalDate date = getCommitDate(rc);
+      if (!dateRange.containsDate(date)) continue;
+      PersonIdent author = rc.getAuthorIdent();
+      String name = author.getName();
+      String email = author.getEmailAddress().toLowerCase();
       if (newContributors.containsKey(email)) {
         newContributors.get(email).add(name);
       } else {
         newContributors.put(email, new HashSet<>(Collections.singletonList(name)));
       }
     }
-
     return mergeExistingContributors(existingContributors, newContributors);
+  }
+
+  private LocalDate getCommitDate(RevCommit revCommit) {
+    return Instant.ofEpochSecond(revCommit.getCommitTime())
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate();
   }
 
   private List<Contributor> mergeExistingContributors(

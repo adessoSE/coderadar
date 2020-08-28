@@ -279,7 +279,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   private boolean isInDateRange(DateRange range, RevCommit rc) {
     LocalDate commitTime =
         Instant.ofEpochSecond(rc.getCommitTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-    return (commitTime.isBefore(range.getEndDate()) || commitTime.isEqual(range.getEndDate()))
-        && (commitTime.isAfter(range.getStartDate()) || commitTime.isEqual(range.getStartDate()));
+    return range.containsDate(commitTime);
   }
 }
