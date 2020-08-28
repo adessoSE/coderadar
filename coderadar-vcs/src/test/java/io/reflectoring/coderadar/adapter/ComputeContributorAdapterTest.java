@@ -48,7 +48,6 @@ public class ComputeContributorAdapterTest {
     Assertions.assertThat(contributors.get(1).getNames()).containsExactly("maximAtanasov");
     Assertions.assertThat(contributors.get(1).getEmailAddresses())
         .containsExactly("maksim.atanasov@adesso.de");
-    Assertions.assertThat(contributors.size()).isEqualTo(1);
   }
 
   @Test
@@ -62,6 +61,7 @@ public class ComputeContributorAdapterTest {
                 .setStartDate(LocalDate.of(2019, 8, 5))
                 .setEndDate(LocalDate.of(2019, 8, 12)));
     Assertions.assertThat(contributors.get(0).getDisplayName()).isEqualTo("maximAtanasov");
+    Assertions.assertThat(contributors.size()).isEqualTo(1);
   }
 
   @AfterEach
