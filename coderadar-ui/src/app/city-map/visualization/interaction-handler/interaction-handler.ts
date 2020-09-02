@@ -13,6 +13,7 @@ import {FocusService} from '../../service/focus.service';
 import {TooltipService} from '../../service/tooltip.service';
 import {ScreenType} from "../../enum/ScreenType";
 import {ScreenInteractionService} from "../../service/screen-interaction.service";
+import {NodeType} from "../../enum/NodeType";
 
 export class InteractionHandler {
 
@@ -65,6 +66,9 @@ export class InteractionHandler {
   updateTooltip(target: Object3D, intersection: Intersection, camera: Camera) {
     if (target) {
       if (target.uuid !== this.hoveredElementUuid) {
+        if(!target.userData.elementName){
+          console.error(`No userdata on element {0}`,target);
+        }
         this.tooltipService.setContent({
           elementName: target.userData.elementName,
           metrics: target.userData.metrics
@@ -201,7 +205,7 @@ export class InteractionHandler {
       for (let i = 0; i < intersections.length; i++) {
         // find the first block that is not a helper block
         // this lets the clicks go through the helper blocks
-        if (!intersections[i].object.userData.isHelper) {
+        if (!intersections[i].object.userData.isHelper && intersections[i].object.userData.type!==NodeType.CONNECTION) {
           return intersections[i];
         }
       }
