@@ -58,6 +58,29 @@ class RemoveUserFromProjectControllerIntegrationTest extends ControllerTestTempl
   }
 
   @Test
+  void throwsExceptionWhenUserIsNotAssignedToProject() throws Exception {
+    testUser.setProjects(Collections.emptyList());
+    userRepository.save(testUser, 1);
+
+    MvcResult result =
+        mvc()
+            .perform(delete("/api/projects/" + testProject.getId() + "/users/" + testUser.getId()))
+            .andExpect(status().isBadRequest())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+
+    Assertions.assertEquals(
+        "User with id "
+            + testUser.getId()
+            + " is not assigned to project with id "
+            + testProject.getId(),
+        errorMessage);
+  }
+
+  @Test
   void throwsExceptionWhenProjectDoesNotExist() throws Exception {
     MvcResult result =
         mvc()

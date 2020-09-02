@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.unit.useradministration.permissions;
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.permissions.RemoveUserFromProjectController;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
@@ -21,7 +22,8 @@ class RemoveUserFromProjectControllerTest extends UnitTestTemplate {
 
   @Test
   void testRemoveUserFromProjectController() {
-    ResponseEntity<HttpStatus> response = testController.removeUserRoleFromProject(1L, 2L);
+    ResponseEntity<ErrorMessageResponse> response =
+        testController.removeUserRoleFromProject(1L, 2L);
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
   }
 
