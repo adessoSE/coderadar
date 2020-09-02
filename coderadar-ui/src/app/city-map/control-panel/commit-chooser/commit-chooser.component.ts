@@ -22,7 +22,7 @@ export class CommitChooserComponent implements OnInit{
 
   static readonly COMMIT_HASH_LENGTH = 7;
 
-  constructor(public datepipe:DatePipe) {}
+  constructor() {}
 
   ngOnInit() {
     this.selected.subscribe(value => this.handleCommitChanged(value));
@@ -45,20 +45,19 @@ export class CommitChooserComponent implements OnInit{
       return source;
     }
     const lowercaseValue = value.toLowerCase();
-
     const filteredCommits: any[] = source.filter(option => {
       let score = 0;
-      const optionAny = option.value as any;
+      const optionAny = option.value;
       if (typeof optionAny !== 'undefined') {
         if (optionAny.author.startsWith(value)) {score += 200; }
         if (optionAny.author.toLowerCase().startsWith(lowercaseValue)) {score += 100; }
         if (optionAny.author.includes(value)) {score += 50; }
         if (optionAny.author.toLowerCase().includes(lowercaseValue)) {score += 25; }
-        if (optionAny.name.startsWith(value)) {score += 1000; }
-        if (optionAny.name.includes(lowercaseValue)) {score += 500; }
+        if (optionAny.hash.startsWith(value)) {score += 1000; }
+        if (optionAny.hash.includes(lowercaseValue)) {score += 500; }
         if (option.displayValue.substring(option.value.author.length+CommitChooserComponent.COMMIT_HASH_LENGTH).toLowerCase().includes(lowercaseValue)){score+=1000}
         if (score > 0||value==="") {
-          optionAny.score = score;
+          optionAny["score"] = score;
           return option;
         }
       }
