@@ -28,6 +28,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -35,6 +37,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class CreateProjectService implements CreateProjectUseCase {
 
   private final GetAvailableBranchesPort getAvailableBranchesPort;
@@ -64,35 +67,6 @@ public class CreateProjectService implements CreateProjectUseCase {
   private final GetUserPort getUserPort;
 
   private static final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
-
-  public CreateProjectService(
-      GetAvailableBranchesPort getAvailableBranchesPort,
-      CreateProjectPort createProjectPort,
-      GetProjectPort getProjectPort,
-      CloneRepositoryUseCase cloneRepositoryUseCase,
-      CoderadarConfigurationProperties coderadarConfigurationProperties,
-      ProcessProjectService processProjectService,
-      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
-      SaveCommitPort saveCommitPort,
-      ComputeContributorsPort computeContributorsPort,
-      SaveContributorsPort saveContributorsPort,
-      ListContributorsPort listContributorsPort,
-      SetUserRoleForProjectPort setUserRoleForProjectPort,
-      GetUserPort getUserPort) {
-    this.getAvailableBranchesPort = getAvailableBranchesPort;
-    this.createProjectPort = createProjectPort;
-    this.getProjectPort = getProjectPort;
-    this.cloneRepositoryUseCase = cloneRepositoryUseCase;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-    this.processProjectService = processProjectService;
-    this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
-    this.saveCommitPort = saveCommitPort;
-    this.computeContributorsPort = computeContributorsPort;
-    this.saveContributorsPort = saveContributorsPort;
-    this.listContributorsPort = listContributorsPort;
-    this.setUserRoleForProjectPort = setUserRoleForProjectPort;
-    this.getUserPort = getUserPort;
-  }
 
   @Override
   public Long createProject(CreateProjectCommand command) {

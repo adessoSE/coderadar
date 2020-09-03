@@ -35,8 +35,8 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @return The file with the given sequence id or null if it does not exist.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.sequenceId = {1} RETURN f LIMIT 1 ")
-  FileEntity getFileInProjectBySequenceId(long projectId, long sequenceId);
+      "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.path = {1} RETURN f LIMIT 1 ")
+  FileEntity getFileInProjectByPath(long projectId, String path);
 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND "

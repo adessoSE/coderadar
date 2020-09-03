@@ -300,7 +300,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
   private void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
 
-    /* // Get all of the existing commits and save them in a map
+    // Get all of the existing commits and save them in a map
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
     IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
     commitRepository.findByProjectId(projectId).forEach(c -> walkedCommits.put(c.getHash(), c));
@@ -319,35 +319,43 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       commitEntity.setParents(parents);
       walkedCommits.put(commitEntity.getHash(), commitEntity);
 
-      List<FileToCommitRelationshipEntity> fileToCommitRelationships =
-          new ArrayList<>(commit.getTouchedFiles().size());
-      for (FileToCommitRelationship rel : commit.getTouchedFiles()) {
-        FileToCommitRelationshipEntity newRel = new FileToCommitRelationshipEntity();
-        newRel.setChangeType(rel.getChangeType().ordinal());
-        newRel.setCommit(commitEntity);
-        FileEntity fileEntity =
-            fileRepository.getFileInProjectBySequenceId(projectId, rel.getFile().getSequenceId());
+      List<FileEntity> changedFiles = new ArrayList<>(commit.getChangedFiles().size());
+      List<FileEntity> deletedFiles = new ArrayList<>(commit.getDeletedFiles().size());
+
+      for (File rel : commit.getChangedFiles()) {
+        FileEntity newRel = new FileEntity();
+        FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, rel.getPath());
         if (fileEntity == null) {
-          fileEntity = fileBaseDataMapper.mapDomainObject(rel.getFile());
-          fileEntity.setOldFiles(new ArrayList<>(rel.getFile().getOldFiles().size()));
-          for (File oldFile : rel.getFile().getOldFiles()) {
+          fileEntity = fileBaseDataMapper.mapDomainObject(rel);
+          fileEntity.setOldFiles(new ArrayList<>(rel.getOldFiles().size()));
+          for (File oldFile : rel.getOldFiles()) {
             FileEntity oldFileEntity =
-                fileRepository.getFileInProjectBySequenceId(projectId, oldFile.getSequenceId());
+                fileRepository.getFileInProjectByPath(projectId, oldFile.getPath());
             if (oldFileEntity == null) {
               oldFileEntity = walkedFiles.get(oldFile);
             }
             fileEntity.getOldFiles().add(oldFileEntity);
           }
-          walkedFiles.put(rel.getFile(), fileEntity);
+          walkedFiles.put(rel, fileEntity);
         }
-        newRel.setFile(fileEntity);
-        fileToCommitRelationships.add(newRel);
+        changedFiles.add(newRel);
       }
-      commitEntity.setTouchedFiles(fileToCommitRelationships);
+
+      for (File rel : commit.getDeletedFiles()) {
+        FileEntity newRel = new FileEntity();
+        FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, rel.getPath());
+        if (fileEntity == null) {
+          fileEntity = fileBaseDataMapper.mapDomainObject(rel);
+          walkedFiles.put(rel, fileEntity);
+        }
+        deletedFiles.add(newRel);
+      }
+      commitEntity.setDeletedFiles(deletedFiles);
+      commitEntity.setChangedFiles(changedFiles);
       newCommitEntities.add(commitEntity);
     }
     List<FileEntity> newFileEntities = new ArrayList<>(walkedFiles.values());
-    saveCommitAndFileEntities(projectId, newCommitEntities, newFileEntities, updatedBranches);*/
+    saveCommitAndFileEntities(projectId, newCommitEntities, newFileEntities, updatedBranches);
   }
 
   private void saveCommitAndFileEntities(
@@ -365,13 +373,13 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       fileBulkSaveChunk = fileEntities.size();
     }
 
-    // Parent rels = amount of commits * 1.5
-
     saveCommitsWithDepthZero(commitEntities, commitBulkSaveChunk);
     saveFilesWithDepthZero(fileEntities, fileBulkSaveChunk);
     attachCommitsAndFilesToProject(
         projectId, commitEntities, fileEntities, commitBulkSaveChunk, fileBulkSaveChunk);
     setBranchPointers(projectId, branches);
+
+    // Parent rels = amount of commits * 1.5
     saveCommitParentsRelationships(commitEntities, commitBulkSaveChunk / 2 + commitBulkSaveChunk);
     saveFileToCommitRelationships(commitEntities, fileBulkSaveChunk);
     saveFileRenameRelationships(fileEntities, fileBulkSaveChunk / 2);

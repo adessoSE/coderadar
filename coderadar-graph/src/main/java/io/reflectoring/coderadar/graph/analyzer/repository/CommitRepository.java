@@ -55,7 +55,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   List<CommitEntity> findByProjectIdAndBranchName(long projectId, String branch);
 
   /**
-   * Returns all commits in a project. (FileToCommitRelationships and parents are not initialized).
+   * Returns all commits in a project. (Files and parents are not initialized).
    *
    * @param projectId The project id.
    * @return A list of commits in the project.
@@ -63,6 +63,19 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN c")
   @NonNull
   List<CommitEntity> findByProjectId(long projectId);
+
+  /**
+   * Returns all commits in a project. (Parents are not initialized).
+   *
+   * @param projectId The project id.
+   * @return A list of commits in the project.
+   */
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} WITH c "
+          + "OPTIONAL MATCH (f)-[:CHANGED_IN]->(c) WITH c, f "
+          + "OPTIONAL MATCH (f2)-[:DELETED_IN]->(c) RETURN c, f, f2")
+  @NonNull
+  List<CommitEntity> findByProjectIdWithFiles(long projectId);
 
   /**
    * Returns all commits in a project with hashes of their parents.

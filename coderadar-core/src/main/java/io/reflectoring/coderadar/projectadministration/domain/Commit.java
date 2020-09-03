@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.Data;
@@ -20,9 +21,7 @@ public class Commit {
   @ToString.Exclude @EqualsAndHashCode.Exclude
   private List<Commit> parents = Collections.emptyList();
 
-  @ToString.Exclude @EqualsAndHashCode.Exclude
-  private List<File> changedFiles = Collections.emptyList();
+  @ToString.Exclude @EqualsAndHashCode.Exclude private List<File> changedFiles = new ArrayList<>();
 
-  @ToString.Exclude @EqualsAndHashCode.Exclude
-  private List<File> deletedFiles = Collections.emptyList();
+  @ToString.Exclude @EqualsAndHashCode.Exclude private List<File> deletedFiles = new ArrayList<>();
 }

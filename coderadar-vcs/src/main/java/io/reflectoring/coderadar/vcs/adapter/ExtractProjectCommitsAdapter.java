@@ -121,25 +121,28 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     diffFormatter.setRepository(repository);
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
-    for (int i = 1; i < commitsSize; i++) {
+
+    for (int i = 1; i < commitsSize; ++i) {
       RevCommit gitCommit = revCommits.get(i);
-      if (gitCommit != null && gitCommit.getParentCount() > 0) {
-        List<DiffEntry> diffs =
-            new ArrayList<>(diffFormatter.scan(gitCommit.getParent(0), gitCommit));
-        for (int j = 1; j < gitCommit.getParentCount(); ++j) {
-          List<DiffEntry> diffEntries = diffFormatter.scan(gitCommit.getParent(j), gitCommit);
-          for (DiffEntry diff : diffEntries) {
-            if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)
-                || diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
-              diffs.add(diff);
-            }
+      int parentCount = gitCommit.getParentCount();
+      if (parentCount == 0) {
+        continue;
+      }
+
+      List<DiffEntry> diffs = new ArrayList<>(diffFormatter.scan(gitCommit.getParent(0), gitCommit));
+
+      for (int j = 1; j < parentCount; ++j) {
+        List<DiffEntry> diffEntries = diffFormatter.scan(gitCommit.getParent(j), gitCommit);
+        for (DiffEntry diff : diffEntries) {
+          if (diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)
+              || diff.getChangeType().equals(DiffEntry.ChangeType.RENAME)) {
+            diffs.add(diff);
           }
         }
-        commits.get(i).setChangedFiles(new ArrayList<>(diffs.size()));
-        commits.get(i).setDeletedFiles(new ArrayList<>());
-        for (DiffEntry diff : diffs) {
-          processDiffEntry(diff, files, commits.get(i));
-        }
+      }
+
+      for (DiffEntry diff : diffs) {
+        processDiffEntry(diff, files, commits.get(i));
       }
     }
   }
@@ -153,7 +156,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    */
   private void processDiffEntry(DiffEntry diff, HashMap<String, List<File>> files, Commit commit) {
     ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
-    if (changeType == ChangeType.UNCHANGED) {
+    if (changeType.equals(ChangeType.UNCHANGED)) {
       return;
     }
     List<File> filesWithPath = computeFilesToSave(diff, files);

@@ -79,7 +79,7 @@ dependencies {
     compile project(":coderadar-vcs")
     compile project(":coderadar-core")
     compile project(":coderadar-rest")
-    //compile project(":coderadar-ui")
+    compile project(":coderadar-ui")
     compile project(":coderadar-dependency-map")
 
     compile "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"
