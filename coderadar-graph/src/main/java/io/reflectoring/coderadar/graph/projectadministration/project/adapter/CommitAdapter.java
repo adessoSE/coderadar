@@ -322,13 +322,12 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       List<FileEntity> changedFiles = new ArrayList<>(commit.getChangedFiles().size());
       List<FileEntity> deletedFiles = new ArrayList<>(commit.getDeletedFiles().size());
 
-      for (File rel : commit.getChangedFiles()) {
-        FileEntity newRel = new FileEntity();
-        FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, rel.getPath());
+      for (File file : commit.getChangedFiles()) {
+        FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, file.getPath());
         if (fileEntity == null) {
-          fileEntity = fileBaseDataMapper.mapDomainObject(rel);
-          fileEntity.setOldFiles(new ArrayList<>(rel.getOldFiles().size()));
-          for (File oldFile : rel.getOldFiles()) {
+          fileEntity = fileBaseDataMapper.mapDomainObject(file);
+          fileEntity.setOldFiles(new ArrayList<>(file.getOldFiles().size()));
+          for (File oldFile : file.getOldFiles()) {
             FileEntity oldFileEntity =
                 fileRepository.getFileInProjectByPath(projectId, oldFile.getPath());
             if (oldFileEntity == null) {
@@ -336,9 +335,9 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
             }
             fileEntity.getOldFiles().add(oldFileEntity);
           }
-          walkedFiles.put(rel, fileEntity);
+          walkedFiles.put(file, fileEntity);
         }
-        changedFiles.add(newRel);
+        changedFiles.add(fileEntity);
       }
 
       for (File rel : commit.getDeletedFiles()) {

@@ -129,7 +129,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         continue;
       }
 
-      List<DiffEntry> diffs = new ArrayList<>(diffFormatter.scan(gitCommit.getParent(0), gitCommit));
+      List<DiffEntry> diffs =
+          new ArrayList<>(diffFormatter.scan(gitCommit.getParent(0), gitCommit));
 
       for (int j = 1; j < parentCount; ++j) {
         List<DiffEntry> diffEntries = diffFormatter.scan(gitCommit.getParent(j), gitCommit);
