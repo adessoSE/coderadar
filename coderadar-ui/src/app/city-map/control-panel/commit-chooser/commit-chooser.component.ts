@@ -10,6 +10,10 @@ import {Observable} from 'rxjs';
 })
 export class CommitChooserComponent implements OnInit {
 
+  constructor() {}
+
+  static readonly COMMIT_HASH_LENGTH = 7;
+
   @Input() commitType: CommitType;
   @Input() commits: Observable<Commit[]>;
   @Input() selected: Observable<Commit>;
@@ -18,10 +22,6 @@ export class CommitChooserComponent implements OnInit {
   @Input() label: string;
 
   @Output() changeCommit = new EventEmitter();
-
-  static readonly COMMIT_HASH_LENGTH = 7;
-
-  constructor() {}
 
   ngOnInit() {
     this.selected.subscribe(value => this.handleCommitChanged(value));
@@ -47,7 +47,7 @@ export class CommitChooserComponent implements OnInit {
     const lowercaseValue = value.toLowerCase();
     const filteredCommits: any[] = source.filter(option => {
       let score = 0;
-      const optionAny = option.value;
+      const optionAny = option.value as any;
       if (typeof optionAny !== 'undefined') {
         if (optionAny.author.startsWith(value)) {score += 200; }
         if (optionAny.author.toLowerCase().startsWith(lowercaseValue)) {score += 100; }
@@ -55,9 +55,10 @@ export class CommitChooserComponent implements OnInit {
         if (optionAny.author.toLowerCase().includes(lowercaseValue)) {score += 25; }
         if (optionAny.hash.startsWith(value)) {score += 1000; }
         if (optionAny.hash.includes(lowercaseValue)) {score += 500; }
-        if (option.displayValue.substring(option.value.author.length+CommitChooserComponent.COMMIT_HASH_LENGTH).toLowerCase().includes(lowercaseValue)){score+=1000}
-        if (score > 0||value==="") {
-          optionAny["score"] = score;
+        if (option.displayValue.substring(option.value.author.length + CommitChooserComponent.COMMIT_HASH_LENGTH)
+          .toLowerCase().includes(lowercaseValue)) {score += 1000; }
+        if (score > 0 || value === '') {
+          optionAny.score = score;
           return option;
         }
       }

@@ -7,8 +7,8 @@ import {ScreenType} from '../../enum/ScreenType';
 import {NodeType} from '../../enum/NodeType';
 import {CommitReferenceType} from '../../enum/CommitReferenceType';
 import {ElementAnalyzer} from '../../helper/element-analyzer';
-import {MetricValue} from "../../../model/metric-value";
-import {FileChangeType} from "../../../model/filechangetype";
+import {MetricValue} from '../../../model/metric-value';
+import {FileChangeType} from '../../../model/filechangetype';
 
 declare var GrowingPacker: any;
 
