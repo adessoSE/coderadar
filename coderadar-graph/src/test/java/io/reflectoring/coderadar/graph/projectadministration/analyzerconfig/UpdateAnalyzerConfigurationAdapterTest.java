@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Update analyzer configuration")
 class UpdateAnalyzerConfigurationAdapterTest {
-  private AnalyzerConfigurationRepository analyzerConfigurationRepository =
+  private final AnalyzerConfigurationRepository analyzerConfigurationRepository =
       mock(AnalyzerConfigurationRepository.class);
 
   private UpdateAnalyzerConfigurationAdapter updateAnalyzerConfigurationAdapter;
@@ -59,6 +59,5 @@ class UpdateAnalyzerConfigurationAdapterTest {
     updateAnalyzerConfigurationAdapter.update(newItem);
 
     verify(analyzerConfigurationRepository, times(1)).save(mockedItem);
-    Assertions.assertNotEquals(mockedOldItem, newItem);
   }
 }

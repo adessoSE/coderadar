@@ -19,11 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 
-public class MergeContributorsControllerIntegrationTest extends ControllerTestTemplate {
+class MergeContributorsControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private ContributorRepository contributorRepository;
 
   @Test
-  public void mergesTwoContributors() throws Exception {
+  void mergesTwoContributors() throws Exception {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command1 =
         new CreateProjectCommand(

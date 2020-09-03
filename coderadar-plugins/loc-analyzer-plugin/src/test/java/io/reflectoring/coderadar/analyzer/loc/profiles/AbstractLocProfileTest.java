@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.analyzer.loc.profiles;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-import io.reflectoring.coderadar.analyzer.loc.Loc;
+import io.reflectoring.coderadar.analyzer.loc.LinesOfCode;
 import io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin;
 import io.reflectoring.coderadar.analyzer.loc.LocCounter;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 
 public abstract class AbstractLocProfileTest {
 
-  Loc countLines(String path, LocProfile profile) throws IOException {
+  LinesOfCode countLines(String path, LocProfile profile) throws IOException {
     InputStream in = getClass().getResourceAsStream(path);
     assertThat(in).isNotNull();
     ByteArrayOutputStream out = new ByteArrayOutputStream();

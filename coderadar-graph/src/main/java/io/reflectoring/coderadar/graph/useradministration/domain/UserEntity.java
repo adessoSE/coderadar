@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.useradministration.domain;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import java.util.List;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -15,4 +16,7 @@ public class UserEntity {
 
   @Relationship(value = "HAS")
   private List<RefreshTokenEntity> refreshTokens;
+
+  @Relationship(type = "ASSIGNED_TO")
+  private List<ProjectEntity> projects;
 }

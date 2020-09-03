@@ -19,8 +19,7 @@ public class WalkCommitTreeAdapter implements WalkCommitTreePort {
   public void walkCommitTree(
       String projectRoot, String name, WalkTreeCommandInterface commandInterface)
       throws UnableToWalkCommitTreeException {
-    try {
-      Git git = Git.open(new File(projectRoot));
+    try (Git git = Git.open(new File(projectRoot))) {
       ObjectId commitId = git.getRepository().resolve(name);
 
       RevWalk walk = new RevWalk(git.getRepository());
@@ -41,7 +40,6 @@ public class WalkCommitTreeAdapter implements WalkCommitTreePort {
         }
         commandInterface.walkMethod(treeWalk.getPathString());
       }
-      git.close();
     } catch (IOException e) {
       throw new UnableToWalkCommitTreeException(e.getMessage());
     }

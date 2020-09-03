@@ -227,7 +227,8 @@ describe('DependencyRootComponent', () => {
                             {
                               filename: 'WildcardImportCircularDependencyTest.java',
                               path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                              packageName: 'org.wickedsource.dependencytree.example.wildcardpackage.WildcardImportCircularDependencyTest.java',
+                              packageName:
+                                'org.wickedsource.dependencytree.example.wildcardpackage.WildcardImportCircularDependencyTest.java',
                               level: 0,
                               children: [],
                               dependencies: [

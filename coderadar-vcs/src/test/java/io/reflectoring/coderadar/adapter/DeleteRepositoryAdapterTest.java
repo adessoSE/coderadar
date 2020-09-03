@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-public class DeleteRepositoryAdapterTest {
+class DeleteRepositoryAdapterTest {
 
   @TempDir public File folder;
 
@@ -24,7 +24,7 @@ public class DeleteRepositoryAdapterTest {
   }
 
   @Test
-  public void testRepositoryDelete() throws IOException {
+  void testRepositoryDelete() throws IOException {
     DeleteLocalRepositoryAdapter deleteRepositoryAdapter = new DeleteLocalRepositoryAdapter();
 
     deleteRepositoryAdapter.deleteRepository(folder.getPath());

@@ -12,26 +12,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class JavaAnalyzer {
 
-  private RegexPatternCache cache;
-  private Pattern importPattern;
-  private Pattern fullyClassifiedPattern;
-  private Pattern skipPattern;
-  private Map<String, Boolean> separators;
-  public int count = 0;
+  private final RegexPatternCache cache;
+  private final Pattern importPattern;
+  private final Pattern fullyClassifiedPattern;
+  private final Pattern skipPattern;
+  private final Map<String, Boolean> separators;
 
-  private final String FILTER_PATTERN = "(\\/\\*(.|[\\r\\n])+?\\*\\/)|(\\/\\/.*[\\r\\n])";
-  private final String IMPORT_PATTERN = " (([a-z_$][\\w$]*)\\.)+(([a-zA-Z_$][\\w$]*)|\\*);";
+  private static final String FILTER_PATTERN = "(\\/\\*(.|[\\r\\n])+?\\*\\/)|(\\/\\/.*[\\r\\n])";
+  private static final String IMPORT_PATTERN = " (([a-z_$][\\w$]*)\\.)+(([a-zA-Z_$][\\w$]*)|\\*);";
   //                                                " ([A-Za-z_$][\\w$]*\\.)*[A-Za-z_$][\\w$]*"
-  private final String FULLYCLASSIFIED_PATTERN = "([a-zA-Z_$][\\w$]*\\.)*[a-zA-Z_$][\\w$]*";
-  private final String NAME_PATTERN = " (([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*)";
-  private final String SKIP_PATTERN = "[\\w$]+";
-  private final String PACKAGE_PATTERN =
+  private static final String FULLYCLASSIFIED_PATTERN = "([a-zA-Z_$][\\w$]*\\.)*[a-zA-Z_$][\\w$]*";
+  private static final String NAME_PATTERN = " (([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*)";
+  private static final String SKIP_PATTERN = "[\\w$]+";
+  private static final String PACKAGE_PATTERN =
       "^(\\s*)package(\\s*)(([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*);";
-  private final String SINGLE_LINE_COMMENT = "^\\s*//.*$";
-  private final String PACKAGE_DECLARATION = "^\\s*package.*$";
-  private final String MULTILINE_COMMENT_START = "^\\s*/\\*.*$";
-  private final String MULTILINE_COMMENT = "^\\s*\\*.*$";
-  private final String IN_STRING = "^.*\".*$";
+  private static final String SINGLE_LINE_COMMENT = "^\\s*//.*$";
+  private static final String PACKAGE_DECLARATION = "^\\s*package.*$";
+  private static final String MULTILINE_COMMENT_START = "^\\s*/\\*.*$";
+  private static final String MULTILINE_COMMENT = "^\\s*\\*.*$";
+  private static final String IN_STRING = "^.*\".*$";
 
   @Autowired
   public JavaAnalyzer() {
@@ -39,33 +38,31 @@ public class JavaAnalyzer {
     importPattern = cache.getPattern(IMPORT_PATTERN);
     fullyClassifiedPattern = cache.getPattern(FULLYCLASSIFIED_PATTERN);
     skipPattern = cache.getPattern(SKIP_PATTERN);
-    separators = new LinkedHashMap<String, Boolean>();
-    {
-      // this list is ordered by the estimated order of the separators in a line to minimize
-      // skipPattern checks
-      separators.put("private ", false);
-      separators.put("public ", false);
-      separators.put("protected ", false);
-      separators.put("(", false);
-      separators.put(")", false);
-      separators.put("{", false);
-      separators.put("=", false);
-      separators.put(",", false);
-      separators.put("<", false);
-      separators.put(">", false);
-      separators.put("||", false);
-      separators.put("&&", false);
-      separators.put("?", false);
-      separators.put(":", false);
-      separators.put("new ", false);
-      separators.put("extends ", false);
-      separators.put("implements ", false);
-      separators.put("throws ", false);
-      separators.put("|", false);
-      separators.put("instanceof ", false);
-      separators.put("@[a-zA-Z_$][\\w$]*", true);
-      separators.put(";", false);
-    }
+    separators = new LinkedHashMap<>();
+    // this list is ordered by the estimated order of the separators in a line to minimize
+    // skipPattern checks
+    separators.put("private ", false);
+    separators.put("public ", false);
+    separators.put("protected ", false);
+    separators.put("(", false);
+    separators.put(")", false);
+    separators.put("{", false);
+    separators.put("=", false);
+    separators.put(",", false);
+    separators.put("<", false);
+    separators.put(">", false);
+    separators.put("||", false);
+    separators.put("&&", false);
+    separators.put("?", false);
+    separators.put(":", false);
+    separators.put("new ", false);
+    separators.put("extends ", false);
+    separators.put("implements ", false);
+    separators.put("throws ", false);
+    separators.put("|", false);
+    separators.put("instanceof ", false);
+    separators.put("@[a-zA-Z_$][\\w$]*", true);
+    separators.put(";", false);
   }
 
   public String getPackageName(byte[] byteFileContent) {
@@ -126,7 +123,7 @@ public class JavaAnalyzer {
    */
   public List<String> getDependenciesFromImportLine(String line) {
     // possibilities for there to be more than one dependency in one line
-    //   import org.somepackage.A a; import org.somepackage.B;
+    //  import org.somepackage.A a; import org.somepackage.B;
     List<String> foundDependencies = new ArrayList<>();
     String lineString = line;
     while (lineString.contains(";")) {
@@ -138,7 +135,7 @@ public class JavaAnalyzer {
           foundDependencies.add(importString);
         }
       }
-      lineString = lineString.substring(lineString.indexOf(";") + 1);
+      lineString = lineString.substring(lineString.indexOf(';') + 1);
     }
     return foundDependencies;
   }
@@ -160,10 +157,9 @@ public class JavaAnalyzer {
     while (separator != null) {
       Matcher fullyClassifiedMatcher = fullyClassifiedPattern.matcher(lineString);
       if (fullyClassifiedMatcher.find()
-          && !JavaUtils.isJavaKeyword(fullyClassifiedMatcher.group())) {
-        if (!foundDependencies.contains(fullyClassifiedMatcher.group())) {
-          foundDependencies.add(fullyClassifiedMatcher.group());
-        }
+          && !JavaUtils.isJavaKeyword(fullyClassifiedMatcher.group())
+          && !foundDependencies.contains(fullyClassifiedMatcher.group())) {
+        foundDependencies.add(fullyClassifiedMatcher.group());
       }
       // split lineString at first found position of found separator
       lineString = lineString.substring(lineString.indexOf(separator) + separator.length());
@@ -187,7 +183,7 @@ public class JavaAnalyzer {
     int index = toCheck.length();
     String separator = null;
     for (Map.Entry<String, Boolean> entry : separators.entrySet()) {
-      if (toCheck.contains("@") && entry.getValue()) {
+      if (toCheck.contains("@") && Boolean.TRUE.equals(entry.getValue())) {
         // entry is a regex
         Matcher matcher = cache.getPattern(entry.getKey()).matcher(toCheck);
         if (matcher.find()) {
@@ -197,14 +193,12 @@ public class JavaAnalyzer {
             index = toCheck.indexOf(separator);
           }
         }
-      } else {
+      } else if (toCheck.contains(entry.getKey())
+          && toCheck.indexOf(entry.getKey()) < index
+          && checkTmpString(entry.getKey(), toCheck)) {
         // entry is not a regex
-        if (toCheck.contains(entry.getKey())
-            && toCheck.indexOf(entry.getKey()) < index
-            && checkTmpString(entry.getKey(), toCheck)) {
-          separator = entry.getKey();
-          index = toCheck.indexOf(separator);
-        }
+        separator = entry.getKey();
+        index = toCheck.indexOf(separator);
       }
     }
     return separator;
@@ -219,7 +213,6 @@ public class JavaAnalyzer {
    * @return true if there is a potential import, else false.
    */
   private boolean checkTmpString(String border, String string) {
-    count++;
     return skipPattern
         .matcher(string.substring(0, string.indexOf(border) + border.length()))
         .find();

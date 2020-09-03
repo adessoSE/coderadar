@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.query;
 import io.reflectoring.coderadar.query.domain.FileTree;
 import io.reflectoring.coderadar.query.port.driver.GetFileTreeForCommitUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class GetFileTreeForCommitController implements AbstractBaseController {
 
   private final GetFileTreeForCommitUseCase getFileTreeForCommitUseCase;
+  private final AuthenticationService authenticationService;
 
-  public GetFileTreeForCommitController(GetFileTreeForCommitUseCase getFileTreeForCommitUseCase) {
+  public GetFileTreeForCommitController(
+      GetFileTreeForCommitUseCase getFileTreeForCommitUseCase,
+      AuthenticationService authenticationService) {
     this.getFileTreeForCommitUseCase = getFileTreeForCommitUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @GetMapping(
@@ -29,6 +34,7 @@ public class GetFileTreeForCommitController implements AbstractBaseController {
       @PathVariable("projectId") long projectId,
       @PathVariable("commitHash") String commitHash,
       @RequestParam("changedOnly") boolean changedFilesOnly) {
+    authenticationService.authenticateMember(projectId);
     return new ResponseEntity<>(
         getFileTreeForCommitUseCase.getFileTreeForCommit(projectId, commitHash, changedFilesOnly),
         HttpStatus.OK);

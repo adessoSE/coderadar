@@ -10,7 +10,7 @@ import {
 } from 'three';
 import {FocusService} from '../../service/focus.service';
 import {TooltipService} from '../../service/tooltip.service';
-import {VisualizationConfig} from "../../VisualizationConfig";
+import {VisualizationConfig} from '../../VisualizationConfig';
 
 export class InteractionHandler {
 
@@ -181,11 +181,11 @@ export class InteractionHandler {
 
   private findFirstNonHelperBlockIntersection(intersections: Intersection[]): Intersection {
     if (intersections.length > 0) {
-      for (let i = 0; i < intersections.length; i++) {
+      for (const i of intersections) {
         // find the first block that is not a helper block
         // this lets the clicks go through the helper blocks
-        if (!intersections[i].object.userData.isHelper) {
-          return intersections[i];
+        if (!i.object.userData.isHelper) {
+          return i;
         }
       }
     }

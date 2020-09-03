@@ -5,7 +5,7 @@ export class VisualizationConfig {
   // VISUALIZATION SETTINGS
   static EDGE_LENGTH_FACTOR = 2;
   static HEIGHT_FACTOR = 0.1;
-  static ROOT_NAME = "root";
+  static ROOT_NAME = 'root';
   // static GLOBAL_MAX_GROUND_AREA = 100;
   // static GLOBAL_MIN_GROUND_AREA = 1;
   // static GLOBAL_MAX_HEIGHT = 100;
@@ -31,7 +31,7 @@ export class VisualizationConfig {
   static COLOR_DELETED_FILE = '#d90206';
   static COLOR_UNCHANGED_FILE = '#cccccc';
 
-  //HIGHLIGHTING
+  // HIGHLIGHTING
   static HIGHLIGHT_BOX_MARGIN = 0.25;
 
   static getShortNameByMetricName(metricName: string): IMetric {

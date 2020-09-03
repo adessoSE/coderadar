@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.project;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -40,7 +41,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + testProject.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(
             result -> {
               ProjectEntity project = projectRepository.findById(id).get();
@@ -63,7 +64,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/1")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }
@@ -77,6 +78,6 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/0")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(status().isBadRequest());
   }
 }

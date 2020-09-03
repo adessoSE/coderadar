@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Get analyzer configuration")
 class GetAnalyzerConfigurationAdapterTest {
-  private AnalyzerConfigurationRepository analyzerConfigurationRepository =
+  private final AnalyzerConfigurationRepository analyzerConfigurationRepository =
       mock(AnalyzerConfigurationRepository.class);
 
   private GetAnalyzerConfigurationAdapter getAnalyzerConfigurationAdapter;

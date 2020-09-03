@@ -8,7 +8,11 @@ import {Title} from '@angular/platform-browser';
 import {AppComponent} from '../../app.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {MatDialogRef} from '@angular/material/dialog';
+import {Team} from '../../model/team';
+import {TeamService} from '../../service/team.service';
+import {HttpResponse} from '@angular/common/http';
 import {DeleteProjectDialogComponent} from '../../components/delete-project-dialog/delete-project-dialog.component';
+import {AddProjectToTeamDialogComponent} from '../../components/add-project-to-team-dialog/add-project-to-team-dialog.component';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -18,18 +22,22 @@ import {DeleteProjectDialogComponent} from '../../components/delete-project-dial
 export class MainDashboardComponent implements OnInit {
 
   projects: Project[] = [];
-
+  teams: Team[] = [];
+  teamDialogRef: MatDialogRef<AddProjectToTeamDialogComponent>;
   dialogRef: MatDialogRef<DeleteProjectDialogComponent>;
   appComponent = AppComponent;
   waiting = false;
+  selectedTeam: Team;
 
   constructor(private snackBar: MatSnackBar, private titleService: Title, private userService: UserService,
-              private router: Router, private projectService: ProjectService, private dialog: MatDialog) {
+              private router: Router, private projectService: ProjectService, private dialog: MatDialog,
+              private teamService: TeamService) {
     titleService.setTitle('Coderadar - Dashboard');
   }
 
   ngOnInit(): void {
     this.getProjects();
+    this.getTeams();
   }
 
   /**
@@ -68,18 +76,41 @@ export class MainDashboardComponent implements OnInit {
     });
   }
 
+  openAddToTeamDialog(project: Project): void {
+    const dialogRef = this.dialog.open(AddProjectToTeamDialogComponent, {
+      width: '300px',
+      data: {teams: this.teams, project}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        for (const team of result.teams) {
+          this.teamService.addTeamToProject(project.id, team.id, result.role);
+        }
+      }
+    });
+  }
+
   /**
    * Gets all projects from the project service and constructs a new array of Project objects
    * from the returned JSON. Sends a refresh token if access is denied.
    */
-  private getProjects(): void {
+  getProjects(): void {
     this.waiting = true;
-    this.projectService.getProjects()
-      .then(response => {response.body.forEach(project => {
+    let promise: Promise<HttpResponse<Project[]>>;
+    if (this.selectedTeam === undefined) {
+      promise = this.projectService.listProjectsForUser(UserService.getLoggedInUser().userId);
+    } else {
+      promise = this.teamService.listProjectsForTeam(this.selectedTeam.id);
+    }
+    promise
+      .then(response => {
+        this.projects = [];
+        response.body.forEach(project => {
         const newProject = new Project(project);
         this.projects.push(newProject);
         });
-                         this.waiting = false;
+        this.waiting = false;
         }
       )
       .catch(e => {
@@ -87,6 +118,16 @@ export class MainDashboardComponent implements OnInit {
           this.userService.refresh(() => this.getProjects());
         }
       });
+  }
+
+  private getTeams() {
+    this.teamService.listTeamsForUser(UserService.getLoggedInUser().userId).then(value =>
+      this.teams = value.body
+    ) .catch(e => {
+      if (e.status && e.status === FORBIDDEN) {
+        this.userService.refresh(() => this.getTeams());
+      }
+    });
   }
 
   startAnalysis(id: number) {

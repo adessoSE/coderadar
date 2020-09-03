@@ -183,7 +183,8 @@ describe('DependencyRootComponent', () => {
                                     changed: null
                                   },
                                   {
-                                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
+                                    path:
+                                      'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
                                     changed: null
                                   }
                                 ]
@@ -209,7 +210,8 @@ describe('DependencyRootComponent', () => {
                                     changed: null
                                   },
                                   {
-                                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
+                                    path:
+                                      'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
                                     changed: null
                                   }
                                 ]
@@ -301,7 +303,8 @@ describe('DependencyRootComponent', () => {
                               {
                                 filename: 'WildcardImportCircularDependencyTest.java',
                                 path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                                packageName: 'org.wickedsource.dependencytree.example.wildcardpackage.WildcardImportCircularDependencyTest.java',
+                                packageName:
+                                  'org.wickedsource.dependencytree.example.wildcardpackage.WildcardImportCircularDependencyTest.java',
                                 level: 0,
                                 changed: null,
                                 children: [],
@@ -574,7 +577,8 @@ describe('DependencyRootComponent', () => {
           expect(dependencyTree.children[0].changed).toBe('ADD');
         });
       const req = httpTestingController.
-      expectOne('http://localhost:8080/analyzers/1/structureMap/0b79780c8e8c8736a8e0ddafc964fc4446f007f2/643a55c23dce1832b5da07816f068896aef854e6');
+      expectOne(
+        'http://localhost:8080/analyzers/1/structureMap/0b79780c8e8c8736a8e0ddafc964fc4446f007f2/643a55c23dce1832b5da07816f068896aef854e6');
       expect(req.request.method).toEqual('GET');
       req.flush(mockResponse);
     });

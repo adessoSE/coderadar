@@ -6,10 +6,10 @@ import java.util.ServiceLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ServiceLoaderTest {
+class ServiceLoaderTest {
 
   @Test
-  public void analyzerIsRegisteredWithServiceLoader() {
+  void analyzerIsRegisteredWithServiceLoader() {
     ServiceLoader<SourceCodeFileAnalyzerPlugin> loader =
         ServiceLoader.load(
             SourceCodeFileAnalyzerPlugin.class,

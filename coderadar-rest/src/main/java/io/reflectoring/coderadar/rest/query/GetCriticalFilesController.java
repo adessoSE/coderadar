@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFilesWithCon
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFrequentlyChangedFilesCommand;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.FileAndCommitsForTimePeriodResponse;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class GetCriticalFilesController implements AbstractBaseController {
   private final GetCriticalFilesUseCase getCriticalFilesUseCase;
+  private final AuthenticationService authenticationService;
 
-  public GetCriticalFilesController(GetCriticalFilesUseCase getCriticalFilesUseCase) {
+  public GetCriticalFilesController(
+      GetCriticalFilesUseCase getCriticalFilesUseCase,
+      AuthenticationService authenticationService) {
     this.getCriticalFilesUseCase = getCriticalFilesUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @RequestMapping(
@@ -34,6 +39,7 @@ public class GetCriticalFilesController implements AbstractBaseController {
   public ResponseEntity<List<ContributorsForFile>> getFilesWithContributors(
       @PathVariable Long projectId,
       @RequestBody @Validated GetFilesWithContributorsCommand command) {
+    authenticationService.authenticateMember(projectId);
     return new ResponseEntity<>(
         getCriticalFilesUseCase.getFilesWithContributors(projectId, command), HttpStatus.OK);
   }
@@ -44,6 +50,7 @@ public class GetCriticalFilesController implements AbstractBaseController {
   public ResponseEntity<List<FileAndCommitsForTimePeriodResponse>> getFrequentlyChangedFiles(
       @PathVariable long projectId,
       @RequestBody @Validated GetFrequentlyChangedFilesCommand command) {
+    authenticationService.authenticateMember(projectId);
     return new ResponseEntity<>(
         mapResponse(getCriticalFilesUseCase.getFrequentlyChangedFiles(projectId, command)),
         HttpStatus.OK);
