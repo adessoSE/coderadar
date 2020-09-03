@@ -1,6 +1,16 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import * as THREE from 'three';
-import {Line, Mesh, Object3D, Scene, Vector3, WebGLRenderer} from 'three';
+import {
+  BoxGeometry,
+  Line,
+  Mesh,
+  MeshBasicMaterial,
+  Object3D,
+  Scene,
+  Vector2,
+  Vector3,
+  WebGLRenderer
+} from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
 
 import {Subscription} from 'rxjs';
@@ -21,6 +31,8 @@ import {ViewType} from '../../enum/ViewType';
 import {BlockConnection} from '../../geometry/block-connection';
 import {NodeType} from '../../enum/NodeType';
 import {ElementAnalyzer} from '../../helper/element-analyzer';
+import {ScreenInteractionService} from '../../service/screen-interaction.service';
+import {ChangetypeSymbols} from '../changetype-symbols/changetype-symbols';
 
 @Component({
   selector: 'app-screen',
@@ -28,6 +40,14 @@ import {ElementAnalyzer} from '../../helper/element-analyzer';
   styleUrls: ['./screen.component.scss']
 })
 export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
+
+  constructor(
+    private focusService: FocusService,
+    private screenInteractionService: ScreenInteractionService,
+    private tooltipService: TooltipService,
+    private comparisonPanelService: ComparisonPanelService
+  ) {
+  }
 
   @Input() screenType: ScreenType;
   @Input() activeViewType: ViewType;
@@ -41,22 +61,25 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   // (see https://github.com/nicolaspanel/three-orbitcontrols-ts/issues/1)
   camera: THREE.PerspectiveCamera;
   controls: OrbitControls;
-  tooltipLine: Object3D;
-  highlightBox: Object3D;
+  spatialCursor: Object3D;
+  highlightBoxes: Object3D[] = [];
   interactionHandler: InteractionHandler;
+  changetypeSymbols: ChangetypeSymbols;
+
+
+
+  public displayTooltip = true;
 
   // use THREE.PerspectiveCamera instead of importing PerspectiveCamera to avoid warning for panning and zooming are disabled
   view: AbstractView;
   private isMergedView = false;
   private requestAnimationFrameId: number;
   private renderingIsPaused = false;
+  private screenOffset: Vector2 = new Vector2();
+  private screenDimensions: Vector2 = new Vector2();
 
-  constructor(
-    private focusService: FocusService,
-    private tooltipService: TooltipService,
-    private comparisonPanelService: ComparisonPanelService
-  ) {
-  }
+  private highlightBoxGeometry: BoxGeometry;
+  private highlightBoxMaterial: MeshBasicMaterial;
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.activeViewType !== null && this.metricTree !== null && this.activeFilter !== null) {
@@ -67,17 +90,17 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
         this.view = new MergedView(this.screenType, this.metricMapping);
         if (this.screenType === ScreenType.RIGHT) {
           this.pauseRendering();
+          this.displayTooltip = false;
         }
         document.querySelector('#stage').classList.remove('split');
-
       } else {
         this.view = new SplitView(this.screenType, this.metricMapping);
         if (this.screenType === ScreenType.RIGHT) {
           this.resumeRendering();
+          this.displayTooltip = true;
         }
         document.querySelector('#stage').classList.add('split');
       }
-
       this.resetScene();
       this.prepareView(this.metricTree);
       this.applyFilter(this.activeFilter);
@@ -99,15 +122,18 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+    this.tooltipService.addScreen(this);
+    this.screenInteractionService.addScreen(this);
     this.view = new SplitView(this.screenType, this.metricMapping);
 
     this.createCamera();
     this.createControls();
     this.createLight();
     this.createRenderer();
-    this.createTooltip();
+    this.create3DCursor();
     this.createSelectionHighlightBox();
     this.createInteractionHandler();
+    this.changetypeSymbols = new ChangetypeSymbols();
 
     this.initializeEventListeners();
 
@@ -122,6 +148,41 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
         });
       })
     );
+    this.subscriptions.push(
+      this.screenInteractionService.highlightedElements$.subscribe((highlightedElements) => {
+        if (this.highlightBoxes.length < highlightedElements.length) {
+          for (let i = 0; i < highlightedElements.length - this.highlightBoxes.length; i++) {
+            this.highlightBoxes.push(this.createSelectionHighlightBox());
+          }
+        }
+        this.highlightBoxes.forEach((value, index) => this.highlightElement(this.scene.getObjectByName(highlightedElements[index]), value));
+      })
+    );
+    this.subscriptions.push(
+      this.screenInteractionService.cursorState$.subscribe((state => {
+        if (state.position) {
+          this.spatialCursor.position.copy(state.position);
+          this.tooltipService.setMousePosition(this.getTooltipPosition(), this.screenType);
+        }
+        this.spatialCursor.visible = state.visible;
+        if (state.scale) {
+          this.spatialCursor.scale.set(1, state.scale, 1);
+          this.spatialCursor.children[0].scale.set(state.scale, 1, state.scale);
+        }
+      }))
+    );
+  }
+
+  public highlightElement(element: Object3D, highlightBox: Object3D) {
+    const addedMargin = VisualizationConfig.HIGHLIGHT_BOX_MARGIN;
+    if (element) {
+      highlightBox.visible = true && element.visible;
+      highlightBox.position.copy(new Vector3(element.position.x + element.scale.x / 2,
+        element.position.y + element.scale.y / 2, element.position.z + element.scale.z / 2));
+      highlightBox.scale.copy(element.scale).addScalar(addedMargin);
+    } else {
+      highlightBox.visible = false;
+    }
   }
 
   ngOnDestroy() {
@@ -168,6 +229,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
 
   resetCamera() {
     const root = this.getRoot();
+    if (!root) {return; }
     // pythagoras
     const diagonal = Math.sqrt(Math.pow(root.scale.x, 2) + Math.pow(root.scale.z, 2));
     this.camera.position.x = root.scale.x * 2;
@@ -190,6 +252,12 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     this.requestAnimationFrameId = requestAnimationFrame(() => {
       this.render();
     });
+
+    // Canvas object offset
+    this.screenOffset.set(this.renderer.domElement.getBoundingClientRect().left, this.renderer.domElement.getBoundingClientRect().top);
+    // Canvas object size
+    this.screenDimensions.set(this.renderer.domElement.getBoundingClientRect().width,
+      this.renderer.domElement.getBoundingClientRect().height);
 
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
@@ -227,6 +295,8 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
       this.view.getConnections().forEach((blockConnection: BlockConnection) => {
         this.scene.add(blockConnection.getCurve());
       });
+    } else {
+      this.changetypeSymbols.addChangeTypeSymbols(this.scene);
     }
   }
 
@@ -234,11 +304,12 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     this.interactionHandler = new InteractionHandler(
       this.scene,
       this.renderer,
+      this.screenType,
       this.isMergedView,
       this.focusService,
+      this.screenInteractionService,
       this.tooltipService,
-      this.tooltipLine,
-      this.highlightBox
+      this.spatialCursor
     );
   }
 
@@ -352,39 +423,58 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private createTooltip() {
+  public getTooltipPosition(): {x: number, y: number} {
+    const tooltipPosition: Vector2 =
+      this.worldPositionToScreenPosition(this.spatialCursor.position.clone().add(new Vector3(0, this.spatialCursor.scale.y, 0)));
+    return {x: tooltipPosition.x, y: tooltipPosition.y};
+  }
+
+  public worldPositionToScreenPosition(worldPosition: Vector3): Vector2 {
+    const screenCoordinate: Vector3 = worldPosition.project(this.camera);
+    const screenPosition: Vector2 = new Vector2(
+      this.screenOffset.x + ((screenCoordinate.x + 1) * this.screenDimensions.x / 2),
+      ((-(screenCoordinate.y - 1) * this.screenDimensions.y / 2)));
+    return screenPosition;
+  }
+
+  private create3DCursor() {
     const material = new THREE.MeshBasicMaterial({
       color: 0xff0000
     });
     const geometry = new THREE.Geometry();
     geometry.vertices.push(
       new Vector3(0, 0, 0),
-      new Vector3(0, -1, 0)
+      new Vector3(0, 1, 0)
     );
-    const tipSize = 0.1;
-    const tipGeometry = new THREE.SphereGeometry(tipSize, 16, 16);
-    this.tooltipLine = new Line(geometry, material);
+    const tipSize = 0.2;
+    const tipGeometry = new THREE.ConeGeometry(tipSize / 2, tipSize, 16, 16);
+    tipGeometry.rotateX(Math.PI);
+    tipGeometry.translate(0, tipSize / 2, 0);
+    this.spatialCursor = new Line(geometry, material);
     const tooltipLineTip = new Mesh(tipGeometry, material);
-    tooltipLineTip.position.setY(-1);
-    this.tooltipLine.add(tooltipLineTip);
-    this.tooltipLine.type = 'TooltipLine';
-    this.tooltipLine.visible = false;
-    this.tooltipLine.userData.isHelper = true;
-    this.scene.add(this.tooltipLine);
+    this.spatialCursor.add(tooltipLineTip);
+    this.spatialCursor.type = 'TooltipLine';
+    this.spatialCursor.visible = false;
+    this.spatialCursor.userData.isHelper = true;
+    this.scene.add(this.spatialCursor);
   }
 
-  private createSelectionHighlightBox() {
-    const material = new THREE.MeshBasicMaterial({
-      color: 0xffff00,
-      opacity: 0.5,
+  private createSelectionHighlightBox(): Object3D {
+    let highlightBox: Object3D;
+    if (!this.highlightBoxMaterial) {
+      this.highlightBoxMaterial = new THREE.MeshBasicMaterial({
+      color: 0x01ff01,
+      opacity: .8,
       transparent: true
-    });
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    this.highlightBox = new Mesh(geometry, material);
-    this.highlightBox.type = 'HighlightBox';
-    this.highlightBox.visible = false;
-    this.highlightBox.userData.isHelper = true;
-    this.scene.add(this.highlightBox);
+      });
+    }
+    if (!this.highlightBoxGeometry) {this.highlightBoxGeometry = new THREE.BoxGeometry(1, 1, 1); }
+    highlightBox = new Mesh(this.highlightBoxGeometry, this.highlightBoxMaterial);
+    highlightBox.type = 'HighlightBox';
+    highlightBox.visible = false;
+    highlightBox.userData.isHelper = true;
+    this.scene.add(highlightBox);
+    return highlightBox;
   }
 
 }

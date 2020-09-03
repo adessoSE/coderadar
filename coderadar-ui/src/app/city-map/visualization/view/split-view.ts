@@ -72,7 +72,7 @@ export class SplitView extends AbstractView {
           return;
         }
 
-        myHeight = heightMetric * VisualizationConfig.HEIGHT_FACTOR;
+        myHeight = VisualizationConfig.ELEMENT_MINIMUM_HEIGHT + heightMetric * VisualizationConfig.ELEMENT_HEIGHT_FACTOR;
 
         const myEdgeLength = Math.sqrt(groundAreaMetric) * VisualizationConfig.EDGE_LENGTH_FACTOR;
 

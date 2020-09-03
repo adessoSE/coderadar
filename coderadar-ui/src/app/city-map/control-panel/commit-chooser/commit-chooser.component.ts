@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CommitType} from '../../enum/CommitType';
 import {Commit} from '../../../model/commit';
 import {Observable} from 'rxjs';
-import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-commit-chooser',
@@ -11,7 +10,7 @@ import {DatePipe} from '@angular/common';
 })
 export class CommitChooserComponent implements OnInit {
 
-  constructor(public datepipe: DatePipe) {}
+  constructor() {}
 
   static readonly COMMIT_HASH_LENGTH = 7;
 
@@ -46,7 +45,6 @@ export class CommitChooserComponent implements OnInit {
       return source;
     }
     const lowercaseValue = value.toLowerCase();
-
     const filteredCommits: any[] = source.filter(option => {
       let score = 0;
       const optionAny = option.value as any;
@@ -55,8 +53,8 @@ export class CommitChooserComponent implements OnInit {
         if (optionAny.author.toLowerCase().startsWith(lowercaseValue)) {score += 100; }
         if (optionAny.author.includes(value)) {score += 50; }
         if (optionAny.author.toLowerCase().includes(lowercaseValue)) {score += 25; }
-        if (optionAny.name.startsWith(value)) {score += 1000; }
-        if (optionAny.name.includes(lowercaseValue)) {score += 500; }
+        if (optionAny.hash.startsWith(value)) {score += 1000; }
+        if (optionAny.hash.includes(lowercaseValue)) {score += 500; }
         if (option.displayValue.substring(option.value.author.length + CommitChooserComponent.COMMIT_HASH_LENGTH)
           .toLowerCase().includes(lowercaseValue)) {score += 1000; }
         if (score > 0 || value === '') {

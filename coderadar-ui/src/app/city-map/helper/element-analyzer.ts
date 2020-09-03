@@ -120,14 +120,14 @@ export class ElementAnalyzer {
     }
   }
 
-  static getMaxMetricValueByMetricName(commit1Metrics: any, commit2Metrics: any, metricName: string): number {
+  static getMaxMetricValueByMetricName(commit1Metrics: MetricValue[], commit2Metrics: MetricValue[], metricName: string): number {
     if (commit1Metrics === null && commit2Metrics === null) {
       throw new Error(`No metric objects given`);
     }
 
-    if (commit1Metrics === null) {
+    if (commit1Metrics == null || commit1Metrics.length === 0) {
       return this.getValueFromMetric(commit2Metrics, metricName);
-    } else if (commit2Metrics === null) {
+    } else if (commit2Metrics == null || commit2Metrics.length === 0) {
       return this.getValueFromMetric(commit1Metrics, metricName);
     } else {
       const commit1 = this.getValueFromMetric(commit1Metrics, metricName);

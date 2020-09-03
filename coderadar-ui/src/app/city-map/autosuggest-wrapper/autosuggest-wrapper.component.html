@@ -2,7 +2,7 @@
   <mat-form-field style="width: 100%">
     <input matInput [formControl]="formControl" (blur)="onBlur()" (focus)="$event.target.select()" [matAutocomplete]="auto" placeholder="{{label}}" type="text">
     <mat-autocomplete #auto="matAutocomplete"  [displayWith]="displayFunction" [panelWidth]="auto">
-      <mat-option (onSelectionChange)="handleValueChanged(option)"
+      <mat-option (onSelectionChange)="handleValueChanged(option)" style="max-height: 25px"
                   *ngFor="let option of displayOptions | async"
                   [value]="option">
                   <div innerHTML="{{option.displayValue | highlightSearch : formControl.value}}"></div>
