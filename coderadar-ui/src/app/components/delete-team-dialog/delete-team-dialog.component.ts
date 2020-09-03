@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Team} from "../../model/team";
+import {Team} from '../../model/team';
 
 class DeleteTeamDialogData {
   team: Team;

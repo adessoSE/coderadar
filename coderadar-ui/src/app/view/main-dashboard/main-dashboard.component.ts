@@ -8,7 +8,7 @@ import {Title} from '@angular/platform-browser';
 import {AppComponent} from '../../app.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ProjectWithRoles} from "../../model/project-with-roles";
+import {ProjectWithRoles} from '../../model/project-with-roles';
 import {Team} from '../../model/team';
 import {TeamService} from '../../service/team.service';
 import {HttpResponse} from '@angular/common/http';
@@ -111,8 +111,8 @@ export class MainDashboardComponent implements OnInit {
         response.body.forEach(project => {
           const newProject = new Project(project.project);
           const projectWithRoles = new ProjectWithRoles();
-        projectWithRoles.project = newProject;
-        projectWithRoles.roles = project.roles;
+          projectWithRoles.project = newProject;
+          projectWithRoles.roles = project.roles;
           this.projects.push(projectWithRoles);
         });
         this.waiting = false;

@@ -369,7 +369,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
     int fileBulkSaveChunk = 5000;
     if (fileEntities.size() < 5000) {
-      fileBulkSaveChunk = fileEntities.size();
+      fileBulkSaveChunk = fileEntities.isEmpty() ? 100 : fileEntities.size();
     }
 
     saveCommitsWithDepthZero(commitEntities, commitBulkSaveChunk);

@@ -3,9 +3,9 @@ import {Team} from '../../model/team';
 import {TeamService} from '../../service/team.service';
 import {UserService} from '../../service/user.service';
 import {FORBIDDEN} from 'http-status-codes';
-import {Project} from "../../model/project";
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {DeleteTeamDialogComponent} from "../../components/delete-team-dialog/delete-team-dialog.component";
+import {Project} from '../../model/project';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {DeleteTeamDialogComponent} from '../../components/delete-team-dialog/delete-team-dialog.component';
 
 @Component({
   selector: 'app-teams-dashboard',

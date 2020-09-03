@@ -4,7 +4,7 @@ import {AppComponent} from '../app.component';
 import {ProjectRole} from '../model/project-role';
 import {Team} from '../model/team';
 import {Project} from '../model/project';
-import {ProjectWithRoles} from "../model/project-with-roles";
+import {ProjectWithRoles} from '../model/project-with-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -60,7 +60,7 @@ export class TeamService {
   }
 
   public listProjectsForTeamWithRolesForUser(teamId: number, userId: number): Promise<HttpResponse<ProjectWithRoles[]>> {
-    return this.httpClient.get<ProjectWithRoles[]>(this.apiURL + 'teams/' + teamId +'/' + userId + '/projects',
+    return this.httpClient.get<ProjectWithRoles[]>(this.apiURL + 'teams/' + teamId + '/' + userId + '/projects',
       {observe: 'response'}).toPromise();
   }
 

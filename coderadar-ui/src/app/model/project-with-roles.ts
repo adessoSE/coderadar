@@ -1,4 +1,4 @@
-import {Project} from "./project";
+import {Project} from './project';
 
 export class ProjectWithRoles {
   public project: Project;
