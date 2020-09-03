@@ -53,7 +53,7 @@ import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {ScreenInteractionService} from "./city-map/service/screen-interaction.service";
+import {ScreenInteractionService} from './city-map/service/screen-interaction.service';
 import {DependencyRootComponent} from './levelized-structure-map/dependency-root/dependency-root.component';
 import {DependencyCompareComponent} from './levelized-structure-map/dependency-compare/dependency-compare.component';
 import {TreeNodeComponent} from './levelized-structure-map/tree-node/tree-node.component';

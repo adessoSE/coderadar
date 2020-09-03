@@ -125,9 +125,9 @@ export class ElementAnalyzer {
       throw new Error(`No metric objects given`);
     }
 
-    if (commit1Metrics == null || commit1Metrics.length == 0) {
-      return this.getValueFromMetric(commit2Metrics, metricName)
-    } else if (commit2Metrics == null || commit2Metrics.length == 0) {
+    if (commit1Metrics == null || commit1Metrics.length === 0) {
+      return this.getValueFromMetric(commit2Metrics, metricName);
+    } else if (commit2Metrics == null || commit2Metrics.length === 0) {
       return this.getValueFromMetric(commit1Metrics, metricName);
     } else {
       const commit1 = this.getValueFromMetric(commit1Metrics, metricName);

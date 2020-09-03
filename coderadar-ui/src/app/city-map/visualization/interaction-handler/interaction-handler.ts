@@ -11,9 +11,9 @@ import {
 } from 'three';
 import {FocusService} from '../../service/focus.service';
 import {TooltipService} from '../../service/tooltip.service';
-import {ScreenType} from "../../enum/ScreenType";
-import {ScreenInteractionService} from "../../service/screen-interaction.service";
-import {NodeType} from "../../enum/NodeType";
+import {ScreenType} from '../../enum/ScreenType';
+import {ScreenInteractionService} from '../../service/screen-interaction.service';
+import {NodeType} from '../../enum/NodeType';
 
 export class InteractionHandler {
 
@@ -39,7 +39,7 @@ export class InteractionHandler {
     private screenType: ScreenType,
     private isMergedView: boolean,
     private focusService: FocusService,
-    private screenInteractionService:ScreenInteractionService,
+    private screenInteractionService: ScreenInteractionService,
     private tooltipService: TooltipService,
     private tooltipLine: Object3D
   ) {
@@ -66,45 +66,45 @@ export class InteractionHandler {
   updateTooltip(target: Object3D, intersection: Intersection, camera: Camera) {
     if (target) {
       if (target.uuid !== this.hoveredElementUuid) {
-        if(!target.userData.elementName){
-          console.error(`No userdata on element {0}`,target);
+        if (!target.userData.elementName) {
+          console.error(`No userdata on element {0}`, target);
         }
         this.tooltipService.setContent({
           elementName: target.userData.elementName,
           metrics: target.userData.metrics
-        },this.screenType);
-        if(this.screenInteractionService.getCounterpart(target)){
+        }, this.screenType);
+        if (this.screenInteractionService.getCounterpart(target)) {
           this.tooltipService.setContent({
             elementName: this.screenInteractionService.getCounterpart(target).userData.elementName,
             metrics: this.screenInteractionService.getCounterpart(target).userData.metrics
-          },this.screenInteractionService.otherType(this.screenType));
-        }else{
-          if(this.screenType === ScreenType.LEFT){
+          }, this.screenInteractionService.otherType(this.screenType));
+        } else {
+          if (this.screenType === ScreenType.LEFT) {
             this.tooltipService.setContent({
-              elementName: "This file was removed",
+              elementName: 'This file was removed',
               metrics: null
-            },this.screenInteractionService.otherType(this.screenType));
-          }else{
+            }, this.screenInteractionService.otherType(this.screenType));
+          } else {
             this.tooltipService.setContent({
-              elementName: "Not yet created here",
+              elementName: 'Not yet created here',
               metrics: null
-            },this.screenInteractionService.otherType(this.screenType));
+            }, this.screenInteractionService.otherType(this.screenType));
           }
         }
         this.hoveredElementUuid = target.uuid;
       }
       const vCameraDistance: Vector3 = intersection.point.clone().sub(camera.position);
       const cameraDistance: number = vCameraDistance.length();
-      var cursorScale = cameraDistance * 0.1;
-      var cursorPosition = intersection.point.clone();
-      this.screenInteractionService.setCursorState(cursorPosition,true,cursorScale);
+      const cursorScale = cameraDistance * 0.1;
+      const cursorPosition = intersection.point.clone();
+      this.screenInteractionService.setCursorState(cursorPosition, true, cursorScale);
 
       this.screenInteractionService.setMouseHighlight(target.name);
-      this.tooltipService.show(null)
+      this.tooltipService.show(null);
     } else {
-      this.tooltipService.hide(null)
-      this.screenInteractionService.setCursorState(null,false)
-      this.screenInteractionService.setMouseHighlight("");
+      this.tooltipService.hide(null);
+      this.screenInteractionService.setCursorState(null, false);
+      this.screenInteractionService.setMouseHighlight('');
     }
   }
 
@@ -164,9 +164,9 @@ export class InteractionHandler {
     const target = intersection ? intersection.object : undefined;
     if (target) {
       if (event.which === 1) { // left mouse button
-        if(event.shiftKey){
+        if (event.shiftKey) {
           this.screenInteractionService.toggleSelect(target.name);
-        }else{
+        } else {
           this.screenInteractionService.select(target.name);
         }
 
@@ -176,14 +176,14 @@ export class InteractionHandler {
           this.clickedElementUuid = undefined;
         }
       }
-    }else{
+    } else {
       this.screenInteractionService.resetSelection();
     }
 
 
   }
 
-  onDocumentDoubleClick(event){
+  onDocumentDoubleClick(event) {
     const intersects = this.raycaster.intersectObjects(this.scene.children);
     const intersection = this.findFirstNonHelperBlockIntersection(intersects);
     const target = intersection ? intersection.object : undefined;
@@ -205,7 +205,7 @@ export class InteractionHandler {
       for (const i of intersections) {
         // find the first block that is not a helper block
         // this lets the clicks go through the helper blocks
-        if (!i.object.userData.isHelper && i.object.userData.type!==NodeType.CONNECTION) {
+        if (!i.object.userData.isHelper && i.object.userData.type !== NodeType.CONNECTION) {
           return i;
         }
       }

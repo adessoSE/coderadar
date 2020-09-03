@@ -3,7 +3,7 @@ import {TooltipService} from '../../service/tooltip.service';
 import {map} from 'rxjs/operators';
 import {VisualizationConfig} from '../../VisualizationConfig';
 import {Observable} from 'rxjs';
-import {ScreenType} from "../../enum/ScreenType";
+import {ScreenType} from '../../enum/ScreenType';
 
 @Component({
   selector: 'app-tooltip',
@@ -12,7 +12,7 @@ import {ScreenType} from "../../enum/ScreenType";
 })
 export class TooltipComponent implements OnInit {
 
-  @ViewChild("tooltip_div")
+  @ViewChild('tooltip_div')
   tooltipRef: ElementRef;
   tooltipElement: HTMLElement;
 
