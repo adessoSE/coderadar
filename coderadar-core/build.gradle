@@ -1,4 +1,5 @@
 apply plugin: "com.diffplug.gradle.spotless"
+apply plugin: "jacoco"
 
 dependencies {
     compile project(':coderadar-plugin-api')

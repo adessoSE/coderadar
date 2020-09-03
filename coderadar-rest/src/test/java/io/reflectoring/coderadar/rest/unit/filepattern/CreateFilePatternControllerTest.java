@@ -7,20 +7,22 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.c
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternUseCase;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.filepattern.CreateFilePatternController;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class CreateFilePatternControllerTest {
+class CreateFilePatternControllerTest extends UnitTestTemplate {
 
-  private CreateFilePatternUseCase createFilePatternUseCase = mock(CreateFilePatternUseCase.class);
+  private final CreateFilePatternUseCase createFilePatternUseCase =
+      mock(CreateFilePatternUseCase.class);
 
   @Test
-  void createFilePatternSuccessfully() {
+  void testCreateFilePattern() {
     CreateFilePatternController testSubject =
-        new CreateFilePatternController(createFilePatternUseCase);
+        new CreateFilePatternController(createFilePatternUseCase, authenticationService);
 
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
@@ -29,6 +31,7 @@ class CreateFilePatternControllerTest {
     ResponseEntity<IdResponse> responseEntity = testSubject.createFilePattern(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(1L, responseEntity.getBody().getId());
   }
 }

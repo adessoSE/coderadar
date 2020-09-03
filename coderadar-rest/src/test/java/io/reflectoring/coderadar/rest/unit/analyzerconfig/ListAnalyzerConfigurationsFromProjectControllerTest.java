@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.ListAnalyzerConfigurationsUseCase;
 import io.reflectoring.coderadar.rest.analyzerconfig.ListAnalyzerConfigurationsFromProjectController;
 import io.reflectoring.coderadar.rest.domain.GetAnalyzerConfigurationResponse;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -14,15 +15,16 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class ListAnalyzerConfigurationsFromProjectControllerTest {
+class ListAnalyzerConfigurationsFromProjectControllerTest extends UnitTestTemplate {
 
-  private ListAnalyzerConfigurationsUseCase listAnalyzerConfigurationsUseCase =
+  private final ListAnalyzerConfigurationsUseCase listAnalyzerConfigurationsUseCase =
       mock(ListAnalyzerConfigurationsUseCase.class);
 
   @Test
-  void returnsTwoGetAnalyzerConfigurationResponsesFromProject() {
+  void testListAnalyzerConfigurationsFromProject() {
     ListAnalyzerConfigurationsFromProjectController testSubject =
-        new ListAnalyzerConfigurationsFromProjectController(listAnalyzerConfigurationsUseCase);
+        new ListAnalyzerConfigurationsFromProjectController(
+            listAnalyzerConfigurationsUseCase, authenticationService);
 
     AnalyzerConfiguration response1 = new AnalyzerConfiguration(1L, "analyzer1", true);
     AnalyzerConfiguration response2 = new AnalyzerConfiguration(2L, "analyzer2", false);
@@ -37,6 +39,7 @@ class ListAnalyzerConfigurationsFromProjectControllerTest {
         testSubject.getAnalyzerConfigurationsFromProject(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(responses.size(), responseEntity.getBody().size());
     Assertions.assertEquals(response1.getId(), responseEntity.getBody().get(0).getId());
     Assertions.assertEquals(

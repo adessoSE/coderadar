@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Observable} from "rxjs";
-import {VisualizationConfig} from "../../VisualizationConfig";
+import {Observable} from 'rxjs';
+import {VisualizationConfig} from '../../VisualizationConfig';
 
 @Component({
   selector: 'app-search',
@@ -16,7 +16,9 @@ export class SearchComponent implements OnInit {
   constructor() {
   }
 
-  filterFileOptions(value: string,source:{value:string,displayValue:string}[]): {value:string,displayValue:string}[] {
+  filterFileOptions(value: string, source: {value: string, displayValue: string, score: number}[]):
+    {value: string, displayValue: string}[] {
+
     if (source === undefined) {
       return [];
     } else if (typeof value !== 'string') {
@@ -27,30 +29,30 @@ export class SearchComponent implements OnInit {
     const lowercaseValue = value.toLowerCase();
 
     source.forEach(option => {
-        var score = 0;
-        //Positive conditions
-        if(option.displayValue.startsWith(value))score += 10
-        if(option.displayValue.toLowerCase().includes(lowercaseValue))score +=1;
-        //Final conditions
-        if(option.displayValue===VisualizationConfig.ROOT_NAME)score = 0;
-        option["score"] = score;
+        let score = 0;
+        // Positive conditions
+        if (option.displayValue.startsWith(value)) {score += 10; }
+        if (option.displayValue.toLowerCase().includes(lowercaseValue)) {score += 1; }
+        // Final conditions
+        if (option.displayValue === VisualizationConfig.ROOT_NAME) {score = 0; }
+        option.score = score;
     });
-    const filteredFiles: {value:string,displayValue:string}[] = source.filter(option => {
-      if(option["score"]<=0)return;
-      if(option.value.toLowerCase().includes(lowercaseValue))return option;
+    const filteredFiles: {value: string, displayValue: string, score: number}[] = source.filter(option => {
+      if (option.score <= 0) {return; }
+      if (option.value.toLowerCase().includes(lowercaseValue)) {return option; }
     });
 
     return filteredFiles.sort(
-      (a, b) =>{
-        return Math.sign(b["score"] - a["score"]);
+      (a, b) => {
+        return Math.sign(b.score - a.score);
       });
   }
 
-  formatFileOptions(option: string): string{
-    if(option){
+  formatFileOptions(option: string): string {
+    if (option) {
       return option;
-    }else{
-      return "";
+    } else {
+      return '';
     }
   }
 

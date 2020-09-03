@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.module;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -59,7 +60,7 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
     // Test
     mvc()
         .perform(get("/api/projects/" + testProject.getId() + "/modules"))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andExpect(containsResource(GetModuleResponse[].class))
         .andExpect(
             result -> {
@@ -74,7 +75,7 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
   void listAllModulesOfProjectReturnsErrorWhenProjectNotFound() throws Exception {
     mvc()
         .perform(get("/api/projects/1/modules"))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }

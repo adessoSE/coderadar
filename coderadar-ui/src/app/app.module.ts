@@ -63,17 +63,22 @@ import {PinchZoomModule} from 'ngx-pinch-zoom';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
-import {ContributorCardComponent, ContributorDialogComponent} from './components/contributor-card/contributor-card.component';
+import {ContributorCardComponent} from './components/contributor-card/contributor-card.component';
 import { FileViewComponent } from './view/file-view/file-view.component';
-import {ContributorMergeDialogComponent} from './components/contributor-merge-dialog/merge-dialog.component';
-import {
-  DeleteProjectDialogComponent
-} from './components/delete-project-dialog/delete-project-dialog.component';
+import { TeamsDashboardComponent } from './view/teams-dashboard/teams-dashboard.component';
+import { AddTeamComponent } from './view/add-team/add-team.component';
+import { SidenavContentComponent } from './view/sidenav-content/sidenav-content.component';
+import {ContributorMergeDialogComponent} from './components/contributor-merge-dialog/contributor-merge-dialog.component';
+import {DeleteProjectDialogComponent} from './components/delete-project-dialog/delete-project-dialog.component';
+import {AddProjectToTeamDialogComponent} from './components/add-project-to-team-dialog/add-project-to-team-dialog.component';
+import {ContributorDialogComponent} from './components/contributor-card/contributor-dialog.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'dashboard', component: MainDashboardComponent},
+  {path: 'teams', component: TeamsDashboardComponent},
+  {path: 'add-team', component: AddTeamComponent},
   {path: 'user-settings', component: UserSettingsComponent},
   {path: 'add-project', component: AddProjectComponent},
   {path: 'project-configure/:id', component: ConfigureProjectComponent},
@@ -94,13 +99,13 @@ const appRoutes: Routes = [
     RegisterComponent,
     AddProjectComponent,
     MainDashboardComponent,
-    DeleteProjectDialogComponent,
     ConfigureProjectComponent,
     EditProjectComponent,
     HeaderComponent,
     FooterComponent,
     UserSettingsComponent,
     ProjectDashboardComponent,
+    TeamsDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
     DependencyRootComponent,
@@ -110,6 +115,11 @@ const appRoutes: Routes = [
     CityViewHeaderComponent,
     ListViewComponent,
     BranchViewComponent,
+    FileViewComponent,
+    TeamsDashboardComponent,
+    AddProjectToTeamDialogComponent,
+    AddTeamComponent,
+    SidenavContentComponent,
     ContributorDialogComponent,
     ContributorCardComponent,
     FileViewComponent,
@@ -182,6 +192,7 @@ const appRoutes: Routes = [
   ],
   bootstrap: [AppComponent],
   entryComponents: [
+    AddProjectToTeamDialogComponent,
     ContributorMergeDialogComponent,
     ContributorDialogComponent,
     DeleteProjectDialogComponent

@@ -30,7 +30,6 @@ public class DependencyCompareTreeAdapter implements GetCompareTreePort {
   private String commitName2;
   private HashMap<String, byte[]> commit1Contents;
   private HashMap<String, byte[]> commit2Contents;
-  private CompareNodeComparator nodeComparator;
 
   private final JavaAnalyzer javaAnalyzer;
   private final WalkCommitTreePort walkCommitTreePort;
@@ -47,7 +46,6 @@ public class DependencyCompareTreeAdapter implements GetCompareTreePort {
     this.walkCommitTreePort = walkCommitTreePort;
     this.getDiffEntriesForCommitsPort = getDiffEntriesForCommitsPort;
     this.rawCommitContentPort = rawCommitContentPort;
-    nodeComparator = new CompareNodeComparator();
   }
 
   private void createTree() {
@@ -103,33 +101,31 @@ public class DependencyCompareTreeAdapter implements GetCompareTreePort {
       // traverse to compare nodes and to set their level
       this.root.traversePost(
           node -> {
-            if (node.hasChildren()) {
-              node.getChildren().sort(new CompareNodeComparator());
-              int level = 0;
-              CompareNode childI;
-              CompareNode childJ;
-              for (int i = 0; i < node.getChildren().size(); i++) {
-                childI = node.getChildren().get(i);
-                // for every child in the current layer check
-                for (int j = 0; j < node.getChildren().size(); j++) {
-                  childJ = node.getChildren().get(j);
-                  if (i == j) continue;
-                  // if any child before this has a dependency on this
-                  // or any child before has more dependencies on this than this has on any child
-                  // before
-                  //   raise layer, break
-                  if (childJ.hasDependencyOn(childI) && !childI.hasDependencyOn(childJ)) {
-                    level = (level < childJ.getLevel() ? childJ.getLevel() + 1 : level + 1);
-                  } else if (childJ.countDependenciesOn(childI)
-                      > childI.countDependenciesOn(childJ)) {
-                    level = (level < childJ.getLevel() ? childJ.getLevel() + 1 : level + 1);
-                  }
-                }
-                childI.setLevel(level);
-                level = 0;
-              }
-              node.getChildren().sort(Comparator.comparingInt(CompareNode::getLevel));
+            if (!node.hasChildren()) {
+              return;
             }
+            node.getChildren().sort(new CompareNodeComparator());
+            int level = 0;
+            CompareNode childI;
+            CompareNode childJ;
+            for (int i = 0; i < node.getChildren().size(); i++) {
+              childI = node.getChildren().get(i);
+              // for every child in the current layer check
+              for (int j = 0; j < node.getChildren().size(); j++) {
+                childJ = node.getChildren().get(j);
+                // if any child before this has a dependency on this
+                // or any child before has more dependencies on this than this has on any child
+                // before
+                //   raise layer, break
+                if (i != j && (childJ.hasDependencyOn(childI) && !childI.hasDependencyOn(childJ))
+                    || childJ.countDependenciesOn(childI) > childI.countDependenciesOn(childJ)) {
+                  level = (level < childJ.getLevel() ? childJ.getLevel() + 1 : level + 1);
+                }
+              }
+              childI.setLevel(level);
+              level = 0;
+            }
+            node.getChildren().sort(Comparator.comparingInt(CompareNode::getLevel));
           });
       return root;
     } catch (UnableToGetDiffsFromCommitsException e) {
@@ -217,7 +213,7 @@ public class DependencyCompareTreeAdapter implements GetCompareTreePort {
         String childPackage = node.getChildren().get(0).getPackageName();
         node.setPackageName(
             childPackage.contains(".")
-                ? childPackage.substring(0, childPackage.lastIndexOf("."))
+                ? childPackage.substring(0, childPackage.lastIndexOf('.'))
                 : "");
       }
     }

@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
@@ -39,7 +40,7 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
                     + testProject.getId()
                     + "/analyzers/"
                     + analyzerConfiguration.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(
             result -> {
               Assertions.assertFalse(analyzerConfigurationRepository.findById(id).isPresent());
@@ -51,7 +52,7 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
   void deleteAnalyzerConfigurationReturnsErrorWhenAnalyzerNotFound() throws Exception {
     mvc()
         .perform(delete("/api/projects/0/analyzers/2"))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("AnalyzerConfiguration with id 2 not found."));

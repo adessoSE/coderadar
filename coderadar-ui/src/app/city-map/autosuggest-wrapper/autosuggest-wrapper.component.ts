@@ -16,52 +16,53 @@ import {debounceTime, distinctUntilChanged, map, startWith} from 'rxjs/operators
   templateUrl: './autosuggest-wrapper.component.html',
   styleUrls: ['./autosuggest-wrapper.component.scss']
 })
-export class AutosuggestWrapperComponent implements  OnInit{
+export class AutosuggestWrapperComponent implements  OnInit {
 
   @ViewChild('inputElement') inputElement;
 
   @Input() model$: Observable<any>;
   @Input() source$: Observable<any[]>;
   @Input() isDisabled: boolean;
-  @Input() resetOnBlur:boolean = false;
+  @Input() resetOnBlur = false;
   @Input() alignRight = false;
   @Input() label: string;
   @Output() valueChanged = new EventEmitter();
-  @Input() filterOptions :((value: any,source:any[])=> any[]) = (value, options) => options;
-  @Input() formatOption :((value: any)=> string ) = value => value.toString();
-  displayOptions: Observable<{value:any,displayValue:string }[]>;
-  formattedOptions: {value:any,displayValue:string }[];
+  displayOptions: Observable<{value: any, displayValue: string }[]>;
+  formattedOptions: {value: any, displayValue: string }[];
 
   formControl = new FormControl();
-  lastSetValue:any;
+  lastSetValue: any;
+  @Input() filterOptions: ((value: any, source: any[]) => any[]) = (value, options) => options;
+  @Input() formatOption: ((value: any) => string ) = value => value.toString();
 
   handleValueChanged(selectedOption: any) {
     this.lastSetValue = selectedOption;
     this.valueChanged.emit(selectedOption.value);
   }
 
-  displayFunction(option:{value:any,displayValue:string }):string{
-    if(option){
+  displayFunction(option: {value: any, displayValue: string }): string {
+    if (option) {
       return option.displayValue;
-    }else{
-      return "";
+    } else {
+      return '';
     }
   }
 
-  onBlur(){
-    if (this.resetOnBlur)this.formControl.reset(this.associateFormattedOptions(this.lastSetValue))
+  onBlur() {
+    if (this.resetOnBlur) {this.formControl.reset(this.associateFormattedOptions(this.lastSetValue)); }
   }
 
-  associateFormattedOptions(value):{value:any,displayValue:string}{
-    return {value:value,displayValue:this.formatOption(value)};
+  associateFormattedOptions(value): {value: any, displayValue: string} {
+    return {value, displayValue: this.formatOption(value)};
   }
 
 
   ngOnInit(): void {
-    if(this.model$)this.model$.subscribe(value => {
+    if (this.model$) {this.model$.subscribe(value => {
       this.formControl.setValue(this.associateFormattedOptions(value));
       this.lastSetValue = value;
     });
+    }
 
     this.formattedOptions = [];
     this.source$.subscribe(value => value.forEach(option => this.formattedOptions.push(this.associateFormattedOptions(option))));
@@ -70,7 +71,7 @@ export class AutosuggestWrapperComponent implements  OnInit{
         debounceTime(200),
         distinctUntilChanged(),
         startWith(' '),
-        map(value => this.filterOptions(value,this.formattedOptions))
+        map(value => this.filterOptions(value, this.formattedOptions))
       );
   }
 }

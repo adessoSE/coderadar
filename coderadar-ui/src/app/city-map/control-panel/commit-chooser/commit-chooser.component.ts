@@ -1,15 +1,15 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CommitType} from '../../enum/CommitType';
 import {Commit} from '../../../model/commit';
-import {Observable} from "rxjs";
-import {DatePipe} from "@angular/common";
+import {Observable} from 'rxjs';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-commit-chooser',
   templateUrl: './commit-chooser.component.html',
   styleUrls: ['./commit-chooser.component.scss']
 })
-export class CommitChooserComponent implements OnInit{
+export class CommitChooserComponent implements OnInit {
 
   @Input() commitType: CommitType;
   @Input() commits: Observable<Commit[]>;
@@ -31,12 +31,13 @@ export class CommitChooserComponent implements OnInit{
 
   formatCommit(commit: Commit): string {
     if (commit === null || commit === undefined) {
-      return "empty";
+      return 'empty';
     }
-    return commit.hash.substring(0, CommitChooserComponent.COMMIT_HASH_LENGTH) + ', ' + commit.author + ', ' + new Date(commit.timestamp).toUTCString();
+    return commit.hash.substring(0, CommitChooserComponent.COMMIT_HASH_LENGTH) + ', ' +
+      commit.author + ', ' + new Date(commit.timestamp).toUTCString();
   }
 
-  filterCommitOptions(value: string,source:{value:Commit,displayValue:string}[]): {value:Commit,displayValue:string}[] {
+  filterCommitOptions(value: string, source: {value: Commit, displayValue: string}[]): {value: Commit, displayValue: string}[] {
     if (source === undefined) {
       return [];
     } else if (typeof value !== 'string') {

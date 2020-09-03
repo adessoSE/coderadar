@@ -19,11 +19,7 @@ public class PatternUtil {
   private static final String SLASHY = "[\\\\/]";
   private static final String NOT_SLASHY = "[^\\\\/]";
 
-  public static Pattern toPattern(String line) {
-    return toPattern(line, 0);
-  }
-
-  public static Pattern toPattern(String line, int flags) {
+  private static Pattern toPattern(String line) {
     line = line.trim();
     int strLen = line.length();
     StringBuilder sb = new StringBuilder(strLen << 2);
@@ -85,7 +81,7 @@ public class PatternUtil {
       }
       previousChar = currentChar;
     }
-    return Pattern.compile(sb.toString(), flags);
+    return Pattern.compile(sb.toString(), 0);
   }
 
   /**

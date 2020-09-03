@@ -11,12 +11,7 @@ import {MatDialog,  MatSnackBar} from '@angular/material';
 import {Contributor} from '../../model/contributor';
 import {Branch} from '../../model/branch';
 import {ContributorService} from '../../service/contributor.service';
-import {ContributorMergeDialogComponent} from '../../components/contributor-merge-dialog/merge-dialog.component';
-
-export interface DialogData {
-  selected: string;
-  displayNames: string[];
-}
+import {ContributorMergeDialogComponent} from '../../components/contributor-merge-dialog/contributor-merge-dialog.component';
 
 @Component({
   selector: 'app-configure-project',
@@ -25,10 +20,9 @@ export interface DialogData {
 })
 export class ConfigureProjectComponent implements OnInit {
 
-
   projectName: string;
   analyzers: AnalyzerConfiguration[] = [];
-  filePatterns: FilePattern[] = []
+  filePatterns: FilePattern[] = [];
   contributors: Contributor[] = [];
   branches: Branch[] = [];
   selectedContributors: Contributor[] = [];
@@ -44,7 +38,8 @@ export class ConfigureProjectComponent implements OnInit {
   moduleExists = false;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService, private titleService: Title,
-              private projectService: ProjectService, private contributorService: ContributorService, private route: ActivatedRoute, public dialog: MatDialog) {
+              private projectService: ProjectService, private contributorService: ContributorService,
+              private route: ActivatedRoute, public dialog: MatDialog) {
     this.projectName = '';
     this.filePatternIncludeInput = '';
     this.filePatternExcludeInput = '';
@@ -215,7 +210,7 @@ export class ConfigureProjectComponent implements OnInit {
    * Sends the refresh token if access is denied and repeats the request.
    * @param module The module to delete from the project
    */
-  private deleteModule(module: Module): void {
+  deleteModule(module: Module): void {
     this.processing = true;
     this.projectService.deleteProjectModule(this.projectId, module)
       .then(() => {
@@ -246,7 +241,7 @@ export class ConfigureProjectComponent implements OnInit {
    *
    * @param analyzerConfiguration The configuration to add to the project.
    */
-  private submitAnalyzerConfiguration(analyzerConfiguration: AnalyzerConfiguration): void {
+  submitAnalyzerConfiguration(analyzerConfiguration: AnalyzerConfiguration): void {
     if (analyzerConfiguration.id !== undefined) {
       this.projectService.editAnalyzerConfigurationForProject(this.projectId, analyzerConfiguration)
         .catch(error => {
@@ -277,7 +272,7 @@ export class ConfigureProjectComponent implements OnInit {
    * Sends the refresh token if access is denied and repeats the request.
    * @param pattern The pattern to delete from the project
    */
-  private deleteFilePattern(pattern: FilePattern): void {
+  deleteFilePattern(pattern: FilePattern): void {
     this.processing = true;
     this.projectService.deleteProjectFilePattern(this.projectId, pattern)
       .then(() => {
@@ -336,7 +331,6 @@ export class ConfigureProjectComponent implements OnInit {
       });
   }
 
-
   openDialog(): void {
     const dialogRef = this.dialog.open(ContributorMergeDialogComponent, {
       width: '250px',
@@ -353,7 +347,7 @@ export class ConfigureProjectComponent implements OnInit {
   }
 
   mergeContributors(displayName: string): void {
-      this.contributorService.mergeContributors(this.selectedContributors, displayName).then(value => {
+      this.contributorService.mergeContributors(this.selectedContributors, displayName).then(() => {
         this.selectedContributors = [];
         this.contributors = [];
         this.getProjectContributors();

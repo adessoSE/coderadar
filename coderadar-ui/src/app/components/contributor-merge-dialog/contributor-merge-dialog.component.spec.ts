@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContributorMergeDialogComponent } from './merge-dialog.component';
+import { ContributorMergeDialogComponent } from './contributor-merge-dialog.component';
 
 describe('MergeDialogComponent', () => {
   let component: ContributorMergeDialogComponent;

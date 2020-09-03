@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.module;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
@@ -44,7 +45,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + testProject.getId() + "/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andDo(
             result -> {
               Long id =
@@ -79,7 +80,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + testProject.getId() + "/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andDo(
             result -> {
               Long id =
@@ -107,7 +108,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/1/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }
@@ -120,6 +121,6 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/0/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(status().isBadRequest());
   }
 }

@@ -202,11 +202,11 @@ export class InteractionHandler {
 
   private findFirstNonHelperBlockIntersection(intersections: Intersection[]): Intersection {
     if (intersections.length > 0) {
-      for (let i = 0; i < intersections.length; i++) {
+      for (const i of intersections) {
         // find the first block that is not a helper block
         // this lets the clicks go through the helper blocks
-        if (!intersections[i].object.userData.isHelper && intersections[i].object.userData.type!==NodeType.CONNECTION) {
-          return intersections[i];
+        if (!i.object.userData.isHelper && i.object.userData.type!==NodeType.CONNECTION) {
+          return i;
         }
       }
     }

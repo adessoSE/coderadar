@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.dependencymap;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.dependencymap.adapter.DependencyCompareTreeAdapter;
@@ -28,9 +29,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class CompareTreeTest extends ControllerTestTemplate {
+class CompareTreeTest extends ControllerTestTemplate {
 
   private CompareNode root;
   private File f;
@@ -89,7 +89,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
                       + commitName
                       + "/"
                       + commitName2))
-          .andExpect(MockMvcResultMatchers.status().isOk())
+          .andExpect(status().isOk())
           .andExpect(containsResource(CompareNode.class))
           .andDo(
               result ->
@@ -120,7 +120,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void testCreateTree() {
+  void testCreateTree() {
     Assertions.assertNotNull(root);
     Assertions.assertEquals("testSrc", root.getFilename());
     Assertions.assertEquals(1, root.getChildren().size());
@@ -354,7 +354,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void testHasDependencyOn() {
+  void testHasDependencyOn() {
     Assertions.assertNotNull(root);
     CompareNode wildcardpackage =
         root.getNodeByPath("src/org/wickedsource/dependencytree/wildcardpackage");
@@ -370,7 +370,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void testCountDependenciesOn() {
+  void testCountDependenciesOn() {
     Assertions.assertNotNull(root);
     CompareNode wildcardpackage =
         root.getNodeByPath("src/org/wickedsource/dependencytree/wildcardpackage");
@@ -389,21 +389,21 @@ public class CompareTreeTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void testGetNodeFromImportNoClass() {
+  void testGetNodeFromImportNoClass() {
     List<CompareNode> imports =
         dependencyTree.getNodeFromImport("org.wickedsource.dependencytree.sbdfjksbdf");
     Assertions.assertEquals(0, imports.size());
   }
 
   @Test
-  public void testGetNodeFromImportWildcard() {
+  void testGetNodeFromImportWildcard() {
     List<CompareNode> imports =
         dependencyTree.getNodeFromImport("org.wickedsource.dependencytree.wildcardpackage.*");
     Assertions.assertEquals(4, imports.size());
   }
 
   @Test
-  public void testGetNodeFromImportClass() {
+  void testGetNodeFromImportClass() {
     List<CompareNode> imports =
         dependencyTree.getNodeFromImport(
             "org.wickedsource.dependencytree.somepackage.CoreDependencyTest");

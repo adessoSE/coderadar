@@ -109,17 +109,6 @@ export class ProjectService {
   }
 
   /**
-   * Edits a module of a project.
-   * Sends a POST request to /projects/{id}/modules/{moduleId}
-   * @param id The id of the project.
-   * @param module The name (path) of the module.
-   */
-  public editProjectModule(id: number, module: Module): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules/' + module.id, JSON.stringify(module),
-      {observe: 'response'}).toPromise();
-  }
-
-  /**
    * Deletes a module of a project.
    * Sends a DELETE request to /projects/{id}/modules/{moduleId}
    * @param id The id of the project.
@@ -214,7 +203,7 @@ export class ProjectService {
    * @param branch The branch to use for getting the commits.
    */
   public getCommitsForContributor(id: number, branch: string, email: string): Promise<HttpResponse<Commit[]>> {
-    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits?email='+email,
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits?email=' + email.replace('+', '%2B'),
       {observe: 'response'}).toPromise();
   }
 
@@ -248,7 +237,7 @@ export class ProjectService {
   }
 
   /**
-   * Returnsthe delta three of a project given two commits and a metric mapping
+   * Returns the delta tree of a project given two commits and a metric mapping
    * @param firstCommit The first commit
    * @param secondCommit The second commit
    * @param metricMapping The metric mapping
@@ -326,5 +315,10 @@ export class ProjectService {
   getFileDiff(projectId: any, commitHash: any, filepath: string): Promise<HttpResponse<FileContentWithMetrics>> {
     return this.httpClient.post<FileContentWithMetrics>(this.apiURL + 'projects/' + projectId + '/files/diff',
       {commitHash, filepath}, {observe: 'response'}).toPromise();
+  }
+
+  public listProjectsForUser(userId: number): Promise<HttpResponse<Project[]>> {
+    return this.httpClient.get<Project[]>(this.apiURL + 'users/' + userId + '/projects',
+      {observe: 'response'}).toPromise();
   }
 }

@@ -1,10 +1,12 @@
 package io.reflectoring.coderadar.rest.contributor;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
+import static io.reflectoring.coderadar.rest.GetContributorResponseMapper.mapContributor;
+
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,16 +22,8 @@ public class GetContributorController implements AbstractBaseController {
     this.getContributorUseCase = getContributorUseCase;
   }
 
-  @GetMapping(path = "/contributors/{id}")
+  @GetMapping(path = "/contributors/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetContributorResponse> getById(@PathVariable long id) {
-    return new ResponseEntity<>(map(getContributorUseCase.getById(id)), HttpStatus.OK);
-  }
-
-  private GetContributorResponse map(Contributor contributor) {
-    return new GetContributorResponse(
-        contributor.getId(),
-        contributor.getDisplayName(),
-        contributor.getNames(),
-        contributor.getEmailAddresses());
+    return new ResponseEntity<>(mapContributor(getContributorUseCase.getById(id)), HttpStatus.OK);
   }
 }

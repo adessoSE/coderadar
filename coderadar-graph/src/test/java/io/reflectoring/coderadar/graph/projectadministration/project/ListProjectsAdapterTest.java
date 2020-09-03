@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("List projects")
 class ListProjectsAdapterTest {
-  private ProjectRepository projectRepository = mock(ProjectRepository.class);
+  private final ProjectRepository projectRepository = mock(ProjectRepository.class);
 
   private ListProjectsAdapter listProjectsAdapter;
 
@@ -31,7 +31,7 @@ class ListProjectsAdapterTest {
 
     List<Project> projects = listProjectsAdapter.getProjects();
     verify(projectRepository, times(1)).findAll();
-    Assertions.assertThat(projects).hasSize(0);
+    Assertions.assertThat(projects).isEmpty();
   }
 
   @Test

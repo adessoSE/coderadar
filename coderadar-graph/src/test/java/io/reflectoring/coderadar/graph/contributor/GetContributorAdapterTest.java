@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class GetContributorAdapterTest {
+class GetContributorAdapterTest {
   private GetContributorAdapter getContributorAdapter;
 
   @Mock private ContributorRepository contributorRepository;
@@ -25,7 +25,7 @@ public class GetContributorAdapterTest {
   }
 
   @Test
-  public void throwsExceptionIfContributorDoesNotExist() {
+  void throwsExceptionIfContributorDoesNotExist() {
     when(contributorRepository.findById(10L)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(

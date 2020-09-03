@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.project;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.net.MalformedURLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,19 +19,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UpdateProjectController implements AbstractBaseController {
   private final UpdateProjectUseCase updateProjectUseCase;
+  private final AuthenticationService authenticationService;
 
-  public UpdateProjectController(UpdateProjectUseCase updateProjectUseCase) {
+  public UpdateProjectController(
+      UpdateProjectUseCase updateProjectUseCase, AuthenticationService authenticationService) {
     this.updateProjectUseCase = updateProjectUseCase;
+    this.authenticationService = authenticationService;
   }
 
-  @PostMapping(
-      path = "/projects/{projectId}",
-      consumes = MediaType.APPLICATION_JSON_VALUE,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(path = "/projects/{projectId}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> updateProject(
       @RequestBody @Validated UpdateProjectCommand command,
       @PathVariable(name = "projectId") long projectId)
       throws MalformedURLException {
+    authenticationService.authenticateAdmin(projectId);
     updateProjectUseCase.update(command, projectId);
     return new ResponseEntity<>(HttpStatus.OK);
   }

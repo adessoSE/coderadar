@@ -1,9 +1,12 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
+import static io.reflectoring.coderadar.rest.GetAnalyzerConfigurationResponseMapper.mapAnalyzerConfiguration;
+
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetAnalyzerConfigurationResponse;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,24 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GetAnalyzerConfigurationController implements AbstractBaseController {
   private final GetAnalyzerConfigurationUseCase getAnalyzerConfigurationUseCase;
+  private final AuthenticationService authenticationService;
 
   public GetAnalyzerConfigurationController(
-      GetAnalyzerConfigurationUseCase getAnalyzerConfigurationUseCase) {
+      GetAnalyzerConfigurationUseCase getAnalyzerConfigurationUseCase,
+      AuthenticationService authenticationService) {
     this.getAnalyzerConfigurationUseCase = getAnalyzerConfigurationUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @GetMapping(
       path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetAnalyzerConfigurationResponse> getAnalyzerConfiguration(
-      @PathVariable long analyzerConfigurationId) {
+      @PathVariable long projectId, @PathVariable long analyzerConfigurationId) {
     AnalyzerConfiguration analyzerConfiguration =
         getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(analyzerConfigurationId);
-    return new ResponseEntity<>(
-        new GetAnalyzerConfigurationResponse(
-            analyzerConfiguration.getId(),
-            analyzerConfiguration.getAnalyzerName(),
-            analyzerConfiguration.isEnabled()),
-        HttpStatus.OK);
+    authenticationService.authenticateMember(projectId);
+    return new ResponseEntity<>(mapAnalyzerConfiguration(analyzerConfiguration), HttpStatus.OK);
   }
 }

@@ -1,6 +1,6 @@
 import {IPackerElement} from './IPackerElement';
 import {NodeType} from '../enum/NodeType';
-import {MetricValue} from "../../model/metric-value";
+import {MetricValue} from '../../model/metric-value';
 
 export interface INode {
   name: string;

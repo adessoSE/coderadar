@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AnalyzerPluginService {
-  private Logger logger = LoggerFactory.getLogger(AnalyzerPluginService.class);
+  private final Logger logger = LoggerFactory.getLogger(AnalyzerPluginService.class);
 
-  private Map<String, Class<? extends SourceCodeFileAnalyzerPlugin>> sourceCodeFileAnalyzerPlugins =
-      new HashMap<>();
+  private final Map<String, Class<? extends SourceCodeFileAnalyzerPlugin>>
+      sourceCodeFileAnalyzerPlugins = new HashMap<>();
 
   /**
    * Constructs a new AnalyzerPluginRegistry. This is a very expensive operation since the
@@ -103,7 +103,7 @@ public class AnalyzerPluginService {
         }
         throw new IllegalArgumentException(
             String.format(
-                "Not a valid configuration file for analyzer plugin %s. The first couple lines of configuration file are:\n %s",
+                "Not a valid configuration file for analyzer plugin %s. The first couple lines of configuration file are:%n %s",
                 configurableAnalyzer.getClass(), firstCoupleLines.toString()));
       } catch (IOException e) {
         throw new IllegalArgumentException(

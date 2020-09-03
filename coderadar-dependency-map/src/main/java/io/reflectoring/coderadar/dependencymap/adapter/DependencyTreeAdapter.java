@@ -88,15 +88,12 @@ public class DependencyTreeAdapter implements GetDependencyTreePort {
               // for every child in the current layer check
               for (int j = 0; j < node.getChildren().size(); j++) {
                 childJ = node.getChildren().get(j);
-                if (i == j) continue;
                 // if any child before this has a dependency on this
                 // or any child before has more dependencies on this than this has on any child
                 // before
                 //   raise layer, break
-                if (childJ.hasDependencyOn(childI) && !childI.hasDependencyOn(childJ)) {
-                  level = (level < childJ.getLevel() ? childJ.getLevel() + 1 : level + 1);
-                } else if (childJ.countDependenciesOn(childI)
-                    > childI.countDependenciesOn(childJ)) {
+                if (i != j && (childJ.hasDependencyOn(childI) && !childI.hasDependencyOn(childJ))
+                    || childJ.countDependenciesOn(childI) > childI.countDependenciesOn(childJ)) {
                   level = (level < childJ.getLevel() ? childJ.getLevel() + 1 : level + 1);
                 }
               }

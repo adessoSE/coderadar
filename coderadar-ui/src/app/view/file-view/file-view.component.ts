@@ -27,8 +27,8 @@ import {AppComponent} from '../../app.component';
 import {Title} from '@angular/platform-browser';
 import {ContributorService} from '../../service/contributor.service';
 import {Contributor} from '../../model/contributor';
-import {HttpResponse} from "@angular/common/http";
-import {FileContentWithMetrics} from "../../model/file-content-with-metrics";
+import {HttpResponse} from '@angular/common/http';
+import {FileContentWithMetrics} from '../../model/file-content-with-metrics';
 
 @Component({
   selector: 'app-file-view',
@@ -80,7 +80,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   hasChild = (_: number, node: FileTreeNode) => node.children !== null;
 
   public getFileTree() {
-    if(!this.showOnlyChangedFiles){
+    if (!this.showOnlyChangedFiles) {
       this.showDiff = false;
       this.updateSelectedFile(null, this.currentSelectedFilepath);
     }
@@ -107,23 +107,23 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   public updateSelectedFile(node: any, path: string): void {
     this.highlighted = false;
     this.currentFileContent = '';
-    if(node === null && path === null){
+    if (node === null && path === null) {
       return;
     }
-    if(path === null) {
+    if (path === null) {
       this.currentSelectedFilepath = this.getFullPath(this.tree.children, node, '');
       this.currentSelectedFilepath = this.currentSelectedFilepath.substr(1, this.currentSelectedFilepath.length);
     } else {
       this.currentSelectedFilepath = path;
     }
-    if(this.currentSelectedFilepath === ''){
+    if (this.currentSelectedFilepath === '') {
       return;
     }
     let promise: Promise<HttpResponse<FileContentWithMetrics>> ;
-    if(this.showDiff){
-      promise = this.projectService.getFileDiff(this.projectId, this.commitHash, this.currentSelectedFilepath)
+    if (this.showDiff) {
+      promise = this.projectService.getFileDiff(this.projectId, this.commitHash, this.currentSelectedFilepath);
     } else {
-      promise = this.projectService.getFileContentWithMetrics(this.projectId, this.commitHash, this.currentSelectedFilepath)
+      promise = this.projectService.getFileContentWithMetrics(this.projectId, this.commitHash, this.currentSelectedFilepath);
     }
     promise.then(value => {
         this.currentFileContent = value.body.content;
@@ -153,7 +153,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    if(this.showDiff){
+    if (this.showDiff) {
       this.fileView.nativeElement.children.item(0).lastChild.remove();
     } else {
       this.fileView.nativeElement.children.item(1).remove();
@@ -212,7 +212,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
     const lineStart = +range.value.split('-')[0];
     let findings = '';
     this.currentFileMetrics.forEach(value => {
-      let found = false;
+      const found = false;
       for (const finding of value.findings) {
         if (finding.lineStart === lineStart) {
           findings += finding.message + '\n';
@@ -226,11 +226,11 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   getCodeClass() {
     const temp = this.currentSelectedFilepath.split('.');
     const fileExtension = temp[temp.length - 1];
-    if(this.showDiff) {
+    if (this.showDiff) {
       if (fileExtension === 'gradle') {
         return 'language-diff-groovy diff-highlight';
       }
-      return 'language-diff-'+ fileExtension + ' diff-highlight';
+      return 'language-diff-' + fileExtension + ' diff-highlight';
     } else {
       if (fileExtension === 'gradle') {
         return 'line-numbers language-groovy';
@@ -240,7 +240,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   }
 
   getAllFindings(metrics: MetricWithFindings[]) {
-    if(metrics === null){
+    if (metrics === null) {
       return '0';
     }
     let result = '';
@@ -267,7 +267,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   }
 
   getPreClass() {
-    if(!this.showDiff){
+    if (!this.showDiff) {
       return 'line-numbers file-content';
     }  else {
       return 'file-content';

@@ -8,10 +8,10 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class CheckstyleSourceCodeFileAnalyzerPluginTest {
+class CheckstyleSourceCodeFileAnalyzerPluginTest {
 
   @Test
-  public void metricsAreCalculatedCorrectly() throws AnalyzerException, IOException {
+  void metricsAreCalculatedCorrectly() throws AnalyzerException, IOException {
 
     byte[] fileContent =
         IOUtils.toByteArray(getClass().getResourceAsStream("/CheckstyleAnalyzer.java.txt"));
@@ -27,7 +27,7 @@ public class CheckstyleSourceCodeFileAnalyzerPluginTest {
   }
 
   @Test
-  public void cyclomaticComplexityIsCalculatedCorrectly() throws IOException {
+  void cyclomaticComplexityIsCalculatedCorrectly() throws IOException {
     byte[] fileContent =
         IOUtils.toByteArray(getClass().getResourceAsStream("/AntPathMatcher.java.txt"));
 

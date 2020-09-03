@@ -7,14 +7,13 @@ import io.reflectoring.coderadar.graph.projectadministration.project.adapter.Upd
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("Update project")
 class UpdateProjectAdapterTest {
-  private ProjectRepository projectRepository = mock(ProjectRepository.class);
+  private final ProjectRepository projectRepository = mock(ProjectRepository.class);
 
   private UpdateProjectAdapter updateProjectAdapter;
 
@@ -42,6 +41,5 @@ class UpdateProjectAdapterTest {
     updateProjectAdapter.update(project);
 
     verify(projectRepository, times(1)).save(mockedItem);
-    Assertions.assertNotEquals(mockedOldItem, project);
   }
 }

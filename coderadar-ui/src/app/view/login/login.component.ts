@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
-import {FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND} from 'http-status-codes';
+import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 
 @Component({

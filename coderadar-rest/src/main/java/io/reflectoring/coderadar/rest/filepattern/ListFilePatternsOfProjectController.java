@@ -1,10 +1,12 @@
 package io.reflectoring.coderadar.rest.filepattern;
 
+import static io.reflectoring.coderadar.rest.GetFilePatternResponseMapper.mapFilePatterns;
+
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetFilePatternResponse;
-import java.util.ArrayList;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,10 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ListFilePatternsOfProjectController implements AbstractBaseController {
   private final ListFilePatternsOfProjectUseCase listFilePatternsOfProjectUseCase;
+  private final AuthenticationService authenticationService;
 
   public ListFilePatternsOfProjectController(
-      ListFilePatternsOfProjectUseCase listFilePatternsOfProjectUseCase) {
+      ListFilePatternsOfProjectUseCase listFilePatternsOfProjectUseCase,
+      AuthenticationService authenticationService) {
     this.listFilePatternsOfProjectUseCase = listFilePatternsOfProjectUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @GetMapping(
@@ -29,13 +34,8 @@ public class ListFilePatternsOfProjectController implements AbstractBaseControll
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetFilePatternResponse>> listFilePatterns(
       @PathVariable long projectId) {
+    authenticationService.authenticateMember(projectId);
     List<FilePattern> filePatterns = listFilePatternsOfProjectUseCase.listFilePatterns(projectId);
-    List<GetFilePatternResponse> responses = new ArrayList<>(filePatterns.size());
-    for (FilePattern filePattern : filePatterns) {
-      responses.add(
-          new GetFilePatternResponse(
-              filePattern.getId(), filePattern.getPattern(), filePattern.getInclusionType()));
-    }
-    return new ResponseEntity<>(responses, HttpStatus.OK);
+    return new ResponseEntity<>(mapFilePatterns(filePatterns), HttpStatus.OK);
   }
 }

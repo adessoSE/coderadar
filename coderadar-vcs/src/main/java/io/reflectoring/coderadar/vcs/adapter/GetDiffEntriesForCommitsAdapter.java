@@ -23,8 +23,7 @@ public class GetDiffEntriesForCommitsAdapter implements GetDiffEntriesForCommits
   @Override
   public List<DiffEntry> getDiffs(String projectRoot, String commitName1, String commitName2)
       throws UnableToGetDiffsFromCommitsException {
-    try {
-      Git git = Git.open(new File(projectRoot));
+    try (Git git = Git.open(new File(projectRoot))) {
       Repository repository = git.getRepository();
       RevCommit commit1 = repository.parseCommit(ObjectId.fromString(commitName1));
       RevCommit commit2 = repository.parseCommit(ObjectId.fromString(commitName2));
@@ -35,32 +34,30 @@ public class GetDiffEntriesForCommitsAdapter implements GetDiffEntriesForCommits
         commit2 = tmp;
       }
 
-      ObjectReader reader = git.getRepository().newObjectReader();
-
       CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
-      ObjectId oldTree = commit1.getTree();
-      oldTreeIter.reset(reader, oldTree);
-
       CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
-      ObjectId newTree = commit2.getTree();
-      newTreeIter.reset(reader, newTree);
+
+      try (ObjectReader reader = git.getRepository().newObjectReader()) {
+        ObjectId oldTree = commit1.getTree();
+        oldTreeIter.reset(reader, oldTree);
+
+        ObjectId newTree = commit2.getTree();
+        newTreeIter.reset(reader, newTree);
+      }
 
       DiffFormatter df = new DiffFormatter(new ByteArrayOutputStream());
       df.setRepository(repository);
-      List<DiffEntry> entries =
-          df.scan(oldTreeIter, newTreeIter).stream()
-              .map(
-                  diffEntry -> {
-                    DiffEntry entry = new DiffEntry();
-                    entry.setNewPath(diffEntry.getNewPath());
-                    entry.setOldPath(diffEntry.getOldPath());
-                    entry.setChangeType(
-                        ChangeTypeMapper.jgitToCoderadar(diffEntry.getChangeType()).ordinal());
-                    return entry;
-                  })
-              .collect(Collectors.toList());
-      git.close();
-      return entries;
+      return df.scan(oldTreeIter, newTreeIter).stream()
+          .map(
+              diffEntry -> {
+                DiffEntry entry = new DiffEntry();
+                entry.setNewPath(diffEntry.getNewPath());
+                entry.setOldPath(diffEntry.getOldPath());
+                entry.setChangeType(
+                    ChangeTypeMapper.jgitToCoderadar(diffEntry.getChangeType()).ordinal());
+                return entry;
+              })
+          .collect(Collectors.toList());
     } catch (IOException e) {
       throw new UnableToGetDiffsFromCommitsException(e.getMessage());
     }

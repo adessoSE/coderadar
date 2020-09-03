@@ -57,6 +57,11 @@
 
     <module name="UniqueProperties"/>
 
+    <module name="LineLength">
+        <property name="max" value="100"/>
+        <property name="ignorePattern" value="^ *\* *[^ ]+$"/>
+    </module>
+
     <module name="TreeWalker">
         <property name="tabWidth" value="4"/>
 
@@ -91,9 +96,7 @@
         <module name="JavadocType">
             <property name="authorFormat" value="\S"/>
         </module>
-        <module name="JavadocMethod">
-            <property name="allowUndeclaredRTE" value="true"/>
-            <property name="allowThrowsTagsForSubclasses" value="true"/>
+        <module name="MissingJavadocMethodCheck ">
             <property name="allowMissingPropertyJavadoc" value="true"/>
         </module>
         <module name="JavadocVariable"/>
@@ -101,13 +104,8 @@
             <property name="scope" value="public"/>
         </module>
         <module name="LeftCurly">
-            <property name="maxLineLength" value="100"/>
         </module>
         <module name="OuterTypeNumber"/>
-        <module name="LineLength">
-            <property name="max" value="100"/>
-            <property name="ignorePattern" value="^ *\* *[^ ]+$"/>
-        </module>
         <module name="MethodCount">
             <property name="maxTotal" value="35"/>
         </module>

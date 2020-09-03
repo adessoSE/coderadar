@@ -33,8 +33,7 @@
 
 .card-list mat-grid-list {
   width: 70%;
-  float: right;
-  margin-right: 10%;
+  float: left;
 }
 
 .card-list mat-card-header a {
@@ -45,8 +44,9 @@
   padding-left: 30px;
 }
 
-.card-list #noProjectsMessage {
+.card-list .noProjectsMessage {
   font-size: x-large;
+  text-align: center;
 }
 
 .card-list mat-card-content > div {
@@ -57,4 +57,13 @@
   float: right;
   margin-right: 100px;
   margin-top: 2px;
+}
+
+.sidenav {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: ghostwhite;
+  min-height: calc(100vh - 220px);
 }
