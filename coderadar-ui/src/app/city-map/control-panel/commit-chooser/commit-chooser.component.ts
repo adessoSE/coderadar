@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CommitType} from '../../enum/CommitType';
 import {Commit} from '../../../model/commit';
 import {Observable} from 'rxjs';
-import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-commit-chooser',
