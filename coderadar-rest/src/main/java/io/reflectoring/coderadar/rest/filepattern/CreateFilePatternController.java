@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.c
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CreateFilePatternController implements AbstractBaseController {
   private final CreateFilePatternUseCase createFilePatternUseCase;
+  private final AuthenticationService authenticationService;
 
-  public CreateFilePatternController(CreateFilePatternUseCase createFilePatternUseCase) {
+  public CreateFilePatternController(
+      CreateFilePatternUseCase createFilePatternUseCase,
+      AuthenticationService authenticationService) {
     this.createFilePatternUseCase = createFilePatternUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @PostMapping(
@@ -30,6 +35,7 @@ public class CreateFilePatternController implements AbstractBaseController {
   public ResponseEntity<IdResponse> createFilePattern(
       @RequestBody @Validated CreateFilePatternCommand command,
       @PathVariable(name = "projectId") long projectId) {
+    authenticationService.authenticateAdmin(projectId);
     return new ResponseEntity<>(
         new IdResponse(createFilePatternUseCase.createFilePattern(command, projectId)),
         HttpStatus.CREATED);

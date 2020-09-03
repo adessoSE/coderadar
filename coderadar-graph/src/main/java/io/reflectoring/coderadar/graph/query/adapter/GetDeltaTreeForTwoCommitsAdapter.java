@@ -12,6 +12,7 @@ import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoC
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -102,35 +103,37 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     deltaTree.setType(commit2Tree.getType());
     deltaTree.setCommit1Metrics(commit1Tree.getMetrics());
     deltaTree.setCommit2Metrics(commit2Tree.getMetrics());
+
     int tree1Counter = 0;
     int tree2Counter = 0;
-    while (tree1Counter < commit1Tree.getChildren().size()
-        || tree2Counter < commit2Tree.getChildren().size()) {
+    int commit1ChildrenSize = commit1Tree.getChildren().size();
+    int commit2ChildrenSize = commit2Tree.getChildren().size();
+
+    while (tree1Counter < commit1ChildrenSize || tree2Counter < commit2ChildrenSize) {
 
       MetricTree metricTree2 =
-          tree2Counter < commit2Tree.getChildren().size()
-              ? commit2Tree.getChildren().get(tree2Counter)
-              : null;
+          tree2Counter < commit2ChildrenSize ? commit2Tree.getChildren().get(tree2Counter) : null;
 
       MetricTree metricTree1 =
-          tree1Counter < commit1Tree.getChildren().size()
-              ? commit1Tree.getChildren().get(tree1Counter)
-              : null;
+          tree1Counter < commit1ChildrenSize ? commit1Tree.getChildren().get(tree1Counter) : null;
 
       if (getChangeType(metricTree1, metricTree2).equals(ChangeType.MODIFY)) {
-        if (metricTree1.getType().equals(MetricTreeNodeType.MODULE)
-            && metricTree2.getType().equals(MetricTreeNodeType.MODULE)) {
+        if (Objects.requireNonNull(metricTree1).getType().equals(MetricTreeNodeType.MODULE)
+            && Objects.requireNonNull(metricTree2).getType().equals(MetricTreeNodeType.MODULE)) {
           deltaTree.getChildren().add(createDeltaTree(metricTree1, metricTree2));
         } else {
-          deltaTree.getChildren().add(createFileNode(metricTree1, metricTree2));
+          deltaTree
+              .getChildren()
+              .add(createFileNode(metricTree1, Objects.requireNonNull(metricTree2)));
         }
-        tree1Counter++;
-        tree2Counter++;
+        ++tree1Counter;
+        ++tree2Counter;
       } else if (getChangeType(metricTree1, metricTree2).equals(ChangeType.DELETE)) {
-        deltaTree.getChildren().add(createDeletedFileNode(metricTree1));
-        tree1Counter++;
+        deltaTree.getChildren().add(createDeletedFileNode(Objects.requireNonNull(metricTree1)));
+        ++tree1Counter;
       } else {
-        if (metricTree2.getType().equals(MetricTreeNodeType.MODULE) && metricTree1 != null) {
+        if (Objects.requireNonNull(metricTree2).getType().equals(MetricTreeNodeType.MODULE)
+            && metricTree1 != null) {
           deltaTree.getChildren().add(createAddedFileNode(metricTree1));
           tree1Counter++;
         } else {

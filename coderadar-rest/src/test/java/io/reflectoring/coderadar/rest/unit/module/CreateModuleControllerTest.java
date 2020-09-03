@@ -2,35 +2,55 @@ package io.reflectoring.coderadar.rest.unit.module;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.module.CreateModuleController;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class CreateModuleControllerTest {
+class CreateModuleControllerTest extends UnitTestTemplate {
 
-  private CreateModuleUseCase createModuleUseCase = mock(CreateModuleUseCase.class);
+  private final CreateModuleUseCase createModuleUseCase = mock(CreateModuleUseCase.class);
 
   @Test
-  void createModuleSuccessfully()
-      throws ModuleAlreadyExistsException, ModulePathInvalidException,
-          ProjectIsBeingProcessedException {
-    CreateModuleController testSubject = new CreateModuleController(createModuleUseCase);
+  void testCreateModule() throws ModulePathInvalidException {
+    CreateModuleController testSubject =
+        new CreateModuleController(createModuleUseCase, authenticationService);
 
     CreateModuleCommand command = new CreateModuleCommand("module-path-test");
     Mockito.when(createModuleUseCase.createModule(command, 5L)).thenReturn(1L);
 
-    ResponseEntity responseEntity = testSubject.createModule(command, 5L);
+    ResponseEntity<Object> responseEntity = testSubject.createModule(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
+    Assertions.assertTrue(responseEntity.getBody() instanceof IdResponse);
     Assertions.assertEquals(1L, ((IdResponse) responseEntity.getBody()).getId());
+  }
+
+  @Test
+  void testCreateModuleReturnsErrorWhenPathInvalid() throws ModulePathInvalidException {
+    CreateModuleController testSubject =
+        new CreateModuleController(createModuleUseCase, authenticationService);
+
+    CreateModuleCommand command = new CreateModuleCommand("module-path-test//");
+    Mockito.when(createModuleUseCase.createModule(command, 5L))
+        .thenThrow(new ModulePathInvalidException(command.getPath()));
+
+    ResponseEntity<Object> responseEntity = testSubject.createModule(command, 5L);
+
+    Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
+    Assertions.assertTrue(responseEntity.getBody() instanceof ErrorMessageResponse);
+    Assertions.assertEquals(
+        "module-path-test// is not a valid path!",
+        ((ErrorMessageResponse) responseEntity.getBody()).getErrorMessage());
   }
 }

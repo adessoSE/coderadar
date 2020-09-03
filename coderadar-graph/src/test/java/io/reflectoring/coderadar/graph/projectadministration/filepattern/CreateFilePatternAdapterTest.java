@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Create file pattern")
 class CreateFilePatternAdapterTest {
-  private FilePatternRepository filePatternRepository = mock(FilePatternRepository.class);
-  private ProjectRepository projectRepository = mock(ProjectRepository.class);
+  private final FilePatternRepository filePatternRepository = mock(FilePatternRepository.class);
+  private final ProjectRepository projectRepository = mock(ProjectRepository.class);
 
   @Test
   @DisplayName("Should return long when passing a valid argument")
@@ -34,7 +34,6 @@ class CreateFilePatternAdapterTest {
         .thenReturn(java.util.Optional.of(new ProjectEntity()));
     when(filePatternRepository.save(any())).thenReturn(filePatternEntity);
     Long returnedId = createFilePatternAdapter.createFilePattern(filePattern, 1L);
-    Assertions.assertThat(returnedId).isNotNull();
-    Assertions.assertThat(returnedId).isEqualTo(2L);
+    Assertions.assertThat(returnedId).isNotNull().isEqualTo(2L);
   }
 }

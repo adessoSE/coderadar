@@ -1,9 +1,11 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
+import io.reflectoring.coderadar.useradministration.domain.Team;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
-/** A coderadar project that defines the source of files that are to be analyzed. */
+/** A Coderadar project that defines the source of files that are to be analyzed. */
 @Data
 public class Project {
   private long id;
@@ -14,4 +16,5 @@ public class Project {
   private String vcsPassword;
   private boolean vcsOnline;
   private Date vcsStart;
+  private List<Team> teams;
 }

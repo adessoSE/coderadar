@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.module;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -34,7 +35,7 @@ class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
     // Test
     mvc()
         .perform(delete("/api/projects/" + testProject.getId() + "/modules/" + module.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(result -> Assertions.assertFalse(moduleRepository.findById(id).isPresent()))
         .andDo(document("modules/delete"));
   }
@@ -47,7 +48,7 @@ class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
 
     mvc()
         .perform(delete("/api/projects/0/modules/0"))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Module with id 0 not found."));
   }

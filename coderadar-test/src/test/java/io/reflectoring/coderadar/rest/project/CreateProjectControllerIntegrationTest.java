@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.project;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
@@ -21,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private ProjectRepository projectRepository;
@@ -37,7 +37,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andDo(
             result -> {
               Long id =
@@ -64,7 +64,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(status().isBadRequest())
         .andDo(document("projects/create/error400"));
   }
 

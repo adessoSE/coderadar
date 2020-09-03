@@ -1,0 +1,24 @@
+<div mat-dialog-content>
+  <mat-form-field style="width: 100%">
+    <mat-label>Select teams</mat-label>
+    <mat-select multiple [formControl]="selectedTeams">
+      <mat-option *ngFor="let team of data.teams" [value]="team">{{team.name}}</mat-option>
+    </mat-select>
+
+  </mat-form-field>
+  <mat-form-field style="width: 100%">
+    <mat-label>Select role</mat-label>
+    <mat-select [(value)]="data.role" >
+      <mat-option [value]="'ADMIN'">
+        Admin
+      </mat-option>
+      <mat-option  [value]="'MEMBER'">
+        Member
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<mat-dialog-actions >
+  <button mat-button style="width: 48%" (click)="onNoClick()">Cancel</button>
+  <button mat-raised-button style="width: 48%" color="primary" (click)="onAddClick()" [mat-dialog-close]="data">Add</button>
+</mat-dialog-actions>

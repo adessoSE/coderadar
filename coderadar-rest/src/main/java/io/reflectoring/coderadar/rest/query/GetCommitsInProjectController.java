@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.GetCommitResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,9 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GetCommitsInProjectController implements AbstractBaseController {
   private final GetCommitsInProjectUseCase getCommitsInProjectUseCase;
+  private final AuthenticationService authenticationService;
 
-  public GetCommitsInProjectController(GetCommitsInProjectUseCase getCommitsInProjectUseCase) {
+  public GetCommitsInProjectController(
+      GetCommitsInProjectUseCase getCommitsInProjectUseCase,
+      AuthenticationService authenticationService) {
     this.getCommitsInProjectUseCase = getCommitsInProjectUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @GetMapping(
@@ -31,6 +36,7 @@ public class GetCommitsInProjectController implements AbstractBaseController {
       @PathVariable("projectId") long projectId,
       @PathVariable("branchName") String branchName,
       @RequestParam(value = "email", required = false) String email) {
+    authenticationService.authenticateMember(projectId);
     List<Commit> commits;
     if (email == null || email.isEmpty()) {
       commits = getCommitsInProjectUseCase.get(projectId, branchName);

@@ -5,6 +5,8 @@ import org.eclipse.jgit.diff.DiffEntry;
 
 public class ChangeTypeMapper {
 
+  private ChangeTypeMapper() {}
+
   public static ChangeType jgitToCoderadar(DiffEntry.ChangeType changeType) {
     return ChangeType.valueOf(changeType.name());
   }

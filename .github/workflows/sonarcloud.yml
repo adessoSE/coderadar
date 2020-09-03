@@ -26,6 +26,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: analyze on sonarcloud
-        run: gradle build sonarqube -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: gradle codeCoverageReport sonarqube -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.java.binaries=build/classes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

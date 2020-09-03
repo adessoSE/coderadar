@@ -22,10 +22,7 @@ public class UpdateContributorController implements AbstractBaseController {
     this.updateContributorUseCase = updateContributorUseCase;
   }
 
-  @PostMapping(
-      path = "/contributors/{id}",
-      consumes = MediaType.APPLICATION_JSON_VALUE,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(path = "/contributors/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> updateContributor(
       @PathVariable long id, @RequestBody @Validated UpdateContributorCommand command) {
     updateContributorUseCase.updateContributor(id, command);

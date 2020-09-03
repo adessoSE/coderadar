@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 
 public class LocCounter {
 
-  public Loc count(byte[] fileContent, LocProfile profile) throws IOException {
-    Loc loc = new Loc();
+  public LinesOfCode count(byte[] fileContent, LocProfile profile) throws IOException {
+    LinesOfCode loc = new LinesOfCode();
     LocContext context = new LocContext();
     BufferedReader reader =
         new BufferedReader(new InputStreamReader(new ByteArrayInputStream(fileContent)));
@@ -25,7 +25,7 @@ public class LocCounter {
     return loc;
   }
 
-  private void countLine(String line, LocProfile profile, Loc loc, LocContext context) {
+  private void countLine(String line, LocProfile profile, LinesOfCode loc, LocContext context) {
     if (isEmptyLine(line)) {
       loc.incrementLoc();
     } else if (isCommentLine(line, profile, context)) {
@@ -73,6 +73,8 @@ public class LocCounter {
           if (!withinString) {
             withinMultiLineComment = false;
           }
+          break;
+        default:
           break;
       }
     }

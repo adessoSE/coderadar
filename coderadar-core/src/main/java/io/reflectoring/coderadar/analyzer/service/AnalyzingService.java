@@ -170,44 +170,42 @@ public class AnalyzingService
    */
   private void zeroOutMissingMetrics(
       Commit commit, List<MetricValue> metrics, Map<Long, List<MetricValue>> fileMetrics) {
+
     for (FileToCommitRelationship relationship : commit.getTouchedFiles()) {
-      List<MetricValue> values = fileMetrics.get(relationship.getFile().getId());
-      if (values != null) {
-        for (MetricValue value : values) {
-          if (value.getValue() != 0
-              && metrics.stream()
-                  .noneMatch(
-                      metricValue ->
-                          metricValue.getName().equals(value.getName())
-                              && metricValue.getFileId() == value.getFileId())) {
-            metrics.add(
-                new MetricValue(
-                    value.getName(),
-                    0L,
-                    commit.getId(),
-                    value.getFileId(),
-                    Collections.emptyList()));
-          }
+      List<MetricValue> values =
+          fileMetrics.getOrDefault(relationship.getFile().getId(), Collections.emptyList());
+
+      for (MetricValue value : values) {
+        if (value.getValue() != 0
+            && metrics.stream()
+                .noneMatch(
+                    metricValue ->
+                        metricValue.getName().equals(value.getName())
+                            && metricValue.getFileId() == value.getFileId())) {
+          metrics.add(
+              new MetricValue(
+                  value.getName(), 0L, commit.getId(), value.getFileId(), Collections.emptyList()));
         }
       }
     }
 
-    metrics.sort(Comparator.comparingLong(MetricValue::getFileId));
-    if (!metrics.isEmpty()) {
-      long fileId = metrics.get(0).getFileId();
-      List<MetricValue> metricsForFile = new ArrayList<>();
-      for (MetricValue metricValue : metrics) {
-        if (metricValue.getValue() != 0) {
-          if (metricValue.getFileId() != fileId) {
-            fileMetrics.put(fileId, new ArrayList<>(metricsForFile));
-            fileId = metricValue.getFileId();
-            metricsForFile.clear();
-          }
-          metricsForFile.add(metricValue);
-        }
-      }
-      fileMetrics.put(fileId, metricsForFile);
+    if (metrics.isEmpty()) {
+      return;
     }
+    metrics.sort(Comparator.comparingLong(MetricValue::getFileId));
+    long fileId = metrics.get(0).getFileId();
+    List<MetricValue> metricsForFile = new ArrayList<>();
+    for (MetricValue metricValue : metrics) {
+      if (metricValue.getValue() != 0) {
+        if (metricValue.getFileId() != fileId) {
+          fileMetrics.put(fileId, new ArrayList<>(metricsForFile));
+          fileId = metricValue.getFileId();
+          metricsForFile.clear();
+        }
+        metricsForFile.add(metricValue);
+      }
+    }
+    fileMetrics.put(fileId, metricsForFile);
   }
 
   /**

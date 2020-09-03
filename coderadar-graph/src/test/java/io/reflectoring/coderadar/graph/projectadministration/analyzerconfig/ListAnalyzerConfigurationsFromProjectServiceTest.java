@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Get analyzer configurations from project")
 class ListAnalyzerConfigurationsFromProjectServiceTest {
-  private AnalyzerConfigurationRepository analyzerConfigurationRepository =
+  private final AnalyzerConfigurationRepository analyzerConfigurationRepository =
       mock(AnalyzerConfigurationRepository.class);
 
-  private ProjectRepository projectRepository = mock(ProjectRepository.class);
+  private final ProjectRepository projectRepository = mock(ProjectRepository.class);
 
   private ListAnalyzerConfigurationsAdapter getAnalyzerConfigurationsFromProjectAdapter;
 
@@ -37,7 +37,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
     Iterable<AnalyzerConfiguration> configurations =
         getAnalyzerConfigurationsFromProjectAdapter.listAnalyzerConfigurations(1L);
     verify(analyzerConfigurationRepository, times(1)).findByProjectId(1L);
-    Assertions.assertThat(configurations).hasSize(0);
+    Assertions.assertThat(configurations).isEmpty();
   }
 
   @Test

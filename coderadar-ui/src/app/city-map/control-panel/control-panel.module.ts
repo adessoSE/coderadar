@@ -30,7 +30,7 @@ import {
 } from '@angular/material';
 import {LayoutModule} from '@angular/cdk/layout';
 import {ProjectService} from '../../service/project.service';
-import {HighlightSearchPipe} from "./pipes/highlight-search.pipe";
+import {HighlightSearchPipe} from './pipes/highlight-search.pipe';
 
 @NgModule({
   imports: [

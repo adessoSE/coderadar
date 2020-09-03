@@ -6,19 +6,21 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectUseCase;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
 import io.reflectoring.coderadar.rest.project.GetProjectController;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class GetProjectControllerTest {
+class GetProjectControllerTest extends UnitTestTemplate {
 
-  private GetProjectUseCase getProjectUseCase = mock(GetProjectUseCase.class);
+  private final GetProjectUseCase getProjectUseCase = mock(GetProjectUseCase.class);
 
   @Test
   void returnsProjectWithIdOne() {
-    GetProjectController testSubject = new GetProjectController(getProjectUseCase);
+    GetProjectController testSubject =
+        new GetProjectController(getProjectUseCase, authenticationService);
 
     Project project = new Project();
     project.setId(1L);
@@ -28,6 +30,7 @@ class GetProjectControllerTest {
     ResponseEntity<GetProjectResponse> responseEntity = testSubject.getProject(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(project.getId(), responseEntity.getBody().getId());
   }
 }

@@ -32,7 +32,7 @@ export class VisualizationConfig {
   static COLOR_DELETED_FILE = '#d90206';
   static COLOR_UNCHANGED_FILE = '#cccccc';
 
-  //HIGHLIGHTING
+  // HIGHLIGHTING
   static HIGHLIGHT_BOX_MARGIN = 0.25;
 
   static getShortNameByMetricName(metricName: string): IMetric {

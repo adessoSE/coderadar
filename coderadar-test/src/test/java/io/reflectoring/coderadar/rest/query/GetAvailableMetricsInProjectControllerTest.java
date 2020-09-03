@@ -66,7 +66,7 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             .andReturn();
 
     List<String> metrics =
-        fromJson(new TypeReference<List<String>>() {}, result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     Assertions.assertTrue(metrics.isEmpty());
   }
@@ -96,7 +96,7 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             .andReturn();
 
     List<String> metrics =
-        fromJson(new TypeReference<List<String>>() {}, result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     Assertions.assertEquals(4, metrics.size());
     Assertions.assertTrue(metrics.contains("coderadar:size:eloc:java"));
@@ -130,7 +130,7 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             .andReturn();
 
     List<String> metrics =
-        fromJson(new TypeReference<List<String>>() {}, result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     Assertions.assertTrue(
         metrics.contains(
@@ -138,9 +138,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"));
-    Assertions.assertTrue(
-        metrics.contains(
-            "checkstyle:com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck"));
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"));
@@ -162,8 +159,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationLocationCheck"));
-    Assertions.assertTrue(
-        metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"));
   }
 
   @Test
@@ -200,7 +195,7 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             .andReturn();
 
     List<String> metrics =
-        fromJson(new TypeReference<List<String>>() {}, result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     Assertions.assertTrue(metrics.contains("coderadar:size:eloc:java"));
     Assertions.assertTrue(metrics.contains("coderadar:size:sloc:java"));
@@ -212,9 +207,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"));
-    Assertions.assertTrue(
-        metrics.contains(
-            "checkstyle:com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck"));
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"));
@@ -236,8 +228,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationLocationCheck"));
-    Assertions.assertTrue(
-        metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"));
   }
 
   @Test

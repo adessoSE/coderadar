@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.dependencymap;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.dependencymap.adapter.DependencyTreeAdapter;
@@ -28,9 +29,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class TreeTest extends ControllerTestTemplate {
+class TreeTest extends ControllerTestTemplate {
 
   private Node root;
   private File f;
@@ -43,7 +43,7 @@ public class TreeTest extends ControllerTestTemplate {
   @Autowired private GetProjectPort getProjectPort;
 
   @BeforeEach
-  public void initEach() {
+  void initEach() {
     try {
       URL testRepoURL = this.getClass().getClassLoader().getResource("testSrc");
       CreateProjectCommand command = new CreateProjectCommand();
@@ -61,7 +61,7 @@ public class TreeTest extends ControllerTestTemplate {
 
       mvc()
           .perform(get("/api/analyzers/" + testProject.getId() + "/structureMap/" + commitName))
-          .andExpect(MockMvcResultMatchers.status().isOk())
+          .andExpect(status().isOk())
           .andExpect(containsResource(Node.class))
           .andDo(result -> root = fromJson(result.getResponse().getContentAsString(), Node.class));
       Assertions.assertNotNull(root);
@@ -89,7 +89,7 @@ public class TreeTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void testInPackageDependencies() {
+  void testInPackageDependencies() {
     Assertions.assertNotNull(root);
     Node notADependencyTest =
         root.getNodeByPath(
@@ -99,7 +99,7 @@ public class TreeTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void testCreateTree() {
+  void testCreateTree() {
     Assertions.assertNotNull(root);
     Assertions.assertEquals("testSrc", root.getFilename());
     Assertions.assertEquals(1, root.getChildren().size());
@@ -219,7 +219,7 @@ public class TreeTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void testHasDependencyOn() {
+  void testHasDependencyOn() {
     Assertions.assertNotNull(root);
     Node wildcardpackage =
         root.getNodeByPath("src/org/wickedsource/dependencytree/wildcardpackage");
@@ -235,7 +235,7 @@ public class TreeTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void testCountDependenciesOn() {
+  void testCountDependenciesOn() {
     Assertions.assertNotNull(root);
     Node wildcardpackage =
         root.getNodeByPath("src/org/wickedsource/dependencytree/wildcardpackage");
@@ -251,21 +251,21 @@ public class TreeTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void testGetNodeFromImportNoClass() {
+  void testGetNodeFromImportNoClass() {
     List<Node> imports =
         dependencyTree.getNodeFromImport("org.wickedsource.dependencytree.sbdfjksbdf");
     Assertions.assertEquals(0, imports.size());
   }
 
   @Test
-  public void testGetNodeFromImportWildcard() {
+  void testGetNodeFromImportWildcard() {
     List<Node> imports =
         dependencyTree.getNodeFromImport("org.wickedsource.dependencytree.wildcardpackage.*");
     Assertions.assertEquals(2, imports.size());
   }
 
   @Test
-  public void testGetNodeFromImportClass() {
+  void testGetNodeFromImportClass() {
     List<Node> imports =
         dependencyTree.getNodeFromImport(
             "org.wickedsource.dependencytree.somepackage.CoreDependencyTest");

@@ -24,8 +24,7 @@ import org.springframework.stereotype.Service;
 public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
 
   @Override
-  public byte[] getCommitContent(String projectRoot, String filepath, String commitHash)
-      throws UnableToGetCommitContentException {
+  public byte[] getCommitContent(String projectRoot, String filepath, String commitHash) {
     if (filepath.isEmpty()) {
       return new byte[0];
     }
@@ -72,8 +71,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   }
 
   @Override
-  public byte[] getFileDiff(String projectRoot, String filepath, String commitHash)
-      throws UnableToGetCommitContentException {
+  public byte[] getFileDiff(String projectRoot, String filepath, String commitHash) {
     if (filepath.isEmpty()) {
       return new byte[0];
     }
@@ -97,7 +95,13 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
       } else {
         rt1 = new RawText(new byte[0]);
       }
-      RawText rt2 = new RawText(BlobUtils.getRawContent(git.getRepository(), commit, filepath));
+      byte[] rawContent = BlobUtils.getRawContent(git.getRepository(), commit, filepath);
+      RawText rt2;
+      if (rawContent != null && rawContent.length != 0) {
+        rt2 = new RawText(BlobUtils.getRawContent(git.getRepository(), commit, filepath));
+      } else {
+        rt2 = new RawText(new byte[] {'\n'});
+      }
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       new DiffFormatter(out)
           .format(new HistogramDiff().diff(RawTextComparator.DEFAULT, rt1, rt2), rt1, rt2);
@@ -109,8 +113,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
 
   @Override
   public HashMap<String, byte[]> getCommitContentBulk(
-      String projectRoot, List<String> filepaths, String commitHash)
-      throws UnableToGetCommitContentException {
+      String projectRoot, List<String> filepaths, String commitHash) {
     try (Git git = Git.open(new java.io.File(projectRoot))) {
       ObjectId commitId = git.getRepository().resolve(commitHash);
       HashMap<String, byte[]> bulkContent = new LinkedHashMap<>();
@@ -127,8 +130,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   public HashMap<File, byte[]> getCommitContentBulkWithFiles(
       String projectRoot,
       List<io.reflectoring.coderadar.projectadministration.domain.File> files,
-      String commitHash)
-      throws UnableToGetCommitContentException {
+      String commitHash) {
     try (Git git = Git.open(new java.io.File(projectRoot))) {
       ObjectId commitId = git.getRepository().resolve(commitHash);
       HashMap<File, byte[]> bulkContent = new LinkedHashMap<>();

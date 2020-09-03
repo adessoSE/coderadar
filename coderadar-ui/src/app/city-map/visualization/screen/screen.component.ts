@@ -189,7 +189,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createRenderer() {
-    this.renderer = new WebGLRenderer({antialias: true, preserveDrawingBuffer: true,logarithmicDepthBuffer:true});
+    this.renderer = new WebGLRenderer({antialias: true, preserveDrawingBuffer: true, logarithmicDepthBuffer: true});
     this.renderer.setClearColor(0xf0f0f0);
     this.renderer.setSize(this.getScreenWidth() - 0, window.innerHeight);
 
@@ -364,7 +364,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     };
   }
 
-  private getRoot():Object3D{
+  private getRoot(): Object3D {
     return this.scene.getObjectByName(VisualizationConfig.ROOT_NAME);
   }
 
@@ -437,7 +437,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     var material = new THREE.MeshBasicMaterial({
       color:0xff0000
     });
-    var geometry = new THREE.Geometry();
+    const geometry = new THREE.Geometry();
     geometry.vertices.push(
       new Vector3(0,0,0),
       new Vector3(0,1,0)

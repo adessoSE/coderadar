@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class RegexPatternCache {
 
-  private Map<RegexPattern, Pattern> patternMap;
+  private final Map<RegexPattern, Pattern> patternMap;
 
   public RegexPatternCache() {
     patternMap = new HashMap<>();
@@ -37,7 +37,7 @@ public class RegexPatternCache {
     return newPattern;
   }
 
-  class RegexPattern {
+  static class RegexPattern {
 
     String regex;
     int flags;
@@ -48,9 +48,12 @@ public class RegexPatternCache {
     }
 
     public boolean equals(Object obj) {
-      RegexPattern other = (RegexPattern) obj;
-      if (other.regex.equals(regex) && other.flags == flags) return true;
-      return false;
+      if (obj instanceof RegexPattern) {
+        RegexPattern other = (RegexPattern) obj;
+        return other.regex.equals(regex) && other.flags == flags;
+      } else {
+        return false;
+      }
     }
 
     public int hashCode() {

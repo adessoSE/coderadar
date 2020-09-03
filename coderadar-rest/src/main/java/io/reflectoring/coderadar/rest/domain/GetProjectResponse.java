@@ -12,5 +12,4 @@ public class GetProjectResponse {
   private String vcsUrl;
   private boolean vcsOnline;
   private Date startDate;
-  private Date endDate;
 }

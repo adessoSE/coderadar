@@ -15,7 +15,7 @@ public class CoderadarAuditListener implements AuditListener {
 
   private FileMetrics metrics = new FileMetrics();
 
-  private MetricCountExtractor metricCountExtractor = new MetricCountExtractor();
+  private final MetricCountExtractor metricCountExtractor = new MetricCountExtractor();
 
   @Override
   public void auditStarted(AuditEvent evt) {

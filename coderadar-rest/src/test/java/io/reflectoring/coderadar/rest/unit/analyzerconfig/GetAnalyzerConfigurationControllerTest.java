@@ -6,21 +6,23 @@ import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.analyzerconfig.GetAnalyzerConfigurationController;
 import io.reflectoring.coderadar.rest.domain.GetAnalyzerConfigurationResponse;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class GetAnalyzerConfigurationControllerTest {
+class GetAnalyzerConfigurationControllerTest extends UnitTestTemplate {
 
-  private GetAnalyzerConfigurationUseCase getAnalyzerConfigurationUseCase =
+  private final GetAnalyzerConfigurationUseCase getAnalyzerConfigurationUseCase =
       mock(GetAnalyzerConfigurationUseCase.class);
 
   @Test
-  void returnsAnalyzerConfigurationWithIdOne() {
+  void testGetAnalyzerConfiguration() {
     GetAnalyzerConfigurationController testSubject =
-        new GetAnalyzerConfigurationController(getAnalyzerConfigurationUseCase);
+        new GetAnalyzerConfigurationController(
+            getAnalyzerConfigurationUseCase, authenticationService);
 
     AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration(1L, "analyzer", true);
 
@@ -28,11 +30,12 @@ class GetAnalyzerConfigurationControllerTest {
         .thenReturn(analyzerConfiguration);
 
     ResponseEntity<GetAnalyzerConfigurationResponse> responseEntity =
-        testSubject.getAnalyzerConfiguration(1L);
+        testSubject.getAnalyzerConfiguration(0L, 1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(1L, responseEntity.getBody().getId());
     Assertions.assertEquals("analyzer", responseEntity.getBody().getAnalyzerName());
-    Assertions.assertEquals(true, responseEntity.getBody().isEnabled());
+    Assertions.assertTrue(responseEntity.getBody().isEnabled());
   }
 }

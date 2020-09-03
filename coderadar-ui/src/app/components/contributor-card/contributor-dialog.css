@@ -1,3 +1,7 @@
 ::ng-deep .contributor-name{
   margin: 0;
 }
+
+ul {
+  padding: 0 16px
+}

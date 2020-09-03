@@ -1,0 +1,54 @@
+<app-header [title]="[{location: '/teams', name: 'Teams'}]"></app-header>
+<div *ngIf="waiting" style="height: 100%">
+  <mat-spinner class="waitingIndicator" [diameter]="100"></mat-spinner>
+</div>
+<mat-sidenav-container class="sidenav">
+  <mat-sidenav mode="side" opened style="width: 15%">
+    <app-sidenav-content></app-sidenav-content>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <main class="card-list">
+      <div class="grid-container">
+
+        <!--Message displayed if no projects are found-->
+        <div *ngIf="teams.length == 0" id="noTeamsMessage">
+          You aren't in any team yet. <br>
+          Click on the plus button to create a team.
+        </div>
+
+        <!--Teams card list-->
+        <mat-grid-list cols="2" rowHeight="170px">
+          <mat-grid-tile *ngFor="let team of teams" [colspan]="2" [rowspan]="1">
+            <mat-card class="dashboard-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <a mat-button>{{team.name}}</a>
+                  <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu" xPosition="before">
+                    <button mat-menu-item>Edit</button>
+                    <button mat-menu-item (click)="removeTeam(team.id)">Remove</button>
+                  </mat-menu>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content class="mat-card-content">
+                <mat-label>Team members:</mat-label>
+                <span *ngFor="let member of team.members">
+                  <span style="font-weight: bold; margin-left: 10px">{{member.username}}</span>
+                </span>
+              </mat-card-content>
+            </mat-card>
+          </mat-grid-tile>
+
+          <!--The big plus button-->
+          <a class="add-button" color="accent" mat-fab routerLink="/add-team">
+            <mat-icon class="add-icon">+</mat-icon>
+          </a>
+
+        </mat-grid-list>
+      </div>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<app-footer></app-footer>

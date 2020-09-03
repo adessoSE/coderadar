@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CreateAnalyzerConfigurationController implements AbstractBaseController {
   private final CreateAnalyzerConfigurationUseCase createAnalyzerConfigurationUseCase;
+  private final AuthenticationService authenticationService;
 
   public CreateAnalyzerConfigurationController(
-      CreateAnalyzerConfigurationUseCase addAnalyzerConfigurationUseCase) {
+      CreateAnalyzerConfigurationUseCase addAnalyzerConfigurationUseCase,
+      AuthenticationService authenticationService) {
     this.createAnalyzerConfigurationUseCase = addAnalyzerConfigurationUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @PostMapping(
@@ -33,6 +37,7 @@ public class CreateAnalyzerConfigurationController implements AbstractBaseContro
   public ResponseEntity<Object> addAnalyzerConfiguration(
       @RequestBody @Validated CreateAnalyzerConfigurationCommand command,
       @PathVariable long projectId) {
+    authenticationService.authenticateAdmin(projectId);
     try {
       return new ResponseEntity<>(
           new IdResponse(createAnalyzerConfigurationUseCase.create(command, projectId)),

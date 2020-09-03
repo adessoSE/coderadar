@@ -29,8 +29,8 @@ public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigu
         getAnalyzerConfigurationPort.getAnalyzerConfiguration(id);
     port.deleteAnalyzerConfiguration(id);
     logger.info(
-        String.format(
-            "Deleted analyzerConfiguration %s for project with id %d",
-            analyzerConfiguration.getAnalyzerName(), projectId));
+        "Deleted analyzerConfiguration {} for project with id {}",
+        analyzerConfiguration.getAnalyzerName(),
+        projectId);
   }
 }

@@ -8,7 +8,7 @@ import java.io.IOException;
 /** Counts several types of lines of code. */
 public class LocAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
 
-  private LocCounter locCounter = new LocCounter();
+  private final LocCounter locCounter = new LocCounter();
 
   @Override
   public AnalyzerFileFilter getFilter() {
@@ -16,18 +16,18 @@ public class LocAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
   }
 
   @Override
-  public FileMetrics analyzeFile(String filename, byte[] fileContent) throws AnalyzerException {
+  public FileMetrics analyzeFile(String filename, byte[] fileContent) {
     try {
       String fileEnding = filename.substring(filename.lastIndexOf('.'));
       LocProfile profile = Profiles.getForFile(filename);
-      Loc loc = locCounter.count(fileContent, profile);
+      LinesOfCode loc = locCounter.count(fileContent, profile);
       return toFileMetrics(loc, fileEnding);
     } catch (IOException e) {
       throw new AnalyzerException(e);
     }
   }
 
-  private FileMetrics toFileMetrics(Loc loc, String fileEnding) {
+  private FileMetrics toFileMetrics(LinesOfCode loc, String fileEnding) {
     String sanitizedFileEnding = fileEnding.replaceAll("\\.", "");
     FileMetrics metrics = new FileMetrics();
     metrics.setMetricCount(
