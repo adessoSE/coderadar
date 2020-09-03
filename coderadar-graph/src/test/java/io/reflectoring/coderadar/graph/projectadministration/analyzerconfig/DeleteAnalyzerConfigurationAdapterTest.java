@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Delete analyzer configuration")
 class DeleteAnalyzerConfigurationAdapterTest {
-  private AnalyzerConfigurationRepository analyzerConfigurationRepository =
+  private final AnalyzerConfigurationRepository analyzerConfigurationRepository =
       mock(AnalyzerConfigurationRepository.class);
 
   private DeleteAnalyzerConfigurationAdapter deleteAnalyzerConfigurationAdapter;

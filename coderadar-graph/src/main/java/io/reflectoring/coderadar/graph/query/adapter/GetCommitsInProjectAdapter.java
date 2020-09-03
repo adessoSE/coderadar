@@ -3,9 +3,15 @@ package io.reflectoring.coderadar.graph.query.adapter;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
-import io.reflectoring.coderadar.projectadministration.domain.*;
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.projectadministration.domain.File;
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -66,13 +72,8 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
           continue;
         }
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-        File file = walkedFiles.get(fileId);
-        if (file == null) {
-          file = new File();
-          file.setId(fileId);
-          file.setPath(filepath);
-          walkedFiles.put(fileId, file);
-        }
+        File file =
+            walkedFiles.computeIfAbsent(fileId, id -> new File().setId(id).setPath(filepath));
         fileToCommitRelationship.setFile(file);
         commit.getTouchedFiles().add(fileToCommitRelationship);
       }

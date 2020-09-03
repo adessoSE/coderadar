@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-public class CompareNodeTest {
+class CompareNodeTest {
 
   private CompareNode testRoot;
 
@@ -47,32 +47,32 @@ public class CompareNodeTest {
   }
 
   @Test
-  public void testGetNodeByPath() {
+  void testGetNodeByPath() {
     CompareNode test = testRoot.getNodeByPath("testNode1_2/testNode2_4");
     Assertions.assertNotNull(test);
     Assertions.assertEquals("testNode2_4", test.getFilename());
   }
 
   @Test
-  public void testGetNodeByPathEmptyString() {
+  void testGetNodeByPathEmptyString() {
     CompareNode empty = testRoot.getNodeByPath("");
     Assertions.assertNull(empty);
   }
 
   @Test
-  public void testGetNodeByPathInvalidString() {
+  void testGetNodeByPathInvalidString() {
     CompareNode empty = testRoot.getNodeByPath("jhsbdlfjs");
     Assertions.assertNull(empty);
   }
 
   @Test
-  public void testGetNodeByPathNull() {
+  void testGetNodeByPathNull() {
     CompareNode empty = testRoot.getNodeByPath(null);
     Assertions.assertNull(empty);
   }
 
   @Test
-  public void testCreateNodeByPath() {
+  void testCreateNodeByPath() {
     CompareNode testRoot = new CompareNode("testRoot", "", "", ChangeType.UNCHANGED);
     testRoot.createNodeByPath("testNode1_5/testNode2_5/testNode3_1", ChangeType.UNCHANGED);
 
@@ -86,19 +86,19 @@ public class CompareNodeTest {
   }
 
   @Test
-  public void testCreateNodeByPathEmptyString() {
+  void testCreateNodeByPathEmptyString() {
     CompareNode empty = testRoot.createNodeByPath("", ChangeType.UNCHANGED);
     Assertions.assertNull(empty);
   }
 
   @Test
-  public void testCreateNodeByPathNull() {
+  void testCreateNodeByPathNull() {
     CompareNode empty = testRoot.createNodeByPath(null, ChangeType.UNCHANGED);
     Assertions.assertNull(empty);
   }
 
   @Test
-  public void testTraversePre() {
+  void testTraversePre() {
     Assertions.assertNotNull(testRoot);
     StringBuilder traversed = new StringBuilder();
     testRoot.traversePre(node -> traversed.append(node.getFilename()).append("\n"));
@@ -117,7 +117,7 @@ public class CompareNodeTest {
   }
 
   @Test
-  public void testTraversePost() {
+  void testTraversePost() {
     Assertions.assertNotNull(testRoot);
     StringBuilder traversed = new StringBuilder();
     testRoot.traversePost(node -> traversed.append(node.getFilename()).append("\n"));
@@ -136,7 +136,7 @@ public class CompareNodeTest {
   }
 
   @Test
-  public void testGetParent() {
+  void testGetParent() {
     Assertions.assertNotNull(testRoot);
     CompareNode testNode2_1 = testRoot.getNodeByPath("testNode1_1/testNode2_1");
     System.out.println(testNode2_1.getPath());
@@ -145,14 +145,14 @@ public class CompareNodeTest {
   }
 
   @Test
-  public void testGetParentRootChild() {
+  void testGetParentRootChild() {
     Assertions.assertNotNull(testRoot);
     Assertions.assertEquals(
         "testRoot", testRoot.getNodeByPath("testNode1_1").getParent(testRoot).getFilename());
   }
 
   @Test
-  public void testGetParentRoot() {
+  void testGetParentRoot() {
     Assertions.assertNotNull(testRoot);
     Assertions.assertNull(testRoot.getParent(testRoot));
   }

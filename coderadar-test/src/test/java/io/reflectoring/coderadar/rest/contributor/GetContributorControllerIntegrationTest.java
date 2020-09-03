@@ -23,12 +23,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultHandler;
 
-public class GetContributorControllerIntegrationTest extends ControllerTestTemplate {
+class GetContributorControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private ContributorRepository contributorRepository;
   @Autowired private SessionFactory sessionFactory;
 
   @Test
-  public void getSingleContributor() throws Exception {
+  void getSingleContributor() throws Exception {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command1 =
         new CreateProjectCommand(

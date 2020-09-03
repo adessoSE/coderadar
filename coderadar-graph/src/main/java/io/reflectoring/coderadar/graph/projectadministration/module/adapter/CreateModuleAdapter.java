@@ -179,7 +179,7 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @return The corrected path.
    */
   private String checkPathIsValid(String path, ProjectEntity projectEntity)
-      throws ModulePathInvalidException, ModuleAlreadyExistsException {
+      throws ModulePathInvalidException {
 
     path = path.trim();
     if (path.contains("//")) {
@@ -194,8 +194,7 @@ public class CreateModuleAdapter implements CreateModulePort {
     }
 
     // Check if a module with the same path already exists.
-    for (ModuleEntity entity :
-        moduleRepository.findModulesInProjectSortedDesc(projectEntity.getId())) {
+    for (ModuleEntity entity : projectEntity.getModules()) {
       if (entity.getPath().equals(path)) {
         throw new ModuleAlreadyExistsException(path);
       }

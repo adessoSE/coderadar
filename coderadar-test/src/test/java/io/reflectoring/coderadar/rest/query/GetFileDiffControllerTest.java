@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
-public class GetFileDiffControllerTest extends ControllerTestTemplate {
+class GetFileDiffControllerTest extends ControllerTestTemplate {
 
   long projectId;
 

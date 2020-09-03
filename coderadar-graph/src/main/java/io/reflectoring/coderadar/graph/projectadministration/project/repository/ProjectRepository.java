@@ -113,7 +113,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param id The project id.
    * @return True if a project with the given id exists, false otherwise.
    */
-  @Query("MATCH (p) WHERE ID(p) = {0} RETURN COUNT(*) > 0")
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} RETURN COUNT(*) > 0")
   boolean existsById(long id);
 
   /**
@@ -159,6 +159,26 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
           + "CREATE (p)-[r:CONTAINS_COMMIT]->(c)")
   void attachCommitsWithIds(long projectId, @NonNull List<Long> commitIds);
 
+  /** @param projectId The id of the project */
   @Query("MATCH (p)<-[r:WORKS_ON]-() WHERE ID(p) = {0} DELETE r")
   void deleteContributorRelationships(long projectId);
+
+  /**
+   * @param userId The user id.
+   * @return All projects a user is assigned to.
+   */
+  @Query(
+      "MATCH (u:UserEntity) WHERE ID(u) = {0} WITH u "
+          + "OPTIONAL MATCH (u)-[:ASSIGNED_TO*0..1]->(p1:ProjectEntity) WHERE p1.isBeingDeleted = FALSE "
+          + "WITH p1, u "
+          + "MATCH (p2:ProjectEntity)<-[:ASSIGNED_TO*0..1]-(t)<-[:IS_IN*0..1]-(u)  WHERE p2.isBeingDeleted = FALSE WITH collect(p1) + collect(p2) as list "
+          + "UNWIND list AS p RETURN DISTINCT p ORDER BY p.name")
+  List<ProjectEntity> findProjectsByUserId(long userId);
+
+  /**
+   * @param teamId The team id.
+   * @return All projects a team is assigned to.
+   */
+  @Query("MATCH (t)-[:ASSIGNED_TO]->(p) WHERE ID(t) = {0} AND p.isBeingDeleted = FALSE RETURN p")
+  List<ProjectEntity> listProjectsByTeamId(long teamId);
 }

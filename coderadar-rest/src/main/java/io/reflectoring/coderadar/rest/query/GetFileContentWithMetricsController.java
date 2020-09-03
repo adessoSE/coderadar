@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
 import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsCommand;
 import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class GetFileContentWithMetricsController implements AbstractBaseController {
 
   private final GetFileContentWithMetricsUseCase useCase;
+  private final AuthenticationService authenticationService;
 
-  public GetFileContentWithMetricsController(GetFileContentWithMetricsUseCase useCase) {
+  public GetFileContentWithMetricsController(
+      GetFileContentWithMetricsUseCase useCase, AuthenticationService authenticationService) {
     this.useCase = useCase;
+    this.authenticationService = authenticationService;
   }
 
   @RequestMapping(
@@ -28,6 +32,7 @@ public class GetFileContentWithMetricsController implements AbstractBaseControll
   public ResponseEntity<FileContentWithMetrics> getFileContentWithMetrics(
       @PathVariable Long projectId,
       @RequestBody @Validated GetFileContentWithMetricsCommand command) {
+    authenticationService.authenticateMember(projectId);
     return new ResponseEntity<>(
         useCase.getFileContentWithMetrics(projectId, command), HttpStatus.OK);
   }

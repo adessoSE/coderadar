@@ -46,6 +46,12 @@ Styles for most forms in the app
   font-size: 20pt;
 }
 
+.mat-card-form #cardButtons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .mat-card-form #cardButtons button {
   width: 25%;
   margin: 10px;
@@ -82,15 +88,22 @@ Styles for the login and register forms
   font-size: 30pt;
 }
 
-.login-card-form #cardButtons button {
-  margin: 10px;
-}
-
 .login-card-form mat-card {
   position: fixed;
   top: 20%;
   min-width: 22%;
 }
+
+.login-card-form #cardButtons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card-form #cardButtons button {
+  margin: 10px;
+}
+
 
 .login-card-form form {
   min-width: 22%;

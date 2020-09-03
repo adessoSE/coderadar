@@ -5,21 +5,23 @@ import static org.mockito.Mockito.mock;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.analyzerconfig.UpdateAnalyzerConfigurationController;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class UpdateAnalyzerConfigurationControllerTest {
+class UpdateAnalyzerConfigurationControllerTest extends UnitTestTemplate {
 
-  private UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase =
+  private final UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase =
       mock(UpdateAnalyzerConfigurationUseCase.class);
 
   @Test
-  void updateAnalyzerConfigurationWithIdOne() {
+  void testUpdateAnalyzerConfiguration() {
     UpdateAnalyzerConfigurationController testSubject =
-        new UpdateAnalyzerConfigurationController(updateAnalyzerConfigurationUseCase);
+        new UpdateAnalyzerConfigurationController(
+            updateAnalyzerConfigurationUseCase, authenticationService);
 
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("analyzer", true);

@@ -10,9 +10,6 @@ import org.passay.*;
 public class CoderadarPasswordValidator implements ConstraintValidator<ValidPassword, String> {
 
   @Override
-  public void initialize(ValidPassword constraintAnnotation) {}
-
-  @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
     if (value == null || value.isEmpty()) {
       return false;

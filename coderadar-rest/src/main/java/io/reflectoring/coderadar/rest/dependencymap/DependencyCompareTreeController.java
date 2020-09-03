@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.dependencymap;
 
 import io.reflectoring.coderadar.dependencymap.port.driver.GetCompareTreeUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class DependencyCompareTreeController implements AbstractBaseController {
 
   private final GetCompareTreeUseCase getCompareTreeUseCase;
+  private final AuthenticationService authenticationService;
 
   @Autowired
-  public DependencyCompareTreeController(GetCompareTreeUseCase getCompareTreeUseCase) {
+  public DependencyCompareTreeController(
+      GetCompareTreeUseCase getCompareTreeUseCase, AuthenticationService authenticationService) {
     this.getCompareTreeUseCase = getCompareTreeUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @GetMapping(
@@ -28,6 +32,7 @@ public class DependencyCompareTreeController implements AbstractBaseController {
       @PathVariable("projectId") Long projectId,
       @PathVariable("commitName") String commitName,
       @PathVariable("secondCommit") String secondCommit) {
+    authenticationService.authenticateMember(projectId);
     return ResponseEntity.ok(
         getCompareTreeUseCase.getDependencyTree(projectId, commitName, secondCommit));
   }

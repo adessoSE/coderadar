@@ -2,10 +2,10 @@ package io.reflectoring.coderadar.rest.unit.project;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.rest.project.UpdateProjectController;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import java.net.MalformedURLException;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;
@@ -14,13 +14,14 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class UpdateProjectControllerTest {
+class UpdateProjectControllerTest extends UnitTestTemplate {
 
-  private UpdateProjectUseCase updateProjectUseCase = mock(UpdateProjectUseCase.class);
+  private final UpdateProjectUseCase updateProjectUseCase = mock(UpdateProjectUseCase.class);
 
   @Test
-  void updateProjectWithIdOne() throws MalformedURLException, ProjectIsBeingProcessedException {
-    UpdateProjectController testSubject = new UpdateProjectController(updateProjectUseCase);
+  void updateProjectWithIdOne() throws MalformedURLException {
+    UpdateProjectController testSubject =
+        new UpdateProjectController(updateProjectUseCase, authenticationService);
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(

@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.filepattern;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -35,7 +36,7 @@ class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate 
     mvc()
         .perform(
             delete("/api/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(result -> Assertions.assertFalse(filePatternRepository.findById(id).isPresent()))
         .andDo(document("filepatterns/delete"));
   }
@@ -44,7 +45,7 @@ class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate 
   void deleteFilePatternReturnsErrorWhenNotFound() throws Exception {
     mvc()
         .perform(delete("/api/projects/0/filePatterns/2"))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("FilePattern with id 2 not found."));

@@ -2,7 +2,7 @@ import {INode} from '../interfaces/INode';
 import {NodeType} from '../enum/NodeType';
 import {ScreenType} from '../enum/ScreenType';
 import {CommitReferenceType} from '../enum/CommitReferenceType';
-import {MetricValue} from "../../model/metric-value";
+import {MetricValue} from '../../model/metric-value';
 
 export class ElementAnalyzer {
 
@@ -113,7 +113,8 @@ export class ElementAnalyzer {
     } else if (commit2Metrics === null) {
       return commit1Metrics[metricName];
     } else {
-      let commit1 = this.getValueFromMetric(commit1Metrics, metricName), commit2 = this.getValueFromMetric(commit2Metrics, metricName);
+      const commit1 = this.getValueFromMetric(commit1Metrics, metricName);
+      const commit2 = this.getValueFromMetric(commit2Metrics, metricName);
 
       return commit1 < commit2 ? commit1 : commit2;
     }
@@ -125,11 +126,12 @@ export class ElementAnalyzer {
     }
 
     if (commit1Metrics === null) {
-      return this.getValueFromMetric(commit2Metrics, metricName)
+      return this.getValueFromMetric(commit2Metrics, metricName);
     } else if (commit2Metrics === null) {
       return this.getValueFromMetric(commit1Metrics, metricName);
     } else {
-      let commit1 = this.getValueFromMetric(commit1Metrics, metricName), commit2 = this.getValueFromMetric(commit2Metrics, metricName);
+      const commit1 = this.getValueFromMetric(commit1Metrics, metricName);
+      const commit2 = this.getValueFromMetric(commit2Metrics, metricName);
 
       return commit1 > commit2 ? commit1 : commit2;
     }
@@ -198,8 +200,8 @@ export class ElementAnalyzer {
     }
   }
 
-  static getValueFromMetric(metrics: MetricValue[], metricName: String) {
-    let index = metrics ? Object.values(metrics).findIndex(object => object.metricName === metricName): -1;
+  static getValueFromMetric(metrics: MetricValue[], metricName: string) {
+    const index = metrics ? Object.values(metrics).findIndex(object => object.metricName === metricName) : -1;
     return index >= 0 ? Number(metrics[index].value) : undefined;
   }
 

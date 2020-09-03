@@ -98,7 +98,7 @@ public class ScanProjectScheduler {
     }
     taskScheduler.scheduleAtFixedRate(
         this::scheduleCheckTask,
-        coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000);
+        coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000L);
   }
 
   /** Starts update tasks for all projects that don't have one running already. */

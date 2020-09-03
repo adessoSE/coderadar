@@ -18,6 +18,6 @@ public interface FilePatternRepository extends Neo4jRepository<FilePatternEntity
   @NonNull
   List<FilePatternEntity> findByProjectId(long projectId);
 
-  @Query("MATCH (f) WHERE ID(f) = {0} RETURN COUNT(f) > 0")
+  @Query("MATCH (f:FilePatternEntity) WHERE ID(f) = {0} RETURN COUNT(f) > 0")
   boolean existsById(long id);
 }

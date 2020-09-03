@@ -33,7 +33,7 @@ class ListModulesOfProjectAdapterTest {
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
     verify(moduleRepository, times(1)).findModulesInProjectSortedDesc(1L);
-    Assertions.assertThat(modules).hasSize(0);
+    Assertions.assertThat(modules).isEmpty();
   }
 
   @Test

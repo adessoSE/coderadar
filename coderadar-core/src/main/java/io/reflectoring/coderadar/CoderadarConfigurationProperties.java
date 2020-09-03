@@ -74,7 +74,7 @@ public class CoderadarConfigurationProperties {
 
     @NotNull private Integer accessTokenDurationInMinutes = 15;
 
-    @NotNull private Boolean enabled = Boolean.TRUE;
+    private boolean enabled = Boolean.TRUE;
 
     @NotNull private Integer refreshTokenDurationInMinutes = 86400;
   }

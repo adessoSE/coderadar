@@ -37,13 +37,16 @@ public class GetFileContentWithMetricsService implements GetFileContentWithMetri
     Project project = getProjectPort.get(projectId);
     String workdir =
         coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
-    String content =
-        new String(
-            getRawCommitContentPort.getCommitContent(
-                workdir, command.getFilepath(), command.getCommitHash()));
-    List<MetricWithFindings> metrics =
-        getMetricsAndFindingsForFilePort.getMetricsAndFindingsForFile(
-            projectId, command.getCommitHash(), command.getFilepath());
-    return new FileContentWithMetrics(content, metrics);
+    byte[] rawContent =
+        getRawCommitContentPort.getCommitContent(
+            workdir, command.getFilepath(), command.getCommitHash());
+    if (rawContent != null) {
+      List<MetricWithFindings> metrics =
+          getMetricsAndFindingsForFilePort.getMetricsAndFindingsForFile(
+              projectId, command.getCommitHash(), command.getFilepath());
+      return new FileContentWithMetrics(new String(rawContent), metrics);
+    } else {
+      return new FileContentWithMetrics("", null);
+    }
   }
 }

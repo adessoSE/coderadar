@@ -16,6 +16,9 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.creat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.query.domain.DateRange;
+import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
+import io.reflectoring.coderadar.useradministration.port.driven.SetUserRoleForProjectPort;
 import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
@@ -27,6 +30,8 @@ import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -54,6 +59,10 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final ListContributorsPort listContributorsPort;
 
+  private final SetUserRoleForProjectPort setUserRoleForProjectPort;
+
+  private final GetUserPort getUserPort;
+
   private static final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 
   public CreateProjectService(
@@ -67,7 +76,9 @@ public class CreateProjectService implements CreateProjectUseCase {
       SaveCommitPort saveCommitPort,
       ComputeContributorsPort computeContributorsPort,
       SaveContributorsPort saveContributorsPort,
-      ListContributorsPort listContributorsPort) {
+      ListContributorsPort listContributorsPort,
+      SetUserRoleForProjectPort setUserRoleForProjectPort,
+      GetUserPort getUserPort) {
     this.getAvailableBranchesPort = getAvailableBranchesPort;
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
@@ -79,6 +90,8 @@ public class CreateProjectService implements CreateProjectUseCase {
     this.computeContributorsPort = computeContributorsPort;
     this.saveContributorsPort = saveContributorsPort;
     this.listContributorsPort = listContributorsPort;
+    this.setUserRoleForProjectPort = setUserRoleForProjectPort;
+    this.getUserPort = getUserPort;
   }
 
   @Override
@@ -87,6 +100,7 @@ public class CreateProjectService implements CreateProjectUseCase {
       throw new ProjectAlreadyExistsException(command.getName());
     }
     Project project = saveProject(command);
+    setAdminRoleForCurrentUser(project.getId());
     processProjectService.executeTask(
         () -> {
           String localDir =
@@ -119,6 +133,16 @@ public class CreateProjectService implements CreateProjectUseCase {
         },
         project.getId());
     return project.getId();
+  }
+
+  private void setAdminRoleForCurrentUser(Long projectId) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof String) {
+      setUserRoleForProjectPort.setRole(
+          projectId,
+          getUserPort.getUserByUsername(((String) authentication.getPrincipal())).getId(),
+          ProjectRole.ADMIN);
+    }
   }
 
   private synchronized void saveContributors(Project project) {

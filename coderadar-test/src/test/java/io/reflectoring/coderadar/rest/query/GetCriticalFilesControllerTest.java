@@ -32,7 +32,7 @@ class GetCriticalFilesControllerTest extends ControllerTestTemplate {
   private long projectId;
 
   @BeforeEach
-  public void setUp() throws Exception {
+  void setUp() throws Exception {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command1 =
         new CreateProjectCommand(
