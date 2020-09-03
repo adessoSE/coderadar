@@ -51,4 +51,11 @@ public class ExceptionHandlerController {
     return new ResponseEntity<>(
         new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
   }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ErrorMessageResponse> illegalArgumentException(
+          IllegalArgumentException e) {
+    return new ResponseEntity<>(
+            new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+  }
 }

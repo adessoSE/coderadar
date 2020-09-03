@@ -3,10 +3,11 @@ package io.reflectoring.coderadar.graph.query.adapter;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import io.reflectoring.coderadar.query.domain.FileTree;
 import io.reflectoring.coderadar.query.port.driven.GetFileTreeForCommitPort;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 @Service
 public class GetFileTreeForCommitAdapter implements GetFileTreeForCommitPort {
@@ -25,6 +26,7 @@ public class GetFileTreeForCommitAdapter implements GetFileTreeForCommitPort {
     } else {
       filepaths = metricQueryRepository.getFileTreeForCommit(projectId, commitHash);
     }
+
     FileTree fileTree = new FileTree("/", new ArrayList<>());
     for (String filepath : filepaths) {
       addToTree(fileTree, Arrays.asList(filepath.split("/")));

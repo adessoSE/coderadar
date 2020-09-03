@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -44,25 +45,26 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
         projectRepository
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
+    String commit1 = ValidationUtils.validateAndTrimCommitHash(command.getCommit1());
+    String commit2 = ValidationUtils.validateAndTrimCommitHash(command.getCommit2());
 
-    if (commitRepository.commitIsNewer(command.getCommit1(), command.getCommit2())) {
-      String temp = command.getCommit1();
-      command.setCommit1(command.getCommit2());
-      command.setCommit2(temp);
+    // Swap the commits if commit1 was made after commit 2
+    if (commitRepository.commitIsNewer(commit1, commit2)) {
+      String temp = commit1;
+      commit1 = commit2;
+      commit2 = temp;
     }
 
     MetricTree commit1Tree =
-        getMetricsForAllFilesInCommitAdapter.get(
-            projectEntity, command.getCommit1(), command.getMetrics());
+        getMetricsForAllFilesInCommitAdapter.get(projectEntity, commit1, command.getMetrics());
     MetricTree commit2Tree =
-        getMetricsForAllFilesInCommitAdapter.get(
-            projectEntity, command.getCommit2(), command.getMetrics());
+        getMetricsForAllFilesInCommitAdapter.get(projectEntity, commit2, command.getMetrics());
 
     DeltaTree deltaTree = createDeltaTree(commit1Tree, commit2Tree);
     List<Pair<String, String>> renamedFiles =
         getRawCommitContentPort.getRenamesBetweenCommits(
-            command.getCommit1(),
-            command.getCommit2(),
+            commit1,
+            commit2,
             coderadarConfigurationProperties.getWorkdir()
                 + "/projects/"
                 + projectEntity.getWorkdirName());

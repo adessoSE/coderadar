@@ -99,7 +99,7 @@ class GetCriticalFilesControllerTest extends ControllerTestTemplate {
 
     List<ContributorsForFile> response =
         fromJson(
-            new TypeReference<List<ContributorsForFile>>() {},
+            new TypeReference<>() {},
             result.getResponse().getContentAsString());
 
     Assertions.assertThat(response.size()).isEqualTo(1);

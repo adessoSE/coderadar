@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.query.service;
 
+import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.query.domain.FileTree;
@@ -21,6 +22,7 @@ public class GetFileTreeForCommitService implements GetFileTreeForCommitUseCase 
   @Override
   public FileTree getFileTreeForCommit(
       long projectId, String commitHash, boolean changedFilesOnly) {
+    commitHash = ValidationUtils.validateAndTrimCommitHash(commitHash);
     if (getProjectPort.existsById(projectId)) {
       return getFileTreeForCommitPort.getFileTreeForCommit(projectId, commitHash, changedFilesOnly);
     } else {

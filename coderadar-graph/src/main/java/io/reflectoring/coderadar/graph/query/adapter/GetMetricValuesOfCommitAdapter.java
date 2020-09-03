@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
+import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
@@ -20,9 +21,9 @@ public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPo
 
   @Override
   public List<MetricValueForCommit> get(long projectId, GetMetricValuesOfCommitCommand command) {
+    String commitHash = ValidationUtils.validateAndTrimCommitHash(command.getCommit());
     List<Map<String, Object>> result =
-        metricQueryRepository.getMetricValuesForCommit(
-            projectId, command.getCommit(), command.getMetrics());
+        metricQueryRepository.getMetricValuesForCommit(projectId, commitHash, command.getMetrics());
     List<MetricValueForCommit> values = new ArrayList<>();
     for (Map<String, Object> queryResult : result) {
       values.add(

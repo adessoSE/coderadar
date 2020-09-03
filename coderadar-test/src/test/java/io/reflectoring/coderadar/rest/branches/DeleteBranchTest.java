@@ -25,11 +25,11 @@ class DeleteBranchTest extends ControllerTestTemplate {
 
   private Long projectId;
   private final Branch master =
-      new Branch("master", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", false);
+      new Branch("master", "e9f7ff6fdd8c0863", false);
   private final Branch testBranch1 =
-      new Branch("testBranch1", "d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df", false);
+      new Branch("testBranch1", "d3272b3793bc4b2b", false);
   private final Branch testBranch2 =
-      new Branch("testBranch2", "fcd9a0e7c34086fdb0aedc82497f8ddfa142e961", false);
+      new Branch("testBranch2", "fcd9a0e7c34086fd", false);
 
   @BeforeEach
   void setUp() {

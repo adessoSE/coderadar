@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.contributor.service;
 
+import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForPathCommand;
@@ -31,7 +32,7 @@ public class ListContributorsService implements ListContributorsUseCase {
       long projectId, GetContributorsForPathCommand command) {
     checkProjectExists(projectId);
     return listContributorsPort.listAllByProjectIdAndPathInCommit(
-        projectId, command.getCommitHash(), command.getPath());
+        projectId, ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()), command.getPath());
   }
 
   private void checkProjectExists(long projectId) {

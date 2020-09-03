@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
+import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.analyzer.domain.Finding;
 import io.reflectoring.coderadar.graph.analyzer.FindingsMapper;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;

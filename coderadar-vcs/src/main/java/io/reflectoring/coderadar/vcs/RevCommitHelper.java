@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.vcs;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.NoHeadException;
@@ -15,6 +16,7 @@ public class RevCommitHelper {
     try (Git git = Git.open(new File(repositoryRoot))) {
       List<RevCommit> revCommits = new ArrayList<>();
       git.log().all().call().forEach(revCommits::add);
+      Collections.reverse(revCommits);
       return revCommits;
     } catch (NoHeadException e) {
       return new ArrayList<>();

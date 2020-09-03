@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.*;
 import org.eclipse.jgit.lib.ObjectId;

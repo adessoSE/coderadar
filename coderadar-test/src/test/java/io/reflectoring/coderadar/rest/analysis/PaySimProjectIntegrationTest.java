@@ -212,9 +212,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             .andReturn();
 
     List<MetricValueForCommit> metricValuesForCommit =
-        fromJson(
-            new TypeReference<List<MetricValueForCommit>>() {},
-            result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     metricValuesForCommit.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
 

@@ -15,7 +15,6 @@ public class File {
   private long id;
   private String path;
 
-  @EqualsAndHashCode.Exclude
-  @ToString.Exclude
+  @EqualsAndHashCode.Exclude @ToString.Exclude
   private List<File> oldFiles = Collections.emptyList();
 }

@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
+import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -45,7 +46,10 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
         projectRepository
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    return get(projectEntity, command.getCommit(), command.getMetrics());
+    return get(
+        projectEntity,
+        ValidationUtils.validateAndTrimCommitHash(command.getCommit()),
+        command.getMetrics());
   }
 
   /**

@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.query.service;
 
+import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
@@ -35,7 +36,7 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     checkProjectExists(projectId);
     List<FilePattern> filePatterns = getFilePatternsForProject(projectId);
     return getCriticalFilesPort.getFilesWithContributors(
-        projectId, command.getNumberOfContributors(), command.getCommitHash(), filePatterns);
+        projectId, command.getNumberOfContributors(), ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()), filePatterns);
   }
 
   @Override
@@ -44,8 +45,7 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     checkProjectExists(projectId);
     List<FilePattern> filePatterns = getFilePatternsForProject(projectId);
     return getCriticalFilesPort.getFrequentlyChangedFiles(
-        projectId,
-        command.getCommitHash(),
+        projectId, ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()),
         command.getStartDate(),
         command.getFrequency(),
         filePatterns);
