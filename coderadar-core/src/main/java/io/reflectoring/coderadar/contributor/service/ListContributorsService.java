@@ -32,7 +32,9 @@ public class ListContributorsService implements ListContributorsUseCase {
       long projectId, GetContributorsForPathCommand command) {
     checkProjectExists(projectId);
     return listContributorsPort.listAllByProjectIdAndPathInCommit(
-        projectId, ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()), command.getPath());
+        projectId,
+        ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()),
+        command.getPath());
   }
 
   private void checkProjectExists(long projectId) {

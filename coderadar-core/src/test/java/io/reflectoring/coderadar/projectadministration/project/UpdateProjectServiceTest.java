@@ -6,6 +6,10 @@ import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
+import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
+import io.reflectoring.coderadar.contributor.port.driven.DetachContributorPort;
+import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
+import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
@@ -63,6 +67,14 @@ class UpdateProjectServiceTest {
 
   @Mock private DeleteProjectPort deleteProjectPort;
 
+  @Mock private ComputeContributorsPort computeContributorsPort;
+
+  @Mock private SaveContributorsPort saveContributorsPort;
+
+  @Mock private DetachContributorPort detachContributorPort;
+
+  @Mock private ListContributorsPort listContributorsPort;
+
   private UpdateProjectService testSubject;
 
   @BeforeEach
@@ -80,7 +92,11 @@ class UpdateProjectServiceTest {
             resetAnalysisPort,
             createModulePort,
             getAvailableBranchesPort,
-            deleteProjectPort);
+            deleteProjectPort,
+            computeContributorsPort,
+            saveContributorsPort,
+            detachContributorPort,
+            listContributorsPort);
   }
 
   @Test

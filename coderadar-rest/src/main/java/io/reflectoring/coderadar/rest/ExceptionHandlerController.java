@@ -53,9 +53,7 @@ public class ExceptionHandlerController {
   }
 
   @ExceptionHandler(IllegalArgumentException.class)
-  public ResponseEntity<ErrorMessageResponse> illegalArgumentException(
-          IllegalArgumentException e) {
-    return new ResponseEntity<>(
-            new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+  public ResponseEntity<ErrorMessageResponse> illegalArgumentException(IllegalArgumentException e) {
+    return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
   }
 }

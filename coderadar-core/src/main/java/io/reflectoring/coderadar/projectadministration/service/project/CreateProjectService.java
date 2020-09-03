@@ -150,7 +150,8 @@ public class CreateProjectService implements CreateProjectUseCase {
     contributors =
         computeContributorsPort.computeContributors(
             coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName(),
-            contributors);
+            contributors,
+            getProjectDateRange(project));
     saveContributorsPort.save(contributors, project.getId());
   }
 

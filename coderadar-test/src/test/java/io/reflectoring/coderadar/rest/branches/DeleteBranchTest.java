@@ -24,12 +24,9 @@ class DeleteBranchTest extends ControllerTestTemplate {
   @Autowired private DeleteBranchPort deleteBranchPort;
 
   private Long projectId;
-  private final Branch master =
-      new Branch("master", "e9f7ff6fdd8c0863", false);
-  private final Branch testBranch1 =
-      new Branch("testBranch1", "d3272b3793bc4b2b", false);
-  private final Branch testBranch2 =
-      new Branch("testBranch2", "fcd9a0e7c34086fd", false);
+  private final Branch master = new Branch("master", "e9f7ff6fdd8c0863", false);
+  private final Branch testBranch1 = new Branch("testBranch1", "d3272b3793bc4b2b", false);
+  private final Branch testBranch2 = new Branch("testBranch2", "fcd9a0e7c34086fd", false);
 
   @BeforeEach
   void setUp() {

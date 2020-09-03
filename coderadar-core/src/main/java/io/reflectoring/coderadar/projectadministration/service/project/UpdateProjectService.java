@@ -4,6 +4,11 @@ import static io.reflectoring.coderadar.projectadministration.service.project.Cr
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
+import io.reflectoring.coderadar.contributor.domain.Contributor;
+import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
+import io.reflectoring.coderadar.contributor.port.driven.DetachContributorPort;
+import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
+import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
@@ -41,6 +46,10 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final CreateModulePort createModulePort;
   private final GetAvailableBranchesPort getAvailableBranchesPort;
   private final DeleteProjectPort deleteProjectPort;
+  private final ComputeContributorsPort computeContributorsPort;
+  private final SaveContributorsPort saveContributorsPort;
+  private final DetachContributorPort detachContributorPort;
+  private final ListContributorsPort listContributorsPort;
 
   private static final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
@@ -56,7 +65,11 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       ResetAnalysisPort resetAnalysisPort,
       CreateModulePort createModulePort,
       GetAvailableBranchesPort getAvailableBranchesPort,
-      DeleteProjectPort deleteProjectPort) {
+      DeleteProjectPort deleteProjectPort,
+      ComputeContributorsPort computeContributorsPort,
+      SaveContributorsPort saveContributorsPort,
+      DetachContributorPort detachContributorPort,
+      ListContributorsPort listContributorsPort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
     this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
@@ -69,6 +82,10 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     this.createModulePort = createModulePort;
     this.getAvailableBranchesPort = getAvailableBranchesPort;
     this.deleteProjectPort = deleteProjectPort;
+    this.computeContributorsPort = computeContributorsPort;
+    this.saveContributorsPort = saveContributorsPort;
+    this.detachContributorPort = detachContributorPort;
+    this.listContributorsPort = listContributorsPort;
   }
 
   @Override
@@ -127,6 +144,17 @@ public class UpdateProjectService implements UpdateProjectUseCase {
               for (Module module : modules) {
                 createModulePort.createModule(module.getPath(), projectId);
               }
+              // Get contributors anew
+              detachContributorPort.detachContributorsFromProject(
+                  listContributorsPort.listAllByProjectId(projectId), projectId);
+              List<Contributor> contributors =
+                  computeContributorsPort.computeContributors(
+                      coderadarConfigurationProperties.getWorkdir()
+                          + "/projects/"
+                          + project.getWorkdirName(),
+                      listContributorsPort.listAll(),
+                      getProjectDateRange(project));
+              saveContributorsPort.save(contributors, projectId);
 
             } catch (Exception e) {
               logger.error("Unable to update project! {}", e.getMessage());

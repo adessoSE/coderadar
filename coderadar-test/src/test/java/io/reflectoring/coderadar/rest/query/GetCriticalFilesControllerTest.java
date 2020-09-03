@@ -98,9 +98,7 @@ class GetCriticalFilesControllerTest extends ControllerTestTemplate {
             .andReturn();
 
     List<ContributorsForFile> response =
-        fromJson(
-            new TypeReference<>() {},
-            result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     Assertions.assertThat(response.size()).isEqualTo(1);
     Assertions.assertThat(response.get(0).getContributors()).containsExactly("maximAtanasov");

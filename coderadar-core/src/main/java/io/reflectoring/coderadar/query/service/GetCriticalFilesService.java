@@ -36,7 +36,10 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     checkProjectExists(projectId);
     List<FilePattern> filePatterns = getFilePatternsForProject(projectId);
     return getCriticalFilesPort.getFilesWithContributors(
-        projectId, command.getNumberOfContributors(), ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()), filePatterns);
+        projectId,
+        command.getNumberOfContributors(),
+        ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()),
+        filePatterns);
   }
 
   @Override
@@ -45,7 +48,8 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     checkProjectExists(projectId);
     List<FilePattern> filePatterns = getFilePatternsForProject(projectId);
     return getCriticalFilesPort.getFrequentlyChangedFiles(
-        projectId, ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()),
+        projectId,
+        ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()),
         command.getStartDate(),
         command.getFrequency(),
         filePatterns);

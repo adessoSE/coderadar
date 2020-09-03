@@ -82,8 +82,7 @@ class GetCommitLogControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals("e9f7ff6fdd8c0863", last.getHash());
     Assertions.assertEquals("modify testModule1/NewRandomFile.java", last.getSubject());
     Assertions.assertEquals(Collections.singletonList("master"), last.getRefs());
-    Assertions.assertArrayEquals(
-        new String[] {"d3272b3793bc4b2b"}, last.getParents());
+    Assertions.assertArrayEquals(new String[] {"d3272b3793bc4b2b"}, last.getParents());
     Assertions.assertEquals("Kilian.Krause@adesso.de", last.getAuthor().getEmail());
     Assertions.assertEquals("Krause", last.getAuthor().getName());
     Assertions.assertEquals(1584013941000L, last.getAuthor().getTimestamp());
@@ -92,8 +91,7 @@ class GetCommitLogControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals("fcd9a0e7c34086fd", secondToLast.getHash());
     Assertions.assertEquals("added TestFile.java", secondToLast.getSubject());
     Assertions.assertEquals(Collections.singletonList("testBranch2"), secondToLast.getRefs());
-    Assertions.assertArrayEquals(
-        new String[] {"d3272b3793bc4b2b"}, secondToLast.getParents());
+    Assertions.assertArrayEquals(new String[] {"d3272b3793bc4b2b"}, secondToLast.getParents());
     Assertions.assertEquals("Maksim.Atanasov@adesso.de", secondToLast.getAuthor().getEmail());
     Assertions.assertEquals("Atanasov", secondToLast.getAuthor().getName());
     Assertions.assertEquals(1582619029000L, secondToLast.getAuthor().getTimestamp());

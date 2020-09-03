@@ -114,9 +114,7 @@ class ListContributorsControllerIntegrationTest extends ControllerTestTemplate {
             .andReturn();
 
     List<GetContributorResponse> contributors =
-        fromJson(
-            new TypeReference<>() {},
-            result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
     GetContributorResponse first = contributors.get(0);
     GetContributorResponse second = contributors.get(1);
 
