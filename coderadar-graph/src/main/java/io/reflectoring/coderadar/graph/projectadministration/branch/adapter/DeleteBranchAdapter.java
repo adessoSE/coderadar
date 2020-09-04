@@ -8,23 +8,16 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class DeleteBranchAdapter implements DeleteBranchPort {
 
   private final BranchRepository branchRepository;
   private final CommitRepository commitRepository;
   private final MetricRepository metricRepository;
-
-  public DeleteBranchAdapter(
-      BranchRepository branchRepository,
-      CommitRepository commitRepository,
-      MetricRepository metricRepository) {
-    this.branchRepository = branchRepository;
-    this.commitRepository = commitRepository;
-    this.metricRepository = metricRepository;
-  }
 
   @Override
   public void delete(long projectId, Branch branch) {

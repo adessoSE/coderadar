@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.projectadministration.service.project;
 import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.CoderadarConstants;
 import io.reflectoring.coderadar.analyzer.service.AnalyzingService;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
@@ -139,7 +140,7 @@ public class ScanProjectScheduler {
 
       if (!updatedBranches.isEmpty()) {
         for (Branch branch : updatedBranches) {
-          if (branch.getCommitHash().equals("0000000000000000000000000000000000000000")) {
+          if (branch.getCommitHash().equals(CoderadarConstants.ZERO_HASH)) {
             deleteBranchPort.delete(project.getId(), branch);
           }
         }
@@ -164,7 +165,8 @@ public class ScanProjectScheduler {
       }
       return updatedBranches.stream().map(Branch::getName).collect(Collectors.toList());
     } catch (Exception e) {
-      logger.error("Unable to update the project: {}", e.getMessage());
+      logger.error("Unable to update the project:");
+      e.printStackTrace();
     }
     return Collections.emptyList();
   }

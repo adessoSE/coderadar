@@ -302,7 +302,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
     // Get all of the existing commits and save them in a map
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
-    IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
+    Map<String, FileEntity> walkedFiles = new HashMap<>();
     commitRepository.findByProjectId(projectId).forEach(c -> walkedCommits.put(c.getHash(), c));
 
     // Remove any already existing commits from the new commits passed into this method
@@ -325,29 +325,31 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       for (File file : commit.getChangedFiles()) {
         FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, file.getPath());
         if (fileEntity == null) {
-          fileEntity = fileBaseDataMapper.mapDomainObject(file);
-          fileEntity.setOldFiles(new ArrayList<>(file.getOldFiles().size()));
-          for (File oldFile : file.getOldFiles()) {
-            FileEntity oldFileEntity =
-                fileRepository.getFileInProjectByPath(projectId, oldFile.getPath());
-            if (oldFileEntity == null) {
-              oldFileEntity = walkedFiles.get(oldFile);
+          fileEntity = walkedFiles.get(file.getPath());
+          if (fileEntity == null) {
+            fileEntity = fileBaseDataMapper.mapDomainObject(file);
+            fileEntity.setOldFiles(new ArrayList<>(file.getOldFiles().size()));
+            for (File oldFile : file.getOldFiles()) {
+              FileEntity oldFileEntity =
+                  fileRepository.getFileInProjectByPath(projectId, oldFile.getPath());
+              if (oldFileEntity == null) {
+                oldFileEntity = walkedFiles.get(oldFile.getPath());
+              }
+              fileEntity.getOldFiles().add(oldFileEntity);
             }
-            fileEntity.getOldFiles().add(oldFileEntity);
+            walkedFiles.put(file.getPath(), fileEntity);
           }
-          walkedFiles.put(file, fileEntity);
         }
         changedFiles.add(fileEntity);
       }
 
-      for (File rel : commit.getDeletedFiles()) {
-        FileEntity newRel = new FileEntity();
-        FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, rel.getPath());
+      for (File file : commit.getDeletedFiles()) {
+        FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, file.getPath());
         if (fileEntity == null) {
-          fileEntity = fileBaseDataMapper.mapDomainObject(rel);
-          walkedFiles.put(rel, fileEntity);
+          fileEntity = fileBaseDataMapper.mapDomainObject(file);
+          walkedFiles.put(file.getPath(), fileEntity);
         }
-        deletedFiles.add(newRel);
+        deletedFiles.add(fileEntity);
       }
       commitEntity.setDeletedFiles(deletedFiles);
       commitEntity.setChangedFiles(changedFiles);
@@ -368,9 +370,6 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     }
 
     int fileBulkSaveChunk = 5000;
-    if (fileEntities.size() < 5000) {
-      fileBulkSaveChunk = fileEntities.isEmpty() ? 100 : fileEntities.size();
-    }
 
     saveCommitsWithDepthZero(commitEntities, commitBulkSaveChunk);
     saveFilesWithDepthZero(fileEntities, fileBulkSaveChunk);

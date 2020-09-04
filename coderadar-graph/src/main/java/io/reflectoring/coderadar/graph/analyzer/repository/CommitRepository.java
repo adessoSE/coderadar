@@ -153,7 +153,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query(
       "MATCH (c) WHERE ID(c) = {0} WITH c "
           + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->(c) "
-          + "WHERE r.changeType = 0 OR r.changeType = 3 DETACH DELETE c, f")
+          + "WHERE NOT EXISTS((c)--(f)-[:CHANGED_IN]->()) DETACH DELETE c, f")
   void deleteCommitAndAddedOrRenamedFiles(long commitId);
 
   @Query(

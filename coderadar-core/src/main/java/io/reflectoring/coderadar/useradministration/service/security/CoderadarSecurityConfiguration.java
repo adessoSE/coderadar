@@ -88,6 +88,7 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
               "/city/*",
               "/project-edit/*",
               "/project/*",
+              "/project/*/commit/*",
               "/project/*/*",
               "/project/*/*/dependency-map",
               "/project/*/*/*/dependency-map",
