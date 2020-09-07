@@ -23,4 +23,11 @@ public interface ContributorRepository extends Neo4jRepository<ContributorEntity
 
   @Query("MATCH (c:ContributorEntity) RETURN c ORDER BY c.displayName")
   List<ContributorEntity> findAll();
+
+  @Query("MATCH (c:ContributorEntity)-[r:WORKS_ON]->(p) WHERE ID(p) = {1} AND ID(c) = {0} DELETE r")
+  void detachContributorFromProject(long contributorId, long projectId);
+
+  @Query(
+      "MATCH (c:ContributorEntity)-[r:WORKS_ON]->(p) WHERE ID(p) = {1} AND ID(c) IN {0} DELETE r")
+  void detachContributorsFromProject(List<Long> contributorIds, long projectId);
 }

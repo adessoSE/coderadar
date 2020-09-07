@@ -53,6 +53,7 @@ import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {ScreenInteractionService} from './city-map/service/screen-interaction.service';
 import {DependencyRootComponent} from './levelized-structure-map/dependency-root/dependency-root.component';
 import {DependencyCompareComponent} from './levelized-structure-map/dependency-compare/dependency-compare.component';
 import {TreeNodeComponent} from './levelized-structure-map/tree-node/tree-node.component';
@@ -70,7 +71,7 @@ import { SidenavContentComponent } from './view/sidenav-content/sidenav-content.
 import {ContributorMergeDialogComponent} from './components/contributor-merge-dialog/contributor-merge-dialog.component';
 import {DeleteProjectDialogComponent} from './components/delete-project-dialog/delete-project-dialog.component';
 import {AddProjectToTeamDialogComponent} from './components/add-project-to-team-dialog/add-project-to-team-dialog.component';
-import {ContributorDialogComponent} from "./components/contributor-card/contributor-dialog.component";
+import {ContributorDialogComponent} from './components/contributor-card/contributor-dialog.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -179,6 +180,7 @@ const appRoutes: Routes = [
     FocusService,
     TooltipService,
     ComparisonPanelService,
+    ScreenInteractionService,
     {
       provide: REDUCER_TOKEN,
       useFactory: getReducers,

@@ -67,8 +67,8 @@ export class MergedView extends AbstractView {
           [this.metricMapping.colorMetricName]: orangeColorMetric
         };
 
-        blueHeight = blueHeightMetric * VisualizationConfig.HEIGHT_FACTOR;
-        const orangeHeight = orangeHeightMetric * VisualizationConfig.HEIGHT_FACTOR;
+        blueHeight = blueHeightMetric * VisualizationConfig.ELEMENT_HEIGHT_FACTOR;
+        const orangeHeight = orangeHeightMetric * VisualizationConfig.ELEMENT_HEIGHT_FACTOR;
 
         const blueEdgeLength = Math.sqrt(blueGroundAreaMetric) * VisualizationConfig.EDGE_LENGTH_FACTOR;
         const orangeEdgeLength = Math.sqrt(orangeGroundAreaMetric) * VisualizationConfig.EDGE_LENGTH_FACTOR;

@@ -1,4 +1,4 @@
-<div id="tooltip">
+<div class="tooltip" #tooltip_div>
   <div class="element-name">{{(content$ | async)?.elementName}}</div>
   <table>
     <tr *ngFor="let metric of (content$ | async)?.metrics | keyValue">
