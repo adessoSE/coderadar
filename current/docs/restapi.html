@@ -2127,18 +2127,8 @@ table.tableblock.grid-all {
 </li>
 <li><a href="#_user_management">2. User Management</a>
 <ul class="sectlevel2">
-<li><a href="#_loading_a_user">2.1. Loading a User</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request">2.1.1. Example Request</a></li>
-<li><a href="#_example_response">2.1.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_listing_all_users">2.2. Listing all Users</a>
-<ul class="sectlevel4">
-<li><a href="#_example_request_2">Example Request</a></li>
-<li><a href="#_example_response_2">Example Response</a></li>
-</ul>
-</li>
+<li><a href="#_loading_a_user">2.1. Loading a User</a></li>
+<li><a href="#_listing_all_users">2.2. Listing all Users</a></li>
 <li><a href="#_authentication">2.3. Authentication</a>
 <ul class="sectlevel3">
 <li><a href="#_registering_a_user">2.3.1. Registering a User</a></li>
@@ -2280,72 +2270,17 @@ table.tableblock.grid-all {
 </li>
 <li><a href="#_teams">8. Teams</a>
 <ul class="sectlevel2">
-<li><a href="#_creating_a_team">8.1. Creating a team</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_52">8.1.1. Example Request</a></li>
-<li><a href="#_example_response_54">8.1.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_deleting_a_team">8.2. Deleting a team</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_53">8.2.1. Example Request</a></li>
-<li><a href="#_example_response_55">8.2.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_add_users_to_a_team">8.3. Add users to a team</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_54">8.3.1. Example Request</a></li>
-<li><a href="#_example_response_56">8.3.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_remove_users_from_a_team">8.4. Remove users from a team</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_55">8.4.1. Example Request</a></li>
-<li><a href="#_example_response_57">8.4.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_retrieve_a_single_team">8.5. Retrieve a single team</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_56">8.5.1. Example Request</a></li>
-<li><a href="#_example_response_58">8.5.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_list_all_teams">8.6. List all teams</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_57">8.6.1. Example Request</a></li>
-<li><a href="#_example_response_59">8.6.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_assign_a_team_to_a_project">8.7. Assign a team to a project</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_58">8.7.1. Example Request</a></li>
-<li><a href="#_example_response_60">8.7.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_remove_a_team_from_a_project">8.8. Remove a team from a project</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_59">8.8.1. Example Request</a></li>
-<li><a href="#_example_response_61">8.8.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_list_teams_assigned_to_a_project">8.9. List teams assigned to a project</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_60">8.9.1. Example Request</a></li>
-<li><a href="#_example_response_62">8.9.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_list_teams_a_user_is_in">8.10. List teams a user is in</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_61">8.10.1. Example Request</a></li>
-<li><a href="#_example_response_63">8.10.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_list_all_projects_for_a_team">8.11. List all projects for a team</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_62">8.11.1. Example Request</a></li>
-<li><a href="#_example_response_64">8.11.2. Example Response</a></li>
-</ul>
-</li>
+<li><a href="#_creating_a_team">8.1. Creating a team</a></li>
+<li><a href="#_deleting_a_team">8.2. Deleting a team</a></li>
+<li><a href="#_add_users_to_a_team">8.3. Add users to a team</a></li>
+<li><a href="#_remove_users_from_a_team">8.4. Remove users from a team</a></li>
+<li><a href="#_retrieve_a_single_team">8.5. Retrieve a single team</a></li>
+<li><a href="#_list_all_teams">8.6. List all teams</a></li>
+<li><a href="#_assign_a_team_to_a_project">8.7. Assign a team to a project</a></li>
+<li><a href="#_remove_a_team_from_a_project">8.8. Remove a team from a project</a></li>
+<li><a href="#_list_teams_assigned_to_a_project">8.9. List teams assigned to a project</a></li>
+<li><a href="#_list_teams_a_user_is_in">8.10. List teams a user is in</a></li>
+<li><a href="#_list_all_projects_for_a_team">8.11. List all projects for a team</a></li>
 </ul>
 </li>
 </ul>
@@ -2476,17 +2411,14 @@ This section describes the REST endpoints for managing coderadar users.</p>
 </div>
 <div class="sect2">
 <h3 id="_loading_a_user"><a class="link" href="#_loading_a_user">2.1. Loading a User</a></h3>
-<div class="sect3">
-<h4 id="_example_request"><a class="link" href="#_example_request">2.1.1. Example Request</a></h4>
+<h4 id="_example_request" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users/315 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response"><a class="link" href="#_example_response">2.1.2. Example Response</a></h4>
+<h4 id="_example_response" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -2500,20 +2432,16 @@ Content-Length: 44
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_listing_all_users"><a class="link" href="#_listing_all_users">2.2. Listing all Users</a></h3>
-<div class="sect4">
-<h5 id="_example_request_2"><a class="link" href="#_example_request_2">Example Request</a></h5>
+<h5 id="_example_request_2" class="discrete">Example Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_2"><a class="link" href="#_example_response_2">Example Response</a></h5>
+<h5 id="_example_response_2" class="discrete">Example Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -2524,7 +2452,6 @@ Content-Length: 47
   "id" : 394,
   "username" : "username"
 } ]</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -2698,8 +2625,8 @@ Content-Type: application/json
 Content-Length: 480
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTk0NzI2MDIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTk0NzE3MDIsInVzZXJJZCI6IjMyNiIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.z7Zw9aHwmgk9yMk_pIC7JbULvXhfSK2gltU48ziueYI",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDQ2NTU3MDIsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk5NDcxNzAyLCJ1c2VySWQiOiIzMjYiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.rE23uo3fAcgH5nsXIJL4kQaDQV6nbx95DESTKoV2QBM",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTk0NzMyOTEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTk0NzIzOTEsInVzZXJJZCI6IjMyNiIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.ytTvQAe7BOQOG6j-gb6FAIPqRdTewFGnwOvyQdXDFEM",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDQ2NTYzOTEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk5NDcyMzkxLCJ1c2VySWQiOiIzMjYiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.YBl8bSqPbD5AyGfQqsFljz1MhKP18fw7DX4n_X2TOis",
   "userId" : 326
 }</code></pre>
 </div>
@@ -2752,8 +2679,8 @@ Content-Length: 448
 Host: localhost:8080
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTk0NzA4NjUsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTk0Njk5NjUsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.Al8-t4e6bGQy5pzYHIV02FYG1fexDdT5q5ug4AN8FlQ",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDQ2NTU3MDUsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk5NDcxNzA1LCJ1c2VySWQiOiIzOTAiLCJ1c2VybmFtZSI6InJhZGFyIn0.qkcrUQKX3KDExTo99rLXHBGCXSG-mV-9CcpsFRi7qS0"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTk0NzE1NTQsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTk0NzA2NTQsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.AnbUlnDwQqFY3XqISwDxnpZvj5p7V1Fg0Vf6hqHjH1k",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDQ2NTYzOTQsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk5NDcyMzk0LCJ1c2VySWQiOiIzOTAiLCJ1c2VybmFtZSI6InJhZGFyIn0.TBMZPcORbTygRj9N6o2VemtmaSt6Br3hZWYUJnkMf7A"
 }</code></pre>
 </div>
 </div>
@@ -2767,7 +2694,7 @@ Content-Type: application/json
 Content-Length: 221
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTk0NzI2MDUsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTk0NzE3MDUsInVzZXJJZCI6IjM5MCIsInVzZXJuYW1lIjoicmFkYXIifQ.CZuedLTqteZV55GcBou_BQuhANggmnK0SpJyMoCBWg0"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTk0NzMyOTQsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTk0NzIzOTQsInVzZXJJZCI6IjM5MCIsInVzZXJuYW1lIjoicmFkYXIifQ.v74CRVLvn35SVfSNXbPXyUhBZBXBh_aNwrGfQJHpnoo"
 }</code></pre>
 </div>
 </div>
@@ -2820,7 +2747,7 @@ Content-Length: 267
 Host: localhost:8080
 
 {
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDQ2NTU3MDQsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk5NDcxNzA0LCJ1c2VySWQiOiIzODUiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.C9QNqeE9y0QHLL4sivGAaEb-nObcvzahlaXPist31OY",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDQ2NTYzOTMsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk5NDcyMzkzLCJ1c2VySWQiOiIzODUiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.dzFq1DWe1ZkXfMxuyLjeUOUrV-k4RflQ0B3WsIP46wo",
   "newPassword" : "newPassword1"
 }</code></pre>
 </div>
@@ -3001,7 +2928,7 @@ Content-Length: 200
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-09-07T09:41:41.417+0000"
+  "startDate" : "2020-09-07T09:53:09.945+0000"
 } ]</code></pre>
 </div>
 </div>
@@ -3190,7 +3117,7 @@ Content-Length: 394
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-09-07T09:41:22.040+0000"
+  "startDate" : "2020-09-07T09:52:52.874+0000"
 }, {
   "id" : 3,
   "name" : "project",
@@ -3198,7 +3125,7 @@ Content-Length: 394
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-09-07T09:41:22.040+0000"
+  "startDate" : "2020-09-07T09:52:52.874+0000"
 } ]</code></pre>
 </div>
 </div>
@@ -3221,7 +3148,7 @@ Host: localhost:8080
   "vcsPassword" : "password",
   "vcsUrl" : "http://valid.url",
   "vcsOnline" : true,
-  "startDate" : 1599471681767
+  "startDate" : 1599472372527
 }</code></pre>
 </div>
 </div>
@@ -3261,7 +3188,7 @@ Content-Length: 194
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-09-07T09:41:22.220+0000"
+  "startDate" : "2020-09-07T09:52:53.016+0000"
 }</code></pre>
 </div>
 </div>
@@ -5794,8 +5721,7 @@ Content-Length: 318
 </tr>
 </tbody>
 </table>
-<div class="sect3">
-<h4 id="_example_request_52"><a class="link" href="#_example_request_52">8.1.1. Example Request</a></h4>
+<h4 id="_example_request_52" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/teams HTTP/1.1
@@ -5809,9 +5735,7 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_54"><a class="link" href="#_example_response_54">8.1.2. Example Response</a></h4>
+<h4 id="_example_response_54" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
@@ -5824,24 +5748,19 @@ Content-Length: 16
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_deleting_a_team"><a class="link" href="#_deleting_a_team">8.2. Deleting a team</a></h3>
-<div class="sect3">
-<h4 id="_example_request_53"><a class="link" href="#_example_request_53">8.2.1. Example Request</a></h4>
+<h4 id="_example_request_53" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/teams/383 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_55"><a class="link" href="#_example_response_55">8.2.2. Example Response</a></h4>
+<h4 id="_example_response_55" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -5868,8 +5787,7 @@ Host: localhost:8080</code></pre>
 </tr>
 </tbody>
 </table>
-<div class="sect3">
-<h4 id="_example_request_54"><a class="link" href="#_example_request_54">8.3.1. Example Request</a></h4>
+<h4 id="_example_request_54" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/teams/358/users HTTP/1.1
@@ -5882,13 +5800,10 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_56"><a class="link" href="#_example_response_56">8.3.2. Example Response</a></h4>
+<h4 id="_example_response_56" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -5915,8 +5830,7 @@ Host: localhost:8080
 </tr>
 </tbody>
 </table>
-<div class="sect3">
-<h4 id="_example_request_55"><a class="link" href="#_example_request_55">8.4.1. Example Request</a></h4>
+<h4 id="_example_request_55" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/teams/372/users HTTP/1.1
@@ -5929,29 +5843,23 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_57"><a class="link" href="#_example_response_57">8.4.2. Example Response</a></h4>
+<h4 id="_example_response_57" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_retrieve_a_single_team"><a class="link" href="#_retrieve_a_single_team">8.5. Retrieve a single team</a></h3>
-<div class="sect3">
-<h4 id="_example_request_56"><a class="link" href="#_example_request_56">8.5.1. Example Request</a></h4>
+<h4 id="_example_request_56" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/teams/352 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_58"><a class="link" href="#_example_response_58">8.5.2. Example Response</a></h4>
+<h4 id="_example_response_58" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -5966,20 +5874,16 @@ Content-Length: 58
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_list_all_teams"><a class="link" href="#_list_all_teams">8.6. List all teams</a></h3>
-<div class="sect3">
-<h4 id="_example_request_57"><a class="link" href="#_example_request_57">8.6.1. Example Request</a></h4>
+<h4 id="_example_request_57" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/teams/ HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_59"><a class="link" href="#_example_response_59">8.6.2. Example Response</a></h4>
+<h4 id="_example_response_59" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -5991,7 +5895,6 @@ Content-Length: 62
   "name" : "testTeam",
   "members" : [ ]
 } ]</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -6018,8 +5921,7 @@ Content-Length: 62
 </tr>
 </tbody>
 </table>
-<div class="sect3">
-<h4 id="_example_request_58"><a class="link" href="#_example_request_58">8.7.1. Example Request</a></h4>
+<h4 id="_example_request_58" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/334/teams/333 HTTP/1.1
@@ -6032,49 +5934,39 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_60"><a class="link" href="#_example_response_60">8.7.2. Example Response</a></h4>
+<h4 id="_example_response_60" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_remove_a_team_from_a_project"><a class="link" href="#_remove_a_team_from_a_project">8.8. Remove a team from a project</a></h3>
-<div class="sect3">
-<h4 id="_example_request_59"><a class="link" href="#_example_request_59">8.8.1. Example Request</a></h4>
+<h4 id="_example_request_59" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/367/teams/368 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_61"><a class="link" href="#_example_response_61">8.8.2. Example Response</a></h4>
+<h4 id="_example_response_61" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_list_teams_assigned_to_a_project"><a class="link" href="#_list_teams_assigned_to_a_project">8.9. List teams assigned to a project</a></h3>
-<div class="sect3">
-<h4 id="_example_request_60"><a class="link" href="#_example_request_60">8.9.1. Example Request</a></h4>
+<h4 id="_example_request_60" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/345/teams HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_62"><a class="link" href="#_example_response_62">8.9.2. Example Response</a></h4>
+<h4 id="_example_response_62" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -6089,20 +5981,16 @@ Content-Length: 62
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_list_teams_a_user_is_in"><a class="link" href="#_list_teams_a_user_is_in">8.10. List teams a user is in</a></h3>
-<div class="sect3">
-<h4 id="_example_request_61"><a class="link" href="#_example_request_61">8.10.1. Example Request</a></h4>
+<h4 id="_example_request_61" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users/350/teams HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_63"><a class="link" href="#_example_response_63">8.10.2. Example Response</a></h4>
+<h4 id="_example_response_63" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -6120,20 +6008,16 @@ Content-Length: 112
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
 <h3 id="_list_all_projects_for_a_team"><a class="link" href="#_list_all_projects_for_a_team">8.11. List all projects for a team</a></h3>
-<div class="sect3">
-<h4 id="_example_request_62"><a class="link" href="#_example_request_62">8.11.1. Example Request</a></h4>
+<h4 id="_example_request_62" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/teams/362/projects HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_64"><a class="link" href="#_example_response_64">8.11.2. Example Response</a></h4>
+<h4 id="_example_response_64" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -6147,9 +6031,8 @@ Content-Length: 200
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-09-07T09:41:43.864+0000"
+  "startDate" : "2020-09-07T09:53:12.472+0000"
 } ]</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -6158,7 +6041,7 @@ Content-Length: 200
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-09-07 09:38:23 +00:00
+Last updated 2020-09-07 09:50:02 +00:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
