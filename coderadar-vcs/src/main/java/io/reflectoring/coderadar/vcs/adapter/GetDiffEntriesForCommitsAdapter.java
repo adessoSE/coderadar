@@ -26,8 +26,8 @@ public class GetDiffEntriesForCommitsAdapter implements GetDiffEntriesForCommits
       throws UnableToGetDiffsFromCommitsException {
     try (Git git = Git.open(new File(projectRoot))) {
       Repository repository = git.getRepository();
-      RevCommit commit1 = repository.parseCommit(ObjectId.fromString(commitName1));
-      RevCommit commit2 = repository.parseCommit(ObjectId.fromString(commitName2));
+      RevCommit commit1 = repository.parseCommit(repository.resolve(commitName1));
+      RevCommit commit2 = repository.parseCommit(repository.resolve(commitName2));
       // change commits so that commit2 is the older one
       if (commit1.getCommitTime() > commit2.getCommitTime()) {
         RevCommit tmp = commit1;

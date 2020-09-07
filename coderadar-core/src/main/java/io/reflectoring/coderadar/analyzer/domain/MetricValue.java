@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
+import io.reflectoring.coderadar.plugin.api.Finding;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -165,8 +165,7 @@ public class ScanProjectScheduler {
       }
       return updatedBranches.stream().map(Branch::getName).collect(Collectors.toList());
     } catch (Exception e) {
-      logger.error("Unable to update the project:");
-      e.printStackTrace();
+      logger.error("Unable to update the project: {}", e.toString());
     }
     return Collections.emptyList();
   }

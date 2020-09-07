@@ -109,8 +109,6 @@ bootRun {
             [
                     // debugging
                     "-Xdebug",
-                    "-Xmx2G",
-                    "-Xms2G",
                     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
             ]
     doFirst {

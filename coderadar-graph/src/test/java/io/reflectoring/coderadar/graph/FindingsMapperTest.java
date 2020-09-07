@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.graph;
 
-import io.reflectoring.coderadar.analyzer.domain.Finding;
 import io.reflectoring.coderadar.graph.analyzer.FindingsMapper;
+import io.reflectoring.coderadar.plugin.api.Finding;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

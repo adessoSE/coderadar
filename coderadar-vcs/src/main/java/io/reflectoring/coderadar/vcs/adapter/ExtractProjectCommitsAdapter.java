@@ -9,11 +9,7 @@ import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
 import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -36,11 +32,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    */
   public List<Commit> extractCommits(String repositoryRoot, DateRange range) throws IOException {
     try (Git git = Git.open(new java.io.File(repositoryRoot))) {
-      List<RevCommit> revCommits = RevCommitHelper.getRevCommits(repositoryRoot);
-      revCommits =
-          revCommits.stream()
-              .filter(revCommit -> isInDateRange(range, revCommit))
-              .collect(Collectors.toList());
+      List<RevCommit> revCommits = RevCommitHelper.getRevCommitsInDateRange(repositoryRoot, range);
       List<Commit> commits = getCommits(revCommits);
       setCommitsFiles(git.getRepository(), commits, revCommits);
       return commits;
@@ -68,7 +60,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     Commit commit = new Commit();
     commit.setHash(rc.abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name());
 
-    rc.getName();
     PersonIdent personIdent = rc.getAuthorIdent();
     commit.setAuthor(personIdent.getName());
     commit.setAuthorEmail(personIdent.getEmailAddress());
@@ -230,16 +221,5 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     } else {
       return diff.getNewPath();
     }
-  }
-
-  /**
-   * @paraf range Date range to test for
-   * @param rc RevCommit to check
-   * @return True if the commit was made within the date range, false otherwise.
-   */
-  private boolean isInDateRange(DateRange range, RevCommit rc) {
-    LocalDate commitTime =
-        Instant.ofEpochSecond(rc.getCommitTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-    return range.containsDate(commitTime);
   }
 }

@@ -116,19 +116,20 @@ public class AnalyzingService
     List<Long> commitIds = new ArrayList<>();
     Map<Long, List<MetricValue>> fileMetrics =
         saveMetricPort.getMetricsForFiles(projectId, branchName);
-
-    for (int i = 0; i < commits.size() && activeAnalysis.get(projectId); i++) {
+    for (Commit commit : commits) {
+      if (Boolean.FALSE.equals(activeAnalysis.get(projectId))) {
+        break;
+      }
       List<MetricValue> metrics =
-          analyzeCommitService.analyzeCommit(
-              commits.get(i), project, sourceCodeFileAnalyzerPlugins);
-      zeroOutMissingMetrics(commits.get(i), metrics, fileMetrics);
+          analyzeCommitService.analyzeCommit(commit, project, sourceCodeFileAnalyzerPlugins);
+      zeroOutMissingMetrics(commit, metrics, fileMetrics);
       if (!metrics.isEmpty()) {
         saveMetricPort.saveMetricValues(metrics);
         saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
         commitIds.clear();
       }
-      commitIds.add(commits.get(i).getId());
-      log(commits.get(i));
+      commitIds.add(commit.getId());
+      log(commit);
     }
     if (!getAvailableMetricsInProjectPort.get(projectId).isEmpty()) {
       saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);

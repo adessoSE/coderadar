@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Metric {
 
-    private String id;
+    private final String id;
 
     public String toString() {
         return id;

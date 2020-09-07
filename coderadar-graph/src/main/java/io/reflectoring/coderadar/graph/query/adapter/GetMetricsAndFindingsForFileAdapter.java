@@ -1,13 +1,11 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
-import io.reflectoring.coderadar.analyzer.domain.Finding;
 import io.reflectoring.coderadar.graph.analyzer.FindingsMapper;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
+import io.reflectoring.coderadar.plugin.api.Finding;
 import io.reflectoring.coderadar.query.domain.MetricWithFindings;
 import io.reflectoring.coderadar.query.port.driven.GetMetricsAndFindingsForFilePort;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +25,8 @@ public class GetMetricsAndFindingsForFileAdapter implements GetMetricsAndFinding
     for (Map<String, Object> metric : metrics) {
       String name = (String) metric.get("name");
       long value = (long) metric.get("value");
-      var findingsTemp = (Object[]) metric.get("findings");
-      List<String> strings = new ArrayList<>();
-      for (Object f : findingsTemp) {
-        strings.add((String) f);
-      }
-      List<Finding> findings = findingsMapper.mapNodeEntities(strings);
+      List<Finding> findings =
+          findingsMapper.mapNodeEntities(Arrays.asList((String[]) metric.get("findings")));
       result.add(new MetricWithFindings(name, value, findings));
     }
     return result;

@@ -4,9 +4,6 @@ import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -17,13 +14,12 @@ public class ComputeContributorAdapter implements ComputeContributorsPort {
   @Override
   public List<Contributor> computeContributors(
       String repositoryRoot, List<Contributor> existingContributors, DateRange dateRange) {
-    List<RevCommit> revCommits = RevCommitHelper.getRevCommits(repositoryRoot);
+    List<RevCommit> revCommits =
+        RevCommitHelper.getRevCommitsInDateRange(repositoryRoot, dateRange);
 
     Map<String, Set<String>> newContributors = new HashMap<>();
 
     for (RevCommit rc : revCommits) {
-      LocalDate date = getCommitDate(rc);
-      if (!dateRange.containsDate(date)) continue;
       PersonIdent author = rc.getAuthorIdent();
       String name = author.getName();
       String email = author.getEmailAddress().toLowerCase();
@@ -34,12 +30,6 @@ public class ComputeContributorAdapter implements ComputeContributorsPort {
       }
     }
     return mergeExistingContributors(existingContributors, newContributors);
-  }
-
-  private LocalDate getCommitDate(RevCommit revCommit) {
-    return Instant.ofEpochSecond(revCommit.getCommitTime())
-        .atZone(ZoneId.systemDefault())
-        .toLocalDate();
   }
 
   private List<Contributor> mergeExistingContributors(

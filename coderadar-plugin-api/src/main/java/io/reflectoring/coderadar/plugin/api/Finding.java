@@ -1,24 +1,22 @@
 package io.reflectoring.coderadar.plugin.api;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * A Finding defines a position within a source code file where a certain metric found an issue.
  */
 @EqualsAndHashCode
-@Getter
+@Data
+@NoArgsConstructor
 public class Finding {
 
-    private final Integer lineStart;
-
-    private final Integer lineEnd;
-
-    private final Integer charStart;
-
-    private final Integer charEnd;
-
-    private final String message;
+    private int lineStart;
+    private int lineEnd;
+    private int charStart;
+    private int charEnd;
+    private String message;
 
     /**
      * Marks a finding starting at some point in one line and ending in some point in another line.

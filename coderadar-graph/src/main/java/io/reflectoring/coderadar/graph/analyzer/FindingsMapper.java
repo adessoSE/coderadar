@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.graph.analyzer;
 
-import io.reflectoring.coderadar.analyzer.domain.Finding;
 import io.reflectoring.coderadar.graph.Mapper;
+import io.reflectoring.coderadar.plugin.api.Finding;
 
 /**
  * Findings are mapped to strings in the following format: "1-2-3-4" where 1 is lineStart, 2 is
