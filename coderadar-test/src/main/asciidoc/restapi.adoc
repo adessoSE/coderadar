@@ -83,20 +83,24 @@ This section describes the REST endpoints for managing coderadar users.
 
 === Loading a User
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/users/get/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/users/get/http-response.adoc[]
 
 === Listing all Users
 
+[discrete]
 ===== Example Request
 
 include::{snippets}/users/list/http-request.adoc[]
 
+[discrete]
 ===== Example Response
 
 include::{snippets}/users/list/http-response.adoc[]
@@ -935,20 +939,24 @@ include::{snippets}/metrics/criticalFiles/modificationFrequency/http-response.ad
 
 include::{snippets}/teams/create/request-fields.adoc[]
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/create/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/create/http-response.adoc[]
 
 === Deleting a team
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/delete/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/delete/http-response.adoc[]
@@ -957,10 +965,12 @@ include::{snippets}/teams/delete/http-response.adoc[]
 
 include::{snippets}/teams/add/user/request-fields.adoc[]
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/add/user/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/add/user/http-response.adoc[]
@@ -969,30 +979,36 @@ include::{snippets}/teams/add/user/http-response.adoc[]
 
 include::{snippets}/teams/remove/user/request-fields.adoc[]
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/remove/user/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/remove/user/http-response.adoc[]
 
 === Retrieve a single team
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/get/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/get/http-response.adoc[]
 
 === List all teams
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/list/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/list/http-response.adoc[]
@@ -1001,50 +1017,60 @@ include::{snippets}/teams/list/http-response.adoc[]
 
 include::{snippets}/teams/add/project/request-fields.adoc[]
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/add/project/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/add/project/http-response.adoc[]
 
 === Remove a team from a project
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/remove/project/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/remove/project/http-response.adoc[]
 
 === List teams assigned to a project
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/list/project/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/list/project/http-response.adoc[]
 
 === List teams a user is in
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/list/user/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/list/user/http-response.adoc[]
 
 === List all projects for a team
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/teams/list/projects/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/teams/list/projects/http-response.adoc[]

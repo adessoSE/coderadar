@@ -90,7 +90,8 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
               "/project/*/*",
               "/project/*/*/dependency-map",
               "/project/*/*/*/dependency-map",
-              "/project/*/*/files")
+              "/project/*/*/files",
+              "/")
           .permitAll()
           .anyRequest()
           .authenticated();
