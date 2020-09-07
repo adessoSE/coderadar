@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class ChangePasswordController implements AbstractBaseController {
   private final ChangePasswordUseCase changePasswordUseCase;
-
-  public ChangePasswordController(ChangePasswordUseCase changePasswordUseCase) {
-    this.changePasswordUseCase = changePasswordUseCase;
-  }
 
   @PostMapping(
       path = "/user/password/change",

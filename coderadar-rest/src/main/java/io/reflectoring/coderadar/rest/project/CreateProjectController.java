@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.creat
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import java.net.MalformedURLException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class CreateProjectController implements AbstractBaseController {
   private final CreateProjectUseCase createProjectUseCase;
-
-  public CreateProjectController(CreateProjectUseCase createProjectUseCase) {
-
-    this.createProjectUseCase = createProjectUseCase;
-  }
 
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,

@@ -5,18 +5,15 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.Anal
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.ListAnalyzerConfigurationsPort;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class ListAnalyzerConfigurationsAdapter implements ListAnalyzerConfigurationsPort {
   private final AnalyzerConfigurationRepository analyzerConfigurationRepository;
   private final AnalyzerConfigurationMapper analyzerConfigurationMapper =
       new AnalyzerConfigurationMapper();
-
-  public ListAnalyzerConfigurationsAdapter(
-      AnalyzerConfigurationRepository analyzerConfigurationRepository) {
-    this.analyzerConfigurationRepository = analyzerConfigurationRepository;
-  }
 
   @Override
   public List<AnalyzerConfiguration> listAnalyzerConfigurations(long projectId) {

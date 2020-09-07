@@ -10,17 +10,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
+
   private final CommitRepository commitRepository;
   private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
-
-  public GetCommitsInProjectAdapter(CommitRepository commitRepository) {
-    this.commitRepository = commitRepository;
-  }
 
   @Override
   public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(

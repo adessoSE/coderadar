@@ -5,18 +5,15 @@ import io.reflectoring.coderadar.graph.useradministration.repository.TeamReposit
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.useradministration.port.driven.CreateTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.create.CreateTeamCommand;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CreateTeamAdapter implements CreateTeamPort {
 
   private final TeamRepository teamRepository;
   private final UserRepository userRepository;
-
-  public CreateTeamAdapter(TeamRepository teamRepository, UserRepository userRepository) {
-    this.teamRepository = teamRepository;
-    this.userRepository = userRepository;
-  }
 
   @Override
   public Long createTeam(CreateTeamCommand createTeamCommand) {

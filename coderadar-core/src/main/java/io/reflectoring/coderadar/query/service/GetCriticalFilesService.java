@@ -13,22 +13,15 @@ import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetCriticalFile
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFilesWithContributorsCommand;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFrequentlyChangedFilesCommand;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetCriticalFilesService implements GetCriticalFilesUseCase {
   private final GetCriticalFilesPort getCriticalFilesPort;
   private final GetProjectPort getProjectPort;
   private final ListFilePatternsOfProjectPort listFilePatternsOfProjectPort;
-
-  public GetCriticalFilesService(
-      GetCriticalFilesPort getCriticalFilesPort,
-      GetProjectPort getProjectPort,
-      ListFilePatternsOfProjectPort listFilePatternsOfProjectPort) {
-    this.getCriticalFilesPort = getCriticalFilesPort;
-    this.getProjectPort = getProjectPort;
-    this.listFilePatternsOfProjectPort = listFilePatternsOfProjectPort;
-  }
 
   @Override
   public List<ContributorsForFile> getFilesWithContributors(

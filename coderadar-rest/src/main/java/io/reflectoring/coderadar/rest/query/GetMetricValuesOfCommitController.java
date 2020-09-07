@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValues
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class GetMetricValuesOfCommitController implements AbstractBaseController {
   private final GetMetricValuesOfCommitUseCase getMetricValuesOfCommitUseCase;
   private final AuthenticationService authenticationService;
-
-  public GetMetricValuesOfCommitController(
-      GetMetricValuesOfCommitUseCase getMetricValuesOfCommitUseCase,
-      AuthenticationService authenticationService) {
-    this.getMetricValuesOfCommitUseCase = getMetricValuesOfCommitUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @RequestMapping(
       method = {RequestMethod.POST, RequestMethod.GET},

@@ -11,26 +11,17 @@ import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWit
 import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsUseCase;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetFileContentWithMetricsService implements GetFileContentWithMetricsUseCase {
 
   private final GetProjectPort getProjectPort;
   private final GetRawCommitContentPort getRawCommitContentPort;
   private final GetMetricsAndFindingsForFilePort getMetricsAndFindingsForFilePort;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-
-  public GetFileContentWithMetricsService(
-      GetProjectPort getProjectPort,
-      GetRawCommitContentPort getRawCommitContentPort,
-      GetMetricsAndFindingsForFilePort getMetricsAndFindingsForFilePort,
-      CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.getProjectPort = getProjectPort;
-    this.getRawCommitContentPort = getRawCommitContentPort;
-    this.getMetricsAndFindingsForFilePort = getMetricsAndFindingsForFilePort;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-  }
 
   @Override
   public FileContentWithMetrics getFileContentWithMetrics(

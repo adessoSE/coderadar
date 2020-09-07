@@ -5,18 +5,16 @@ import io.reflectoring.coderadar.graph.projectadministration.branch.repository.B
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListBranchesAdapter implements ListBranchesPort {
-
-  private final BranchMapper branchMapper = new BranchMapper();
 
   private final BranchRepository branchRepository;
 
-  public ListBranchesAdapter(BranchRepository branchRepository) {
-    this.branchRepository = branchRepository;
-  }
+  private final BranchMapper branchMapper = new BranchMapper();
 
   @Override
   public List<Branch> listBranchesInProject(long projectId) {

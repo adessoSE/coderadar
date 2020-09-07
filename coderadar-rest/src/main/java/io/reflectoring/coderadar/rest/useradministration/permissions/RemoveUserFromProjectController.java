@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.useradministration.UserNotAssignedException;
 import io.reflectoring.coderadar.useradministration.port.driver.permissions.RemoveUserFromProjectUseCase;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,16 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
+@RequiredArgsConstructor
 public class RemoveUserFromProjectController implements AbstractBaseController {
   private final RemoveUserFromProjectUseCase removeUserFromProjectUseCase;
   private final AuthenticationService authenticationService;
-
-  public RemoveUserFromProjectController(
-      RemoveUserFromProjectUseCase removeUserFromProjectUseCase,
-      AuthenticationService authenticationService) {
-    this.removeUserFromProjectUseCase = removeUserFromProjectUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @DeleteMapping(path = "/projects/{projectId}/users/{userId}")
   public ResponseEntity<ErrorMessageResponse> removeUserRoleFromProject(

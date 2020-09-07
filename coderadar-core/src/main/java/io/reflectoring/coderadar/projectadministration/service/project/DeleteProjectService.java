@@ -8,11 +8,13 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.delet
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.vcs.port.driven.DeleteLocalRepositoryPort;
 import java.io.IOException;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class DeleteProjectService implements DeleteProjectUseCase {
 
   private final DeleteProjectPort deleteProjectPort;
@@ -22,19 +24,6 @@ public class DeleteProjectService implements DeleteProjectUseCase {
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteProjectService.class);
-
-  public DeleteProjectService(
-      DeleteProjectPort deleteProjectPort,
-      ProcessProjectService processProjectService,
-      GetProjectPort getProjectPort,
-      DeleteLocalRepositoryPort deleteLocalRepositoryPort,
-      CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.deleteProjectPort = deleteProjectPort;
-    this.processProjectService = processProjectService;
-    this.getProjectPort = getProjectPort;
-    this.deleteLocalRepositoryPort = deleteLocalRepositoryPort;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-  }
 
   @Override
   public void delete(long id) {

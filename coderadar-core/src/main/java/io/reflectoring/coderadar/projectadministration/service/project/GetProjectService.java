@@ -7,18 +7,15 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectUseCase;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetProjectService implements GetProjectUseCase {
 
   private final GetProjectPort getProjectPort;
   private final GetUserPort getUserPort;
-
-  public GetProjectService(GetProjectPort getProjectPort, GetUserPort getUserPort) {
-    this.getProjectPort = getProjectPort;
-    this.getUserPort = getUserPort;
-  }
 
   @Override
   public Project get(long id) {

@@ -8,26 +8,17 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListUsersForProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RemoveUserFromProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driver.permissions.RemoveUserFromProjectUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RemoveUserFromProjectService implements RemoveUserFromProjectUseCase {
 
   private final GetProjectPort getProjectPort;
   private final GetUserPort getUserPort;
   private final RemoveUserFromProjectPort removeUserFromProjectPort;
   private final ListUsersForProjectPort listUsersForProjectPort;
-
-  public RemoveUserFromProjectService(
-      GetProjectPort getProjectPort,
-      GetUserPort getUserPort,
-      RemoveUserFromProjectPort removeUserFromProjectPort,
-      ListUsersForProjectPort listUsersForProjectPort) {
-    this.getProjectPort = getProjectPort;
-    this.getUserPort = getUserPort;
-    this.removeUserFromProjectPort = removeUserFromProjectPort;
-    this.listUsersForProjectPort = listUsersForProjectPort;
-  }
 
   @Override
   public void removeUserFromProject(long projectId, long userId) {

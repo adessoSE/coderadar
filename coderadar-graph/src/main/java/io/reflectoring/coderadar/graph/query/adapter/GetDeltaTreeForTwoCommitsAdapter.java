@@ -14,10 +14,12 @@ import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommitsPort {
 
   private final GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter;
@@ -25,19 +27,6 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private final CommitRepository commitRepository;
   private final GetRawCommitContentPort getRawCommitContentPort;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-
-  public GetDeltaTreeForTwoCommitsAdapter(
-      GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter,
-      ProjectRepository projectRepository,
-      CommitRepository commitRepository,
-      GetRawCommitContentPort getRawCommitContentPort,
-      CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.getMetricsForAllFilesInCommitAdapter = getMetricsForAllFilesInCommitAdapter;
-    this.projectRepository = projectRepository;
-    this.commitRepository = commitRepository;
-    this.getRawCommitContentPort = getRawCommitContentPort;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-  }
 
   @Override
   public DeltaTree get(GetDeltaTreeForTwoCommitsCommand command, long projectId) {

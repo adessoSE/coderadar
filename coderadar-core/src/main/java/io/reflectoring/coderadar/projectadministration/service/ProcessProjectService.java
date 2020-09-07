@@ -4,27 +4,20 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ProcessProjectService {
 
   private final AsyncListenableTaskExecutor taskExecutor;
   private final ProjectStatusPort projectStatusPort;
   private final GetProjectPort getProjectPort;
   private static final Logger logger = LoggerFactory.getLogger(ProcessProjectService.class);
-
-  public ProcessProjectService(
-      AsyncListenableTaskExecutor taskExecutor,
-      ProjectStatusPort projectStatusPort,
-      GetProjectPort getProjectPort) {
-    this.taskExecutor = taskExecutor;
-    this.projectStatusPort = projectStatusPort;
-    this.getProjectPort = getProjectPort;
-  }
 
   /**
    * Executes a task for a given project. The project is locked while this operation is performed

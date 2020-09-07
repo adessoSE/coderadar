@@ -7,20 +7,15 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.create.CreateTeamCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.create.CreateTeamUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CreateTeamService implements CreateTeamUseCase {
   private final CreateTeamPort createTeamPort;
   private final GetTeamPort getTeamPort;
   private final GetUserPort getUserPort;
-
-  public CreateTeamService(
-      CreateTeamPort createTeamPort, GetTeamPort getTeamPort, GetUserPort getUserPort) {
-    this.createTeamPort = createTeamPort;
-    this.getTeamPort = getTeamPort;
-    this.getUserPort = getUserPort;
-  }
 
   @Override
   public Long createTeam(CreateTeamCommand createTeamCommand) {

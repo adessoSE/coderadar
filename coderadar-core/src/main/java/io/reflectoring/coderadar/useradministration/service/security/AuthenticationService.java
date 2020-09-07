@@ -6,25 +6,18 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserRoleForProjectPort;
 import io.reflectoring.coderadar.useradministration.service.UserUnauthenticatedException;
 import io.reflectoring.coderadar.useradministration.service.UserUnauthorizedException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationService {
 
   private final GetUserRoleForProjectPort getUserRoleForProjectPort;
   private final GetUserPort getUserPort;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-
-  public AuthenticationService(
-      GetUserRoleForProjectPort getUserRoleForProjectPort,
-      GetUserPort getUserPort,
-      CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.getUserRoleForProjectPort = getUserRoleForProjectPort;
-    this.getUserPort = getUserPort;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-  }
 
   public void authenticateMember(long projectId) {
     if (coderadarConfigurationProperties.getAuthentication().isEnabled()

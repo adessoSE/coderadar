@@ -8,11 +8,11 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DeleteBranchAdapter implements DeleteBranchPort {
 
   private final BranchRepository branchRepository;

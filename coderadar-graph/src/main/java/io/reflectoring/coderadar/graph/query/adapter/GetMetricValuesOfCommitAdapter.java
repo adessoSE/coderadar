@@ -8,16 +8,14 @@ import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValues
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPort {
 
   private final MetricQueryRepository metricQueryRepository;
-
-  public GetMetricValuesOfCommitAdapter(MetricQueryRepository metricQueryRepository) {
-    this.metricQueryRepository = metricQueryRepository;
-  }
 
   @Override
   public List<MetricValueForCommit> get(long projectId, GetMetricValuesOfCommitCommand command) {

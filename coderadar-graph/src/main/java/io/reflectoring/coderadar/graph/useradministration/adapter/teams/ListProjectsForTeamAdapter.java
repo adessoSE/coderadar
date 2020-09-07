@@ -10,20 +10,17 @@ import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driven.ListProjectsForTeamPort;
 import java.util.*;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListProjectsForTeamAdapter implements ListProjectsForTeamPort {
 
-  private final ProjectMapper projectMapper = new ProjectMapper();
   private final ProjectRepository projectRepository;
   private final UserRepository userRepository;
 
-  public ListProjectsForTeamAdapter(
-      ProjectRepository projectRepository, UserRepository userRepository) {
-    this.projectRepository = projectRepository;
-    this.userRepository = userRepository;
-  }
+  private final ProjectMapper projectMapper = new ProjectMapper();
 
   @Override
   public List<Project> listProjects(long teamId) {

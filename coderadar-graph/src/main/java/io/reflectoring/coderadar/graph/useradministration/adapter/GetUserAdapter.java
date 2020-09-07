@@ -6,17 +6,15 @@ import io.reflectoring.coderadar.graph.useradministration.repository.UserReposit
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetUserAdapter implements GetUserPort {
 
   private final UserRepository userRepository;
   private final UserMapper userMapper = new UserMapper();
-
-  public GetUserAdapter(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
 
   @Override
   public User getUser(long id) {

@@ -4,19 +4,17 @@ import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import java.util.Collections;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CoderadarUserDetailService implements UserDetailsService {
 
   private final GetUserPort getUserPort;
-
-  public CoderadarUserDetailService(GetUserPort getUserPort) {
-    this.getUserPort = getUserPort;
-  }
 
   @Override
   public UserDetails loadUserByUsername(String username) {

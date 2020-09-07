@@ -6,16 +6,14 @@ import io.reflectoring.coderadar.contributor.port.driven.GetContributorPort;
 import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetContributorAdapter implements GetContributorPort {
   private final ContributorRepository contributorRepository;
   private final ContributorMapper mapper = new ContributorMapper();
-
-  public GetContributorAdapter(ContributorRepository contributorRepository) {
-    this.contributorRepository = contributorRepository;
-  }
 
   @Override
   public Contributor get(long id) {

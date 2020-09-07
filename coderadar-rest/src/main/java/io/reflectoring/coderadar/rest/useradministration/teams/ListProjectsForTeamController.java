@@ -11,6 +11,7 @@ import io.reflectoring.coderadar.rest.domain.ProjectWithRolesResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListProjectsForTeamUseCase;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
+@RequiredArgsConstructor
 public class ListProjectsForTeamController implements AbstractBaseController {
   private final ListProjectsForTeamUseCase listProjectsForTeamUseCase;
-
-  public ListProjectsForTeamController(ListProjectsForTeamUseCase listProjectsForTeamUseCase) {
-    this.listProjectsForTeamUseCase = listProjectsForTeamUseCase;
-  }
 
   @GetMapping(path = "/teams/{teamId}/projects", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetProjectResponse>> listProjectsForTeam(@PathVariable long teamId) {

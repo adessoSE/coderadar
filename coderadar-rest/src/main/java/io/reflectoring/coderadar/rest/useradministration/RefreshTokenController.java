@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class RefreshTokenController implements AbstractBaseController {
   private final RefreshTokenUseCase refreshTokenUseCase;
-
-  public RefreshTokenController(RefreshTokenUseCase refreshTokenUseCase) {
-    this.refreshTokenUseCase = refreshTokenUseCase;
-  }
 
   @PostMapping(
       path = "/user/refresh",

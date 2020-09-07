@@ -6,16 +6,14 @@ import io.reflectoring.coderadar.query.port.driven.GetFileTreeForCommitPort;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class GetFileTreeForCommitAdapter implements GetFileTreeForCommitPort {
 
   private final MetricQueryRepository metricQueryRepository;
-
-  public GetFileTreeForCommitAdapter(MetricQueryRepository metricQueryRepository) {
-    this.metricQueryRepository = metricQueryRepository;
-  }
 
   @Override
   public FileTree getFileTreeForCommit(long projectId, String commitHash, boolean changeFilesOnly) {

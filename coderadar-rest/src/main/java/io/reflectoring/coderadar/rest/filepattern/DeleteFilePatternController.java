@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.filepattern;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.delete.DeleteFilePatternFromProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,16 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class DeleteFilePatternController implements AbstractBaseController {
   private final DeleteFilePatternFromProjectUseCase deleteFilePatternFromProjectUseCase;
   private final AuthenticationService authenticationService;
-
-  public DeleteFilePatternController(
-      DeleteFilePatternFromProjectUseCase deleteFilePatternFromProjectUseCase,
-      AuthenticationService authenticationService) {
-    this.deleteFilePatternFromProjectUseCase = deleteFilePatternFromProjectUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @DeleteMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}")
   public ResponseEntity<HttpStatus> deleteFilePattern(

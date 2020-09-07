@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.analyzer.service;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.domain.Finding;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
@@ -16,24 +15,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /** Performs analysis on a commit. */
 @Service
-public class AnalyzeCommitService implements AnalyzeCommitUseCase {
+@RequiredArgsConstructor
+public class AnalyzeCommitService {
 
   private final AnalyzeFileService analyzeFileService;
   private final GetRawCommitContentPort getRawCommitContentPort;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-
-  public AnalyzeCommitService(
-      AnalyzeFileService analyzeFileService,
-      GetRawCommitContentPort getRawCommitContentPort,
-      CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.analyzeFileService = analyzeFileService;
-    this.getRawCommitContentPort = getRawCommitContentPort;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-  }
 
   /**
    * Analyzes a single commit.
@@ -43,7 +35,6 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
    * @param analyzers The analyzers to use.
    * @return A list of metric values for the given commit.
    */
-  @Override
   public List<MetricValue> analyzeCommit(
       Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
     List<MetricValue> metricValues = new ArrayList<>();

@@ -4,16 +4,13 @@ import io.reflectoring.coderadar.graph.useradministration.repository.UserReposit
 import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserRoleForProjectPort;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetUserRoleForProjectAdapter implements GetUserRoleForProjectPort {
-
   private final UserRepository userRepository;
-
-  public GetUserRoleForProjectAdapter(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
 
   @Override
   public ProjectRole getRole(long projectId, long userId) {

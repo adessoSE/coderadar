@@ -8,11 +8,13 @@ import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigurationUseCase {
 
   private final CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort;
@@ -20,17 +22,6 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
   private final ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService;
   private static final Logger logger =
       LoggerFactory.getLogger(CreateAnalyzerConfigurationService.class);
-
-  public CreateAnalyzerConfigurationService(
-      CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort,
-      ListAnalyzersService listAnalyzerService,
-      ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService) {
-
-    this.createAnalyzerConfigurationPort = createAnalyzerConfigurationPort;
-    this.listAnalyzerService = listAnalyzerService;
-    this.listAnalyzerConfigurationsFromProjectService =
-        listAnalyzerConfigurationsFromProjectService;
-  }
 
   @Override
   public Long create(CreateAnalyzerConfigurationCommand command, long projectId) {

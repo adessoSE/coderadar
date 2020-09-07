@@ -6,16 +6,14 @@ import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import java.io.IOException;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ExtractProjectCommitsService implements ExtractProjectCommitsUseCase {
 
   private final ExtractProjectCommitsPort extractProjectCommitsPort;
-
-  public ExtractProjectCommitsService(ExtractProjectCommitsPort extractProjectCommitsPort) {
-    this.extractProjectCommitsPort = extractProjectCommitsPort;
-  }
 
   @Override
   public List<Commit> getCommits(String repositoryRoot, DateRange range) throws IOException {

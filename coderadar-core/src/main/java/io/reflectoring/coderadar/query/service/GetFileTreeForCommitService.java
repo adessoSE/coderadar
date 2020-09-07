@@ -6,18 +6,14 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.query.domain.FileTree;
 import io.reflectoring.coderadar.query.port.driven.GetFileTreeForCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetFileTreeForCommitUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetFileTreeForCommitService implements GetFileTreeForCommitUseCase {
   private final GetProjectPort getProjectPort;
   private final GetFileTreeForCommitPort getFileTreeForCommitPort;
-
-  public GetFileTreeForCommitService(
-      GetProjectPort getProjectPort, GetFileTreeForCommitPort getFileTreeForCommitPort) {
-    this.getProjectPort = getProjectPort;
-    this.getFileTreeForCommitPort = getFileTreeForCommitPort;
-  }
 
   @Override
   public FileTree getFileTreeForCommit(

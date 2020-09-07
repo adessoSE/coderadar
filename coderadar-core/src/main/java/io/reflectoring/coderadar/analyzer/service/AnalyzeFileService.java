@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnalyzeFileService {
 
-  private Logger logger = LoggerFactory.getLogger(AnalyzeFileService.class);
+  private static final Logger logger = LoggerFactory.getLogger(AnalyzeFileService.class);
 
   /**
    * Analyzes a single file. Lets all AnalyzerPlugins run over the given file to calculate their

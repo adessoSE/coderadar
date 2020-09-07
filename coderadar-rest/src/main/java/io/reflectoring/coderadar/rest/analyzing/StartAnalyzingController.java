@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class StartAnalyzingController implements AbstractBaseController {
   private final StartAnalyzingUseCase startAnalyzingUseCase;
   private final AuthenticationService authenticationService;
-
-  public StartAnalyzingController(
-      StartAnalyzingUseCase startAnalyzingUseCase, AuthenticationService authenticationService) {
-    this.startAnalyzingUseCase = startAnalyzingUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @PostMapping(path = "projects/{projectId}/analyze", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> startAnalyzing(

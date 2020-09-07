@@ -7,17 +7,15 @@ import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import java.util.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SaveMetricAdapter implements SaveMetricPort {
 
   private final MetricRepository metricRepository;
   private final FindingsMapper findingsMapper = new FindingsMapper();
-
-  public SaveMetricAdapter(MetricRepository metricRepository) {
-    this.metricRepository = metricRepository;
-  }
 
   @Override
   public void saveMetricValues(List<MetricValue> metricValues) {

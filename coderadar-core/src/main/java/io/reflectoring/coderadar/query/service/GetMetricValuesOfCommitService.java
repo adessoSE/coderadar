@@ -7,19 +7,15 @@ import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
 import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitCommand;
 import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitUseCase {
   private final GetMetricValuesOfCommitPort getMetricValuesOfCommitPort;
 
   private final GetProjectPort getProjectPort;
-
-  public GetMetricValuesOfCommitService(
-      GetMetricValuesOfCommitPort getMetricValuesOfCommitPort, GetProjectPort getProjectPort) {
-    this.getMetricValuesOfCommitPort = getMetricValuesOfCommitPort;
-    this.getProjectPort = getProjectPort;
-  }
 
   @Override
   public List<MetricValueForCommit> get(long projectId, GetMetricValuesOfCommitCommand command) {

@@ -8,17 +8,15 @@ import io.reflectoring.coderadar.query.port.driven.GetMetricsAndFindingsForFileP
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class GetMetricsAndFindingsForFileAdapter implements GetMetricsAndFindingsForFilePort {
 
   private final MetricQueryRepository metricQueryRepository;
   private final FindingsMapper findingsMapper = new FindingsMapper();
-
-  public GetMetricsAndFindingsForFileAdapter(MetricQueryRepository metricQueryRepository) {
-    this.metricQueryRepository = metricQueryRepository;
-  }
 
   public List<MetricWithFindings> getMetricsAndFindingsForFile(
       long projectId, String commitHash, String filepath) {

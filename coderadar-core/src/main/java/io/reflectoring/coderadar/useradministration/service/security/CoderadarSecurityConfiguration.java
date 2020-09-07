@@ -23,11 +23,9 @@ import org.springframework.web.filter.CorsFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  private UserDetailsService userDetailsService;
-
-  private TokenService tokenService;
-
-  private CoderadarConfigurationProperties coderadarConfiguration;
+  private final UserDetailsService userDetailsService;
+  private final TokenService tokenService;
+  private final CoderadarConfigurationProperties coderadarConfiguration;
 
   private CorsFilter corsFilter;
 

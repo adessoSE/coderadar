@@ -7,23 +7,16 @@ import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
 import io.reflectoring.coderadar.query.port.driver.filediff.GetFileDiffCommand;
 import io.reflectoring.coderadar.query.port.driver.filediff.GetFileDiffUseCase;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetFileDiffService implements GetFileDiffUseCase {
 
   private final GetProjectPort getProjectPort;
   private final GetRawCommitContentPort getRawCommitContentPort;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-
-  public GetFileDiffService(
-      GetProjectPort getProjectPort,
-      GetRawCommitContentPort getRawCommitContentPort,
-      CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.getProjectPort = getProjectPort;
-    this.getRawCommitContentPort = getRawCommitContentPort;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-  }
 
   @Override
   public FileContentWithMetrics getFileDiff(long projectId, GetFileDiffCommand command) {

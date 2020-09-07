@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.dependencymap.util.RegexPatternCache;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.apache.axis2.util.JavaUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,7 +31,6 @@ public class JavaAnalyzer {
   private static final String MULTILINE_COMMENT = "^\\s*\\*.*$";
   private static final String IN_STRING = "^.*\".*$";
 
-  @Autowired
   public JavaAnalyzer() {
     this.cache = new RegexPatternCache();
     importPattern = cache.getPattern(IMPORT_PATTERN);

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
@@ -26,17 +27,11 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UpdateLocalRepositoryAdapter implements UpdateLocalRepositoryPort {
 
   private final CloneRepositoryAdapter cloneRepositoryAdapter;
   private final GetAvailableBranchesAdapter getAvailableBranchesAdapter;
-
-  public UpdateLocalRepositoryAdapter(
-      CloneRepositoryAdapter cloneRepositoryAdapter,
-      GetAvailableBranchesAdapter getAvailableBranchesAdapter) {
-    this.cloneRepositoryAdapter = cloneRepositoryAdapter;
-    this.getAvailableBranchesAdapter = getAvailableBranchesAdapter;
-  }
 
   @Override
   public List<Branch> updateRepository(UpdateRepositoryCommand command)

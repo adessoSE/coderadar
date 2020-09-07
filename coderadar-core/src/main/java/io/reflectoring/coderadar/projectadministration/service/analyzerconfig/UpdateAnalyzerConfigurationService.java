@@ -9,31 +9,22 @@ import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigurationUseCase {
 
   private final GetAnalyzerConfigurationPort getAnalyzerConfigurationPort;
   private final UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort;
   private final ListAnalyzersService listAnalyzerService;
   private final ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService;
+
   private static final Logger logger =
       LoggerFactory.getLogger(UpdateAnalyzerConfigurationService.class);
-
-  public UpdateAnalyzerConfigurationService(
-      UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,
-      GetAnalyzerConfigurationPort getAnalyzerConfigurationPort,
-      ListAnalyzersService listAnalyzerService,
-      ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService) {
-    this.updateAnalyzerConfigurationPort = updateAnalyzerConfigurationPort;
-    this.getAnalyzerConfigurationPort = getAnalyzerConfigurationPort;
-    this.listAnalyzerService = listAnalyzerService;
-    this.listAnalyzerConfigurationsFromProjectService =
-        listAnalyzerConfigurationsFromProjectService;
-  }
 
   @Override
   public void update(

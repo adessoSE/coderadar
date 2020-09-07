@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WalkCommitTreeAdapter implements WalkCommitTreePort {
+
   @Override
   public void walkCommitTree(
       String projectRoot, String name, WalkTreeCommandInterface commandInterface)

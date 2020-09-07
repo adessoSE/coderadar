@@ -7,21 +7,19 @@ import io.reflectoring.coderadar.useradministration.port.driven.RegisterUserPort
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserUseCase;
 import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RegisterUserService implements RegisterUserUseCase {
 
   private final RegisterUserPort port;
   private final GetUserPort getUserPort;
-  private static final Logger logger = LoggerFactory.getLogger(RegisterUserService.class);
 
-  public RegisterUserService(RegisterUserPort port, GetUserPort getUserPort) {
-    this.port = port;
-    this.getUserPort = getUserPort;
-  }
+  private static final Logger logger = LoggerFactory.getLogger(RegisterUserService.class);
 
   @Override
   public Long register(RegisterUserCommand command) {

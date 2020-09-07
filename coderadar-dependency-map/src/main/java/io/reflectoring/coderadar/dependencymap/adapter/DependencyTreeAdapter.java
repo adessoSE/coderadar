@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class DependencyTreeAdapter implements GetDependencyTreePort {
 
   private Node root;
@@ -26,16 +27,6 @@ public class DependencyTreeAdapter implements GetDependencyTreePort {
   private final JavaAnalyzer javaAnalyzer;
   private final WalkCommitTreePort walkCommitTreePort;
   private final GetRawCommitContentPort rawCommitContentPort;
-
-  @Autowired
-  public DependencyTreeAdapter(
-      JavaAnalyzer javaAnalyzer,
-      WalkCommitTreePort walkCommitTreePort,
-      GetRawCommitContentPort rawCommitContentPort) {
-    this.javaAnalyzer = javaAnalyzer;
-    this.walkCommitTreePort = walkCommitTreePort;
-    this.rawCommitContentPort = rawCommitContentPort;
-  }
 
   /** Creates the */
   private void createTree() {

@@ -32,8 +32,8 @@ class UpdateAnalyzerConfigurationServiceTest {
   void setUp() {
     this.testSubject =
         new UpdateAnalyzerConfigurationService(
-            updateConfigurationPortMock,
             getConfigurationPortMock,
+            updateConfigurationPortMock,
             listAnalyzerServiceMock,
             listAnalyzerConfigurationsFromProjectServiceMock);
   }

@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetBranchResponse;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class ListBranchesController implements AbstractBaseController {
   private final ListBranchesUseCase listBranchesUseCase;
   private final AuthenticationService authenticationService;
-
-  public ListBranchesController(
-      ListBranchesUseCase listBranchesUseCase, AuthenticationService authenticationService) {
-    this.listBranchesUseCase = listBranchesUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @GetMapping(path = "/projects/{projectId}/branches", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetBranchResponse>> listBranches(@PathVariable long projectId) {

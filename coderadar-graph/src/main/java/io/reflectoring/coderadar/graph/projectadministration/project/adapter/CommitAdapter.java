@@ -14,9 +14,11 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import java.util.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   private final ProjectRepository projectRepository;
   private final FileRepository fileRepository;
@@ -26,21 +28,6 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   private final ForceUpdateChecker forceUpdateChecker;
   private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
   private final FileBaseDataMapper fileBaseDataMapper = new FileBaseDataMapper();
-
-  public CommitAdapter(
-      CommitRepository commitRepository,
-      ProjectRepository projectRepository,
-      FileRepository fileRepository,
-      BranchRepository branchRepository,
-      MetricRepository metricRepository,
-      ForceUpdateChecker forceUpdateChecker) {
-    this.projectRepository = projectRepository;
-    this.fileRepository = fileRepository;
-    this.commitRepository = commitRepository;
-    this.branchRepository = branchRepository;
-    this.metricRepository = metricRepository;
-    this.forceUpdateChecker = forceUpdateChecker;
-  }
 
   @Override
   public void saveCommits(List<Commit> commits, List<Branch> branches, long projectId) {

@@ -10,22 +10,17 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import java.util.Date;
+import lombok.RequiredArgsConstructor;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 /** Service for generation and verification of authentication tokens. */
 @Service
+@RequiredArgsConstructor
 public class TokenService {
 
   private final CoderadarConfigurationProperties configuration;
-
   private final SecretKeyService secretKeyService;
-
-  public TokenService(
-      CoderadarConfigurationProperties configuration, SecretKeyService secretKeyService) {
-    this.configuration = configuration;
-    this.secretKeyService = secretKeyService;
-  }
 
   /**
    * This method generates a JSON Web Token for access to resources. The token contains the

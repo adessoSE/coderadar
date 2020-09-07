@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWit
 import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,16 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class GetFileContentWithMetricsController implements AbstractBaseController {
-
   private final GetFileContentWithMetricsUseCase useCase;
   private final AuthenticationService authenticationService;
-
-  public GetFileContentWithMetricsController(
-      GetFileContentWithMetricsUseCase useCase, AuthenticationService authenticationService) {
-    this.useCase = useCase;
-    this.authenticationService = authenticationService;
-  }
 
   @RequestMapping(
       method = {RequestMethod.GET, RequestMethod.POST},

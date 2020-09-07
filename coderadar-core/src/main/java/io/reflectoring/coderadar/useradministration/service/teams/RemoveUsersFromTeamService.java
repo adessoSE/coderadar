@@ -8,23 +8,16 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RemoveUsersFromTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.RemoveUsersFromTeamUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RemoveUsersFromTeamService implements RemoveUsersFromTeamUseCase {
 
   private final GetTeamPort getTeamPort;
   private final GetUserPort getUserPort;
   private final RemoveUsersFromTeamPort removeUsersFromTeamPort;
-
-  public RemoveUsersFromTeamService(
-      GetTeamPort getTeamPort,
-      GetUserPort getUserPort,
-      RemoveUsersFromTeamPort removeUsersFromTeamPort) {
-    this.getTeamPort = getTeamPort;
-    this.getUserPort = getUserPort;
-    this.removeUsersFromTeamPort = removeUsersFromTeamPort;
-  }
 
   @Override
   public void removeUsersFromTeam(long teamId, List<Long> userIds) {

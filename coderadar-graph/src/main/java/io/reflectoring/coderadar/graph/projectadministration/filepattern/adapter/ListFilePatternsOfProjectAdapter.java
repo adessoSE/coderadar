@@ -5,16 +5,14 @@ import io.reflectoring.coderadar.graph.projectadministration.filepattern.reposit
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListFilePatternsOfProjectAdapter implements ListFilePatternsOfProjectPort {
   private final FilePatternRepository filePatternRepository;
   private final FilePatternMapper filePatternMapper = new FilePatternMapper();
-
-  public ListFilePatternsOfProjectAdapter(FilePatternRepository filePatternRepository) {
-    this.filePatternRepository = filePatternRepository;
-  }
 
   @Override
   public List<FilePattern> listFilePatterns(long projectId) {

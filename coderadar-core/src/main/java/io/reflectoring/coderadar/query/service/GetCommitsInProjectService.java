@@ -6,18 +6,14 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
   private final GetCommitsInProjectPort getCommitsInProjectPort;
   private final GetProjectPort getProjectPort;
-
-  public GetCommitsInProjectService(
-      GetCommitsInProjectPort getCommitsInProjectPort, GetProjectPort getProjectPort) {
-    this.getCommitsInProjectPort = getCommitsInProjectPort;
-    this.getProjectPort = getProjectPort;
-  }
 
   @Override
   public List<Commit> get(long projectId, String branch) {

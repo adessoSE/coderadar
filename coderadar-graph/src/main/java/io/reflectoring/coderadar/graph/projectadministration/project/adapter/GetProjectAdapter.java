@@ -14,18 +14,16 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetProjectAdapter implements GetProjectPort {
   private final ProjectRepository projectRepository;
-  private final ProjectMapper projectMapper = new ProjectMapper();
   private final UserRepository userRepository;
 
-  public GetProjectAdapter(ProjectRepository projectRepository, UserRepository userRepository) {
-    this.projectRepository = projectRepository;
-    this.userRepository = userRepository;
-  }
+  private final ProjectMapper projectMapper = new ProjectMapper();
 
   @Override
   public Project get(long id) {

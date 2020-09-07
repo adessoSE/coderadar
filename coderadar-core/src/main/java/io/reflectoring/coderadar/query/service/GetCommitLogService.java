@@ -6,18 +6,15 @@ import io.reflectoring.coderadar.query.domain.CommitLog;
 import io.reflectoring.coderadar.query.port.driven.GetCommitLogPort;
 import io.reflectoring.coderadar.query.port.driver.GetCommitLogUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetCommitLogService implements GetCommitLogUseCase {
 
   private final GetCommitLogPort getCommitLogPort;
   private final GetProjectPort getProjectPort;
-
-  public GetCommitLogService(GetCommitLogPort getCommitLogPort, GetProjectPort getProjectPort) {
-    this.getCommitLogPort = getCommitLogPort;
-    this.getProjectPort = getProjectPort;
-  }
 
   @Override
   public List<CommitLog> getCommitLog(long projectId) {

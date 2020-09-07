@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetDiffEntriesForCommitsAdapter implements GetDiffEntriesForCommitsPort {
+
   @Override
   public List<DiffEntry> getDiffs(String projectRoot, String commitName1, String commitName2)
       throws UnableToGetDiffsFromCommitsException {

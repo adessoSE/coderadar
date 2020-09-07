@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driver.get.GetUserUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
+@RequiredArgsConstructor
 public class GetUserController implements AbstractBaseController {
   private final GetUserUseCase getUserUseCase;
-
-  public GetUserController(GetUserUseCase getUserUseCase) {
-    this.getUserUseCase = getUserUseCase;
-  }
 
   @GetMapping(path = "/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetUserResponse> getUser(@PathVariable long userId) {

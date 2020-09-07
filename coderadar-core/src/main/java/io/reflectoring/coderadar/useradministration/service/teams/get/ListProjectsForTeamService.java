@@ -9,23 +9,16 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListProjectsForTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListProjectsForTeamUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListProjectsForTeamService implements ListProjectsForTeamUseCase {
 
   private final GetTeamPort getTeamPort;
   private final ListProjectsForTeamPort listProjectsForTeamPort;
   private final GetUserPort getUserPort;
-
-  public ListProjectsForTeamService(
-      GetTeamPort getTeamPort,
-      ListProjectsForTeamPort listProjectsForTeamPort,
-      GetUserPort getUserPort) {
-    this.getTeamPort = getTeamPort;
-    this.listProjectsForTeamPort = listProjectsForTeamPort;
-    this.getUserPort = getUserPort;
-  }
 
   @Override
   public List<Project> listProjects(long teamId) {

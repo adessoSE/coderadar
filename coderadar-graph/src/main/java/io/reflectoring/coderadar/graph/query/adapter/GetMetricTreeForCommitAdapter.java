@@ -15,19 +15,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort {
 
   private final MetricQueryRepository metricQueryRepository;
   private final ProjectRepository projectRepository;
-
-  public GetMetricTreeForCommitAdapter(
-      MetricQueryRepository metricQueryRepository, ProjectRepository projectRepository) {
-    this.metricQueryRepository = metricQueryRepository;
-    this.projectRepository = projectRepository;
-  }
 
   MetricTree get(ProjectEntity project, String commitHash, List<String> metrics) {
     List<Map<String, Object>> result =

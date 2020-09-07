@@ -3,16 +3,13 @@ package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.ada
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.DeleteAnalyzerConfigurationPort;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class DeleteAnalyzerConfigurationAdapter implements DeleteAnalyzerConfigurationPort {
   private final AnalyzerConfigurationRepository analyzerConfigurationRepository;
-
-  public DeleteAnalyzerConfigurationAdapter(
-      AnalyzerConfigurationRepository analyzerConfigurationRepository) {
-    this.analyzerConfigurationRepository = analyzerConfigurationRepository;
-  }
 
   @Override
   public void deleteAnalyzerConfiguration(long id) {

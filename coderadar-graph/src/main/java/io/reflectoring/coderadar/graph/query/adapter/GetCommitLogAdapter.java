@@ -8,18 +8,15 @@ import io.reflectoring.coderadar.query.domain.CommitLog;
 import io.reflectoring.coderadar.query.domain.CommitLogAuthor;
 import io.reflectoring.coderadar.query.port.driven.GetCommitLogPort;
 import java.util.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetCommitLogAdapter implements GetCommitLogPort {
 
   private final CommitRepository commitRepository;
   private final BranchRepository branchRepository;
-
-  public GetCommitLogAdapter(CommitRepository commitRepository, BranchRepository branchRepository) {
-    this.commitRepository = commitRepository;
-    this.branchRepository = branchRepository;
-  }
 
   @Override
   public List<CommitLog> getCommitLog(long projectId) {

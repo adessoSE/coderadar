@@ -7,23 +7,16 @@ import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.SetUserRoleForProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driver.permissions.SetUserRoleForProjectUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SetUserRoleForProjectService implements SetUserRoleForProjectUseCase {
 
   private final GetProjectPort getProjectPort;
   private final GetUserPort getUserPort;
   private final SetUserRoleForProjectPort setUserRoleForProjectPort;
-
-  public SetUserRoleForProjectService(
-      GetProjectPort getProjectPort,
-      GetUserPort getUserPort,
-      SetUserRoleForProjectPort setUserRoleForProjectPort) {
-    this.getProjectPort = getProjectPort;
-    this.getUserPort = getUserPort;
-    this.setUserRoleForProjectPort = setUserRoleForProjectPort;
-  }
 
   @Override
   public void setRole(long projectId, long userId, ProjectRole role) {

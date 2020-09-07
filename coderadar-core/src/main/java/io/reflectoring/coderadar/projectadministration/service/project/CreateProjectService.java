@@ -28,7 +28,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -36,34 +36,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CreateProjectService implements CreateProjectUseCase {
 
   private final GetAvailableBranchesPort getAvailableBranchesPort;
-
   private final CreateProjectPort createProjectPort;
-
   private final GetProjectPort getProjectPort;
-
-  private final CloneRepositoryUseCase cloneRepositoryUseCase;
-
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-
   private final ProcessProjectService processProjectService;
-
-  private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
-
   private final SaveCommitPort saveCommitPort;
-
   private final ComputeContributorsPort computeContributorsPort;
-
   private final SaveContributorsPort saveContributorsPort;
-
   private final ListContributorsPort listContributorsPort;
-
   private final SetUserRoleForProjectPort setUserRoleForProjectPort;
-
   private final GetUserPort getUserPort;
+  private final CloneRepositoryUseCase cloneRepositoryUseCase;
+  private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
 
   private static final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 

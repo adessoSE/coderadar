@@ -7,23 +7,16 @@ import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driven.AddTeamToProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.AddTeamToProjectUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AddTeamToProjectService implements AddTeamToProjectUseCase {
 
   private final GetProjectPort getProjectPort;
   private final AddTeamToProjectPort addTeamToProjectPort;
   private final GetTeamPort getTeamPort;
-
-  public AddTeamToProjectService(
-      GetProjectPort getProjectPort,
-      AddTeamToProjectPort addTeamToProjectPort,
-      GetTeamPort getTeamPort) {
-    this.getProjectPort = getProjectPort;
-    this.addTeamToProjectPort = addTeamToProjectPort;
-    this.getTeamPort = getTeamPort;
-  }
 
   @Override
   public void addTeamToProject(long projectId, long teamId, ProjectRole role) {

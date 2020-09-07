@@ -6,15 +6,13 @@ import io.reflectoring.coderadar.contributor.port.driven.MergeContributorsPort;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MergeContributorsAdapter implements MergeContributorsPort {
   private final ContributorRepository contributorRepository;
-
-  public MergeContributorsAdapter(ContributorRepository contributorRepository) {
-    this.contributorRepository = contributorRepository;
-  }
 
   @Override
   public void mergeContributors(List<Long> contributorIds, String displayName) {

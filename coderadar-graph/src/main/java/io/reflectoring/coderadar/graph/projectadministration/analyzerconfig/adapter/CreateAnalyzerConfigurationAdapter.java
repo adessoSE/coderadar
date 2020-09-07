@@ -8,21 +8,17 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntit
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class CreateAnalyzerConfigurationAdapter implements CreateAnalyzerConfigurationPort {
   private final AnalyzerConfigurationRepository analyzerConfigurationRepository;
-  private final AnalyzerConfigurationMapper analyzerConfigurationMapper =
-      new AnalyzerConfigurationMapper();
   private final ProjectRepository projectRepository;
 
-  public CreateAnalyzerConfigurationAdapter(
-      AnalyzerConfigurationRepository analyzerConfigurationRepository,
-      ProjectRepository projectRepository) {
-    this.analyzerConfigurationRepository = analyzerConfigurationRepository;
-    this.projectRepository = projectRepository;
-  }
+  private final AnalyzerConfigurationMapper analyzerConfigurationMapper =
+      new AnalyzerConfigurationMapper();
 
   @Override
   public Long create(AnalyzerConfiguration entity, long projectId) {

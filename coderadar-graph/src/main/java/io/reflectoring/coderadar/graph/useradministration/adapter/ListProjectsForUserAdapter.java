@@ -11,17 +11,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListProjectsForUserAdapter implements ListProjectsForUserPort {
 
   private final ProjectRepository projectRepository;
   private final ProjectMapper projectMapper = new ProjectMapper();
-
-  public ListProjectsForUserAdapter(ProjectRepository projectRepository) {
-    this.projectRepository = projectRepository;
-  }
 
   @Override
   public List<ProjectWithRoles> listProjects(long userId) {

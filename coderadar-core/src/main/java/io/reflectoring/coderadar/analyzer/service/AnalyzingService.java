@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.analyzer.service;
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.GetAnalyzingStatusUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StopAnalyzingUseCase;
@@ -21,15 +20,17 @@ import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AnalyzingService
     implements StartAnalyzingUseCase, StopAnalyzingUseCase, GetAnalyzingStatusUseCase {
   private final GetProjectPort getProjectPort;
-  private final AnalyzeCommitUseCase analyzeCommitUseCase;
+  private final AnalyzeCommitService analyzeCommitService;
   private final AnalyzerPluginService analyzerPluginService;
   private final ListAnalyzerConfigurationsPort listAnalyzerConfigurationsPort;
   private final ListFilePatternsOfProjectPort listFilePatternsOfProjectPort;
@@ -41,33 +42,7 @@ public class AnalyzingService
   private final ListBranchesPort listBranchesPort;
 
   private final Map<Long, Boolean> activeAnalysis = new ConcurrentHashMap<>();
-
   private static final Logger logger = LoggerFactory.getLogger(AnalyzingService.class);
-
-  public AnalyzingService(
-      GetProjectPort getProjectPort,
-      AnalyzeCommitUseCase analyzeCommitUseCase,
-      AnalyzerPluginService analyzerPluginService,
-      ListAnalyzerConfigurationsPort listAnalyzerConfigurationsPort,
-      ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
-      GetCommitsInProjectPort getCommitsInProjectPort,
-      SaveMetricPort saveMetricPort,
-      SaveCommitPort saveCommitPort,
-      ProcessProjectService processProjectService,
-      GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort,
-      ListBranchesPort listBranchesPort) {
-    this.getProjectPort = getProjectPort;
-    this.analyzeCommitUseCase = analyzeCommitUseCase;
-    this.analyzerPluginService = analyzerPluginService;
-    this.listAnalyzerConfigurationsPort = listAnalyzerConfigurationsPort;
-    this.listFilePatternsOfProjectPort = listFilePatternsOfProjectPort;
-    this.getCommitsInProjectPort = getCommitsInProjectPort;
-    this.saveMetricPort = saveMetricPort;
-    this.saveCommitPort = saveCommitPort;
-    this.processProjectService = processProjectService;
-    this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
-    this.listBranchesPort = listBranchesPort;
-  }
 
   public void start(long projectId) {
     start(
@@ -144,7 +119,7 @@ public class AnalyzingService
 
     for (int i = 0; i < commits.size() && activeAnalysis.get(projectId); i++) {
       List<MetricValue> metrics =
-          analyzeCommitUseCase.analyzeCommit(
+          analyzeCommitService.analyzeCommit(
               commits.get(i), project, sourceCodeFileAnalyzerPlugins);
       zeroOutMissingMetrics(commits.get(i), metrics, fileMetrics);
       if (!metrics.isEmpty()) {

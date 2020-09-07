@@ -27,11 +27,13 @@ import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UpdateProjectService implements UpdateProjectUseCase {
 
   private final GetProjectPort getProjectPort;
@@ -52,41 +54,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final ListContributorsPort listContributorsPort;
 
   private static final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
-
-  public UpdateProjectService(
-      GetProjectPort getProjectPort,
-      UpdateProjectPort updateProjectPort,
-      UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
-      CoderadarConfigurationProperties coderadarConfigurationProperties,
-      ProcessProjectService processProjectService,
-      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
-      SaveCommitPort saveCommitPort,
-      ListModulesOfProjectUseCase listModulesOfProjectUseCase,
-      ResetAnalysisPort resetAnalysisPort,
-      CreateModulePort createModulePort,
-      GetAvailableBranchesPort getAvailableBranchesPort,
-      DeleteProjectPort deleteProjectPort,
-      ComputeContributorsPort computeContributorsPort,
-      SaveContributorsPort saveContributorsPort,
-      DetachContributorPort detachContributorPort,
-      ListContributorsPort listContributorsPort) {
-    this.getProjectPort = getProjectPort;
-    this.updateProjectPort = updateProjectPort;
-    this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-    this.processProjectService = processProjectService;
-    this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
-    this.saveCommitPort = saveCommitPort;
-    this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
-    this.resetAnalysisPort = resetAnalysisPort;
-    this.createModulePort = createModulePort;
-    this.getAvailableBranchesPort = getAvailableBranchesPort;
-    this.deleteProjectPort = deleteProjectPort;
-    this.computeContributorsPort = computeContributorsPort;
-    this.saveContributorsPort = saveContributorsPort;
-    this.detachContributorPort = detachContributorPort;
-    this.listContributorsPort = listContributorsPort;
-  }
 
   @Override
   public void update(UpdateProjectCommand command, long projectId) {

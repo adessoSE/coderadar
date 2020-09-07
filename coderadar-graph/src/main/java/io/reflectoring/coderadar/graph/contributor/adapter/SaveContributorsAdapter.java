@@ -10,19 +10,15 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SaveContributorsAdapter implements SaveContributorsPort {
   private final ContributorRepository contributorRepository;
   private final ProjectRepository projectRepository;
   private final ContributorMapper contributorMapper = new ContributorMapper();
-
-  public SaveContributorsAdapter(
-      ContributorRepository contributorRepository, ProjectRepository projectRepository) {
-    this.contributorRepository = contributorRepository;
-    this.projectRepository = projectRepository;
-  }
 
   @Override
   public void save(List<Contributor> contributors, long projectId) {

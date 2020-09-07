@@ -10,24 +10,17 @@ import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenUseCase;
 import io.reflectoring.coderadar.useradministration.service.security.TokenService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RefreshTokenService implements RefreshTokenUseCase {
 
   private final GetUserPort getUserPort;
-
   private final RefreshTokenPort refreshTokenPort;
-
   private final TokenService tokenService;
-
-  public RefreshTokenService(
-      GetUserPort getUserPort, RefreshTokenPort refreshTokenPort, TokenService tokenService) {
-    this.getUserPort = getUserPort;
-    this.refreshTokenPort = refreshTokenPort;
-    this.tokenService = tokenService;
-  }
 
   @Override
   public String refreshToken(RefreshTokenCommand command) {

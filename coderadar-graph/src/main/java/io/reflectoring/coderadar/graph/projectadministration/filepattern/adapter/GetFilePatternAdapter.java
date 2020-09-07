@@ -5,17 +5,14 @@ import io.reflectoring.coderadar.graph.projectadministration.filepattern.reposit
 import io.reflectoring.coderadar.projectadministration.FilePatternNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetFilePatternAdapter implements GetFilePatternPort {
-
   private final FilePatternRepository filePatternRepository;
   private final FilePatternMapper filePatternMapper = new FilePatternMapper();
-
-  public GetFilePatternAdapter(FilePatternRepository filePatternRepository) {
-    this.filePatternRepository = filePatternRepository;
-  }
 
   @Override
   public FilePattern get(long id) {

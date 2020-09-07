@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class ListModulesOfProjectController implements AbstractBaseController {
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
   private final AuthenticationService authenticationService;
-
-  public ListModulesOfProjectController(
-      ListModulesOfProjectUseCase listModulesOfProjectUseCase,
-      AuthenticationService authenticationService) {
-    this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @GetMapping(path = "/projects/{projectId}/modules", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetModuleResponse>> listModules(@PathVariable long projectId) {

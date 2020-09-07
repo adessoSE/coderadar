@@ -7,23 +7,18 @@ import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
 import io.reflectoring.coderadar.graph.query.repository.ContributorQueryRepository;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListContributorsAdapter implements ListContributorsPort {
-  private final ContributorMapper mapper = new ContributorMapper();
+
   private final ContributorRepository contributorRepository;
   private final FileRepository fileRepository;
   private final ContributorQueryRepository contributorQueryRepository;
 
-  public ListContributorsAdapter(
-      ContributorRepository contributorRepository,
-      FileRepository fileRepository,
-      ContributorQueryRepository contributorQueryRepository) {
-    this.contributorRepository = contributorRepository;
-    this.fileRepository = fileRepository;
-    this.contributorQueryRepository = contributorQueryRepository;
-  }
+  private final ContributorMapper mapper = new ContributorMapper();
 
   @Override
   public List<Contributor> listAll() {

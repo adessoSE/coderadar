@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.updat
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.net.MalformedURLException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class UpdateProjectController implements AbstractBaseController {
   private final UpdateProjectUseCase updateProjectUseCase;
   private final AuthenticationService authenticationService;
-
-  public UpdateProjectController(
-      UpdateProjectUseCase updateProjectUseCase, AuthenticationService authenticationService) {
-    this.updateProjectUseCase = updateProjectUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @PostMapping(path = "/projects/{projectId}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> updateProject(
