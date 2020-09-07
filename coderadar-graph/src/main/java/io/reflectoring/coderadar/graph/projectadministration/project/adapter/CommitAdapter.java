@@ -270,16 +270,18 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
     List<FileEntity> rels = new ArrayList<>(files.size());
     for (File file : files) {
-      FileEntity fileEntity = walkedFiles.get(file);
-      if (fileEntity == null) {
-        fileEntity = fileBaseDataMapper.mapDomainObject(file);
-        walkedFiles.put(file, fileEntity);
-        List<FileEntity> oldFiles = new ArrayList<>(file.getOldFiles().size());
-        for (File oldFile : file.getOldFiles()) {
-          oldFiles.add(walkedFiles.get(oldFile));
-        }
-        fileEntity.setOldFiles(oldFiles);
-      }
+      FileEntity fileEntity =
+          walkedFiles.computeIfAbsent(
+              file,
+              f -> {
+                var entity = fileBaseDataMapper.mapDomainObject(f);
+                List<FileEntity> oldFiles = new ArrayList<>(f.getOldFiles().size());
+                for (File oldFile : f.getOldFiles()) {
+                  oldFiles.add(walkedFiles.get(oldFile));
+                }
+                entity.setOldFiles(oldFiles);
+                return entity;
+              });
       rels.add(fileEntity);
     }
     return rels;

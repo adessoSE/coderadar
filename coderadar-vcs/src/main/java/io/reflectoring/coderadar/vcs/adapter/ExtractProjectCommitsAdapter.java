@@ -68,6 +68,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     Commit commit = new Commit();
     commit.setHash(rc.abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name());
 
+    rc.getName();
     PersonIdent personIdent = rc.getAuthorIdent();
     commit.setAuthor(personIdent.getName());
     commit.setAuthorEmail(personIdent.getEmailAddress());
@@ -232,7 +233,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   }
 
   /**
-   * @param range Date range to test for
+   * @paraf range Date range to test for
    * @param rc RevCommit to check
    * @return True if the commit was made within the date range, false otherwise.
    */
