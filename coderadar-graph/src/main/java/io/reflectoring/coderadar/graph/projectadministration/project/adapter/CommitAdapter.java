@@ -312,20 +312,22 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       for (File file : commit.getChangedFiles()) {
         FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, file.getPath());
         if (fileEntity == null) {
-          fileEntity = walkedFiles.get(file.getPath());
-          if (fileEntity == null) {
-            fileEntity = fileBaseDataMapper.mapDomainObject(file);
-            fileEntity.setOldFiles(new ArrayList<>(file.getOldFiles().size()));
-            for (File oldFile : file.getOldFiles()) {
-              FileEntity oldFileEntity =
-                  fileRepository.getFileInProjectByPath(projectId, oldFile.getPath());
-              if (oldFileEntity == null) {
-                oldFileEntity = walkedFiles.get(oldFile.getPath());
-              }
-              fileEntity.getOldFiles().add(oldFileEntity);
-            }
-            walkedFiles.put(file.getPath(), fileEntity);
-          }
+          fileEntity =
+              walkedFiles.computeIfAbsent(
+                  file.getPath(),
+                  s -> {
+                    var entity = fileBaseDataMapper.mapDomainObject(file);
+                    entity.setOldFiles(new ArrayList<>(file.getOldFiles().size()));
+                    for (File oldFile : file.getOldFiles()) {
+                      FileEntity oldFileEntity =
+                          fileRepository.getFileInProjectByPath(projectId, oldFile.getPath());
+                      if (oldFileEntity == null) {
+                        oldFileEntity = walkedFiles.get(oldFile.getPath());
+                      }
+                      entity.getOldFiles().add(oldFileEntity);
+                    }
+                    return entity;
+                  });
         }
         changedFiles.add(fileEntity);
       }
@@ -333,8 +335,9 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       for (File file : commit.getDeletedFiles()) {
         FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, file.getPath());
         if (fileEntity == null) {
-          fileEntity = fileBaseDataMapper.mapDomainObject(file);
-          walkedFiles.put(file.getPath(), fileEntity);
+          fileEntity =
+              walkedFiles.computeIfAbsent(
+                  file.getPath(), s -> fileBaseDataMapper.mapDomainObject(file));
         }
         deletedFiles.add(fileEntity);
       }

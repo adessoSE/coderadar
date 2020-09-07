@@ -12,11 +12,9 @@ public interface ListProjectsForTeamPort {
   List<Project> listProjects(long teamId);
 
   /**
-   * TODO
-   *
-   * @param teamId
-   * @param userId
-   * @return
+   * @param teamId The id of the team.
+   * @param userId The id of the user.
+   * @return All projects the team has access to and the roles the user has for the project.
    */
   List<ProjectWithRoles> listProjectsWithRolesForUser(long teamId, long userId);
 }

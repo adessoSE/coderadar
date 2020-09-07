@@ -18,10 +18,10 @@ public interface GetProjectPort {
   Project get(String name);
 
   /**
-   * TODO
-   *
-   * @param id
-   * @return
+   * @param projectId The project id.
+   * @param userId The user id.
+   * @return The project with the given id and all roles the user (with the given id) has for this
+   *     project.
    */
   ProjectWithRoles getWithRoles(long projectId, long userId);
 

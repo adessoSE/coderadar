@@ -13,10 +13,9 @@ public interface ListProjectsForTeamUseCase {
   List<Project> listProjects(long teamId);
 
   /**
-   * TODO
-   *
    * @param teamId The id of the team.
-   * @return All projects the team has access to.
+   * @param userId The id of the user.
+   * @return All projects the team has access to and the roles the team has for the project.
    */
   List<ProjectWithRoles> listProjectsWithUserRoles(long teamId, long userId);
 }
