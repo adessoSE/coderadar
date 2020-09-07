@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {TooltipService} from '../../service/tooltip.service';
 import {map} from 'rxjs/operators';
 import {VisualizationConfig} from '../../VisualizationConfig';
 import {Observable} from 'rxjs';
+import {ScreenType} from '../../enum/ScreenType';
 
 @Component({
   selector: 'app-tooltip',
@@ -11,17 +12,24 @@ import {Observable} from 'rxjs';
 })
 export class TooltipComponent implements OnInit {
 
+  @ViewChild('tooltip_div')
+  tooltipRef: ElementRef;
   tooltipElement: HTMLElement;
+
+  @Input()
+  screenType: ScreenType;
 
   content$: Observable<{ elementName: string, metrics: any }>;
 
   constructor(private tooltipService: TooltipService) {
+
   }
 
   ngOnInit() {
-    this.tooltipElement = document.querySelector('#tooltip') as HTMLElement;
+    this.tooltipElement = this.tooltipRef.nativeElement;
 
-    this.content$ = this.tooltipService.tooltipContent$
+
+    this.content$ = this.tooltipService.getTooltipControls(this.screenType).content$
       .pipe(
         map((tooltipObject) => {
           const readableMetrics = {};
@@ -41,15 +49,15 @@ export class TooltipComponent implements OnInit {
         })
       );
 
-    this.tooltipService.hideTooltip$.subscribe(() => {
+    this.tooltipService.getTooltipControls(this.screenType).hide$.subscribe(() => {
       this.hide();
     });
 
-    this.tooltipService.showTooltip$.subscribe(() => {
+    this.tooltipService.getTooltipControls(this.screenType).show$.subscribe(() => {
       this.show();
     });
 
-    this.tooltipService.trackPosition$.subscribe((position) => {
+    this.tooltipService.getTooltipControls(this.screenType).position$.subscribe((position) => {
       this.followPosition(position);
     });
 
