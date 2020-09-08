@@ -14,35 +14,35 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
    * @param username The username to search for.
    * @return The UserEntity with the given username or null if nothing is found.
    */
-  @Query("MATCH (u:UserEntity) WHERE u.username = {0} RETURN u LIMIT 1")
+  @Query("MATCH (u:UserEntity) WHERE u.username = $0 RETURN u LIMIT 1")
   UserEntity findByUsername(@NonNull String username);
 
   /**
    * @param token The refresh token to look for.
    * @return The UserEntity with the given refresh token or null if nothing is found.
    */
-  @Query("MATCH (r:RefreshTokenEntity)<-[:HAS]-(u) WHERE r.token = {0} RETURN u LIMIT 1")
+  @Query("MATCH (r:RefreshTokenEntity)<-[:HAS]-(u) WHERE r.token = $0 RETURN u LIMIT 1")
   UserEntity findUserByRefreshToken(@NonNull String token);
 
   /**
    * @param username The username to search for.
    * @return True if a user with the given username exists.
    */
-  @Query("MATCH (u:UserEntity) WHERE u.username = {0} RETURN COUNT(u) > 0 LIMIT 1")
+  @Query("MATCH (u:UserEntity) WHERE u.username = $0 RETURN COUNT(u) > 0 LIMIT 1")
   boolean existsByUsername(@NonNull String username);
 
   /**
    * @param id The user id.
    * @return True if a user with the given id exists.
    */
-  @Query("MATCH (u:UserEntity) WHERE ID(u) = {0} RETURN COUNT(u) > 0")
+  @Query("MATCH (u:UserEntity) WHERE ID(u) = $0 RETURN COUNT(u) > 0")
   boolean existsById(long id);
 
   /**
    * @param userIds The user ids.
    * @return All users matching the given ids.
    */
-  @Query("MATCH (u) WHERE ID(u) IN {0} RETURN DISTINCT u")
+  @Query("MATCH (u) WHERE ID(u) IN $0 RETURN DISTINCT u")
   List<UserEntity> findAllByIds(List<Long> userIds);
 
   /**
@@ -54,16 +54,16 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
    * @param role The role to set.
    */
   @Query(
-      "MATCH (p), (u) WHERE ID(p) = {0} AND ID(u) = {1} WITH p, u "
+      "MATCH (p), (u) WHERE ID(p) = $0 AND ID(u) = $1 WITH p, u "
           + "OPTIONAL MATCH (p)<-[r:ASSIGNED_TO]-(u) DELETE r "
-          + "CREATE (p)<-[r1:ASSIGNED_TO {role: {2}}]-(u)")
+          + "CREATE (p)<-[r1:ASSIGNED_TO {role: $2}]-(u)")
   void setUserRoleForProject(long projectId, long userId, String role);
 
-  @Query("MATCH (p)<-[r:ASSIGNED_TO]-(u) WHERE ID(p) = {0} AND ID(u) = {1} RETURN r.role LIMIT 1")
+  @Query("MATCH (p)<-[r:ASSIGNED_TO]-(u) WHERE ID(p) = $0 AND ID(u) = $1 RETURN r.role LIMIT 1")
   String getUserRoleForProject(long projectId, long userId);
 
   @Query(
-      "MATCH (u)-[:IS_IN]->(t)-[r:ASSIGNED_TO]->(p) WHERE ID(p) = {0} AND ID(u) = {1} RETURN r.role")
+      "MATCH (u)-[:IS_IN]->(t)-[r:ASSIGNED_TO]->(p) WHERE ID(p) = $0 AND ID(u) = $1 RETURN r.role")
   List<String> getUserRolesForProjectInTeams(long projectId, long userId);
 
   /**
@@ -72,11 +72,11 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
    * @param projectId The project id.
    * @param userId The user id.
    */
-  @Query("MATCH (p)<-[r:ASSIGNED_TO]-(u:UserEntity) WHERE ID(p) = {0} AND ID(u) = {1} DELETE r")
+  @Query("MATCH (p)<-[r:ASSIGNED_TO]-(u:UserEntity) WHERE ID(p) = $0 AND ID(u) = $1 DELETE r")
   void removeUserRoleFromProject(long projectId, long userId);
 
   @Query(
-      "OPTIONAL MATCH (p)<-[:ASSIGNED_TO]-(u:UserEntity) WHERE ID(p) = {0} WITH p, collect(u) as users "
+      "OPTIONAL MATCH (p)<-[:ASSIGNED_TO]-(u:UserEntity) WHERE ID(p) = $0 WITH p, collect(u) as users "
           + "OPTIONAL MATCH (p)<-[:ASSIGNED_TO]-(t:TeamEntity)<-[:IS_IN]-(u) RETURN collect(u) + users as users")
   List<UserEntity> listUsersForProject(long projectId);
 

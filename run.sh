@@ -19,7 +19,7 @@ docker run --rm -t --publish=7687:7687 \
             --volume=$HOME/neo4j_docker/data:/data \
             --env NEO4J_dbms_connector_bolt_tls__level=OPTIONAL \
             --env NEO4J_AUTH=neo4j/neo3j \
-            --env 'NEO4JLABS_PLUGINS=["apoc"]' neo4j:3.5.19 > /dev/null &
+            --env 'NEO4JLABS_PLUGINS=["apoc"]' neo4j:4.1.1 > /dev/null &
 
 docker pull maxim615/coderadar
 

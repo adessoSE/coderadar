@@ -17,7 +17,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    * @param projectId The project id.
    * @return All of the metric values in a project.
    */
-  @Query("MATCH (p)-[:CONTAINS*]->()-[:MEASURED_BY]->(m) WHERE ID(p) = {0} RETURN m")
+  @Query("MATCH (p)-[:CONTAINS*]->()-[:MEASURED_BY]->(m) WHERE ID(p) = $0 RETURN m")
   List<MetricValueEntity> findByProjectId(long projectId);
 
   /**
@@ -29,7 +29,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    *     CommitEntity ("commitId").
    */
   @Query(
-      "UNWIND {0} as x "
+      "UNWIND $0 as x "
           + "MATCH (m) WHERE ID(m) = x[0] "
           + "MATCH (f) WHERE ID(f) = x[1] "
           + "MATCH (c) WHERE ID(c) = x[2] "
@@ -44,7 +44,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    * @return All files and their corresponding metrics for the head commit of the given branch
    */
   @Query(
-      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
+      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = $0 AND b.name = $1 WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
           + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN]->(c) RETURN collect(f) as renames', {commits: commits}) "
           + "YIELD value WITH commits, value.renames as renames "
@@ -56,6 +56,6 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "RETURN  id, collect(metric) as metrics")
   List<FileIdAndMetricQueryResult> getLastMetricsForFiles(long projectId, String branchName);
 
-  @Query("MATCH (c)<-[:VALID_FOR]-(m) WHERE ID(c) = {0} DETACH DELETE m")
+  @Query("MATCH (c)<-[:VALID_FOR]-(m) WHERE ID(c) = $0 DETACH DELETE m")
   void deleteMetricsForCommit(long id);
 }

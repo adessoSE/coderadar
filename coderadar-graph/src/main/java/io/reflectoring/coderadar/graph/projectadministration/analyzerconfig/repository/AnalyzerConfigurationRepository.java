@@ -15,10 +15,10 @@ public interface AnalyzerConfigurationRepository
    * @param projectId The project id.
    * @return All analyzer configurations in a project.
    */
-  @Query("MATCH (p)-[:HAS]->(c:AnalyzerConfigurationEntity) WHERE ID(p) = {0} RETURN c")
+  @Query("MATCH (p)-[:HAS]->(c:AnalyzerConfigurationEntity) WHERE ID(p) = $0 RETURN c")
   @NonNull
   List<AnalyzerConfigurationEntity> findByProjectId(long projectId);
 
-  @Query("MATCH (a:AnalyzerConfigurationEntity) WHERE ID(a) = {0} RETURN COUNT(a) > 0")
+  @Query("MATCH (a:AnalyzerConfigurationEntity) WHERE ID(a) = $0 RETURN COUNT(a) > 0")
   boolean existsById(long id);
 }
