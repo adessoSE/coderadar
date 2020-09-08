@@ -134,7 +134,6 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
    * @return A list of aggregated metric values.
    */
   private List<MetricValueForCommit> aggregateChildMetrics(List<MetricTree> children) {
-    List<MetricValueForCommit> resultList = new ArrayList<>();
     Map<String, Long> aggregatedMetrics = new LinkedHashMap<>();
     for (MetricTree metricTree : children) {
       for (MetricValueForCommit val : aggregateChildMetrics(metricTree.getChildren())) {
@@ -151,6 +150,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
             value.getMetricName(), aggregatedMetrics.get(value.getMetricName()) + value.getValue());
       }
     }
+    List<MetricValueForCommit> resultList = new ArrayList<>(aggregatedMetrics.size());
     for (Map.Entry<String, Long> metric : aggregatedMetrics.entrySet()) {
       resultList.add(new MetricValueForCommit(metric.getKey(), metric.getValue()));
     }

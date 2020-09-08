@@ -55,7 +55,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
    */
   private List<Commit> mapCommitEntitiesNoParents(List<Map<String, Object>> commitEntities) {
     List<Commit> commits = new ArrayList<>(commitEntities.size());
-    Map<Long, File> walkedFiles = new HashMap<>(commitEntities.size());
+    Map<Long, File> walkedFiles = new HashMap<>();
     for (Map<String, Object> result : commitEntities) {
       var commitEntity = (Map<String, Object>) result.get("commit");
       var files = (Object[]) result.get("files");

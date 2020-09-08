@@ -26,7 +26,7 @@ public class ListProjectsForUserController implements AbstractBaseController {
   public ResponseEntity<List<ProjectWithRolesResponse>> listProjectsForUser(
       @PathVariable long userId) {
     List<ProjectWithRoles> projects = listProjectsForUserUseCase.listProjects(userId);
-    List<ProjectWithRolesResponse> responses = new ArrayList<>();
+    List<ProjectWithRolesResponse> responses = new ArrayList<>(projects.size());
     for (ProjectWithRoles p : projects) {
       responses.add(
           new ProjectWithRolesResponse(

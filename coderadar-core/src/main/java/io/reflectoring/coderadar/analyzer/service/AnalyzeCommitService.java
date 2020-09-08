@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.analyzer.service;
 
+import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
@@ -10,10 +11,7 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -53,12 +51,12 @@ public class AnalyzeCommitService {
    * @param project The project the commit is in.
    * @return A map of File and corresponding FileMetrics
    */
-  private HashMap<Long, FileMetrics> analyzeBulk(
+  private Map<Long, FileMetrics> analyzeBulk(
       String commitHash,
       List<File> files,
       List<SourceCodeFileAnalyzerPlugin> analyzers,
       Project project) {
-    HashMap<Long, FileMetrics> fileMetricsMap = new LinkedHashMap<>();
+    Map<Long, FileMetrics> fileMetricsMap = Maps.newLinkedHashMapWithExpectedSize(files.size());
     try {
       HashMap<File, byte[]> fileContents =
           getRawCommitContentPort.getCommitContentBulkWithFiles(

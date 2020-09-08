@@ -30,7 +30,7 @@ public class ListProjectsForTeamAdapter implements ListProjectsForTeamPort {
   @Override
   public List<ProjectWithRoles> listProjectsWithRolesForUser(long teamId, long userId) {
     List<ProjectEntity> projectEntities = projectRepository.listProjectsByTeamId(teamId);
-    List<ProjectWithRoles> result = new ArrayList<>();
+    List<ProjectWithRoles> result = new ArrayList<>(projectEntities.size());
     for (ProjectEntity project : projectEntities) {
       Set<String> roles =
           new HashSet<>(userRepository.getUserRolesForProjectInTeams(project.getId(), userId));

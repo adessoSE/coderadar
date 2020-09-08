@@ -24,7 +24,7 @@ public class ListProjectsForUserAdapter implements ListProjectsForUserPort {
   @Override
   public List<ProjectWithRoles> listProjects(long userId) {
     List<Map<String, Object>> projectsWithRoles = projectRepository.findProjectsByUsedId(userId);
-    List<ProjectWithRoles> projects = new ArrayList<>();
+    List<ProjectWithRoles> projects = new ArrayList<>(projectsWithRoles.size());
     for (Map<String, Object> project : projectsWithRoles) {
       if (project.get("project") == null) {
         continue;

@@ -169,7 +169,7 @@ public class AnalyzingService
     }
     metrics.sort(Comparator.comparingLong(MetricValue::getFileId));
     long fileId = metrics.get(0).getFileId();
-    List<MetricValue> metricsForFile = new ArrayList<>();
+    List<MetricValue> metricsForFile = new ArrayList<>(metrics.size());
     for (MetricValue metricValue : metrics) {
       if (metricValue.getValue() != 0) {
         if (metricValue.getFileId() != fileId) {
@@ -201,7 +201,7 @@ public class AnalyzingService
    */
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(
       List<AnalyzerConfiguration> analyzerConfigurations) {
-    List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
+    List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>(analyzerConfigurations.size());
     for (AnalyzerConfiguration config : analyzerConfigurations) {
       if (config.isEnabled()) {
         analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));

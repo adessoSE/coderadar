@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 
+import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
@@ -280,7 +281,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   private void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
 
     // Get all of the existing commits and save them in a map
-    Map<String, CommitEntity> walkedCommits = new HashMap<>();
+    Map<String, CommitEntity> walkedCommits = Maps.newHashMapWithExpectedSize(commits.size());
     Map<String, FileEntity> walkedFiles = new HashMap<>();
     commitRepository.findByProjectId(projectId).forEach(c -> walkedCommits.put(c.getHash(), c));
 
@@ -289,7 +290,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     commits.sort(Comparator.comparingLong(Commit::getTimestamp));
 
     // We'll save the newly added commits in this list
-    List<CommitEntity> newCommitEntities = new ArrayList<>();
+    List<CommitEntity> newCommitEntities = new ArrayList<>(commits.size());
 
     for (Commit commit : commits) {
       CommitEntity commitEntity = commitBaseDataMapper.mapDomainObject(commit);

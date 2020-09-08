@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.analyzer.adapter;
 
+import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.graph.analyzer.FindingsMapper;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileIdAndMetricQueryResult;
@@ -45,11 +46,11 @@ public class SaveMetricAdapter implements SaveMetricPort {
   public Map<Long, List<MetricValue>> getMetricsForFiles(long projectId, String branch) {
     List<FileIdAndMetricQueryResult> metrics =
         metricRepository.getLastMetricsForFiles(projectId, branch);
-    Map<Long, List<MetricValue>> filesMetrics = new HashMap<>();
+    Map<Long, List<MetricValue>> filesMetrics = Maps.newHashMapWithExpectedSize(metrics.size());
     for (var i : metrics) {
       long fileId = i.getId();
       List<MetricValueEntity> fileMetrics = i.getMetrics();
-      List<MetricValue> mapped = new ArrayList<>();
+      List<MetricValue> mapped = new ArrayList<>(fileMetrics.size());
       for (MetricValueEntity entity : fileMetrics) {
         mapped.add(
             new MetricValue(

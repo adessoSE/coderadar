@@ -79,4 +79,8 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
       "OPTIONAL MATCH (p)<-[:ASSIGNED_TO]-(u:UserEntity) WHERE ID(p) = {0} WITH p, collect(u) as users "
           + "OPTIONAL MATCH (p)<-[:ASSIGNED_TO]-(t:TeamEntity)<-[:IS_IN]-(u) RETURN collect(u) + users as users")
   List<UserEntity> listUsersForProject(long projectId);
+
+  /** @return All users in the database. */
+  @Query("MATCH (u:UserEntity) RETURN u")
+  List<UserEntity> findAll();
 }

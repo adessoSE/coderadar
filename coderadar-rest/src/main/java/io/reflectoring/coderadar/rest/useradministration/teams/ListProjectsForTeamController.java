@@ -39,7 +39,7 @@ public class ListProjectsForTeamController implements AbstractBaseController {
       @PathVariable long teamId, @PathVariable long userId) {
     List<ProjectWithRoles> projects =
         listProjectsForTeamUseCase.listProjectsWithUserRoles(teamId, userId);
-    List<ProjectWithRolesResponse> responses = new ArrayList<>();
+    List<ProjectWithRolesResponse> responses = new ArrayList<>(projects.size());
     for (ProjectWithRoles p : projects) {
       responses.add(
           new ProjectWithRolesResponse(

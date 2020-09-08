@@ -21,7 +21,7 @@ public class DetachContributorAdapter implements DetachContributorPort {
 
   @Override
   public void detachContributorsFromProject(List<Contributor> contributors, long projectId) {
-    List<Long> ids = new ArrayList<>();
+    List<Long> ids = new ArrayList<>(contributors.size());
     contributors.forEach(contributor -> ids.add(contributor.getId()));
     contributorRepository.detachContributorsFromProject(ids, projectId);
   }

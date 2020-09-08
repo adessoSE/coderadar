@@ -107,7 +107,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       Repository repository, List<Commit> commits, List<RevCommit> revCommits) throws IOException {
     commits.sort(Comparator.comparingLong(Commit::getTimestamp));
     int commitsSize = commits.size();
-    HashMap<String, List<File>> files = new HashMap<>((int) (commitsSize / 0.75) + 1);
+    HashMap<String, List<File>> files = new HashMap<>();
     setFirstCommitFiles(repository, commits.get(0), revCommits.get(0), files);
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
     diffFormatter.setRepository(repository);

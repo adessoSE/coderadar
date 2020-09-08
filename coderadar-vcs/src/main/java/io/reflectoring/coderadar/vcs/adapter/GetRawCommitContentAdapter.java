@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
+import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
@@ -9,6 +10,7 @@ import java.util.*;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.*;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
@@ -105,10 +107,11 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   public HashMap<String, byte[]> getCommitContentBulk(
       String projectRoot, List<String> filepaths, String commitHash) {
     try (Git git = Git.open(new java.io.File(projectRoot))) {
-      ObjectId commitId = git.getRepository().resolve(commitHash);
-      HashMap<String, byte[]> bulkContent = new LinkedHashMap<>();
+      Repository repository = git.getRepository();
+      ObjectId commitId = repository.resolve(commitHash);
+      HashMap<String, byte[]> bulkContent = Maps.newLinkedHashMapWithExpectedSize(filepaths.size());
       for (String filepath : filepaths) {
-        bulkContent.put(filepath, BlobUtils.getRawContent(git.getRepository(), commitId, filepath));
+        bulkContent.put(filepath, BlobUtils.getRawContent(repository, commitId, filepath));
       }
       return bulkContent;
     } catch (IOException e) {
@@ -123,7 +126,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
       String commitHash) {
     try (Git git = Git.open(new java.io.File(projectRoot))) {
       ObjectId commitId = git.getRepository().resolve(commitHash);
-      HashMap<File, byte[]> bulkContent = new LinkedHashMap<>();
+      HashMap<File, byte[]> bulkContent = Maps.newLinkedHashMapWithExpectedSize(files.size());
       for (File file : files) {
         bulkContent.put(
             file, BlobUtils.getRawContent(git.getRepository(), commitId, file.getPath()));

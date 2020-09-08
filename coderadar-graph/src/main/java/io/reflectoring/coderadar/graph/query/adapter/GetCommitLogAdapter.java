@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
+import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
@@ -23,12 +24,12 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
     List<BranchEntity> branches = branchRepository.getBranchesInProject(projectId);
     List<LinkedHashMap<String, Object>> commits =
         commitRepository.findByProjectIdWithParents(projectId);
-    List<CommitLog> log = new ArrayList<>();
 
-    Map<String, List<String>> commitToRefMap = new HashMap<>();
+    Map<String, List<String>> commitToRefMap = Maps.newHashMapWithExpectedSize(branches.size());
     for (BranchEntity ref : branches) {
-      String commitName = ref.getCommitHash();
-      List<String> refNames = commitToRefMap.computeIfAbsent(commitName, k -> new ArrayList<>());
+      // most commits will have at most 2 branches/tags on them
+      List<String> refNames =
+          commitToRefMap.computeIfAbsent(ref.getCommitHash(), k -> new ArrayList<>(2));
       if (!refNames.contains(ref.getName())) {
         if (ref.isTag()) {
           refNames.add("tag: " + ref.getName());
@@ -37,6 +38,8 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
         }
       }
     }
+
+    List<CommitLog> log = new ArrayList<>(commits.size());
     for (LinkedHashMap<String, Object> commitWithParents : commits) {
       CommitEntity commit = (CommitEntity) commitWithParents.get("commit");
       // author
