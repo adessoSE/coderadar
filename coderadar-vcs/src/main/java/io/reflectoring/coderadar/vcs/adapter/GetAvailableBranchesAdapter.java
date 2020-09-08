@@ -35,13 +35,12 @@ public class GetAvailableBranchesAdapter implements GetAvailableBranchesPort {
       int length = branchName.length;
       String truncatedName = branchName[length - 1];
       if (result.stream().noneMatch(branch -> branch.getName().equals(truncatedName))) {
-        boolean isTag = tags.contains(ref);
         result.add(
             new Branch()
                 .setName(truncatedName)
                 .setCommitHash(
                     ref.getObjectId().abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name())
-                .setTag(isTag));
+                .setTag(tags.contains(ref)));
       }
     }
     return result;

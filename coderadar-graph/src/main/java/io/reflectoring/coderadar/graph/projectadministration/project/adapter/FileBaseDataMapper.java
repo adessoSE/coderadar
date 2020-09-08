@@ -7,15 +7,10 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 public class FileBaseDataMapper implements Mapper<File, FileEntity> {
 
   public File mapGraphObject(FileEntity entity) {
-    File file = new File();
-    file.setId(entity.getId());
-    file.setPath(entity.getPath());
-    return file;
+    return new File(entity.getId(), entity.getPath());
   }
 
   public FileEntity mapDomainObject(File file) {
-    FileEntity fileEntity = new FileEntity();
-    fileEntity.setPath(file.getPath());
-    return fileEntity;
+    return new FileEntity(file.getPath());
   }
 }

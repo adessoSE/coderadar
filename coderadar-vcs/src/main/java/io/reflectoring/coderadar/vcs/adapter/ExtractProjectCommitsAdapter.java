@@ -83,18 +83,18 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       RevCommit firstRevCommit,
       HashMap<String, List<File>> files)
       throws IOException {
-    firstCommit.setChangedFiles(new ArrayList<>());
     try (TreeWalk treeWalk = new TreeWalk(repository)) {
       treeWalk.setRecursive(true);
       treeWalk.addTree(firstRevCommit.getTree());
       while (treeWalk.next()) {
-        File file = new File();
-        file.setPath(treeWalk.getPathString());
-        firstCommit.getChangedFiles().add(file);
+        File file = new File(treeWalk.getPathString());
         List<File> fileList = new ArrayList<>(1);
         fileList.add(file);
         files.put(file.getPath(), fileList);
       }
+      List<File> changedFiles = new ArrayList<>(files.size());
+      files.values().forEach(changedFiles::addAll);
+      firstCommit.setChangedFiles(changedFiles);
     }
   }
 
@@ -174,8 +174,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     String path = getFilepathFromDiffEntry(diff);
     List<File> existingFilesWithPath = files.get(path);
     List<File> filesToSave;
-    File file = new File();
-    file.setPath(path);
+    File file = new File(path);
     if (existingFilesWithPath == null) {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
         List<File> filesWithOldPath = files.get(diff.getOldPath());
@@ -188,24 +187,22 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       files.put(file.getPath(), filesToSave);
     } else {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
-        filesToSave = new ArrayList<>(1);
-        filesToSave.add(file);
+        filesToSave = Collections.singletonList(file);
         existingFilesWithPath.add(file);
         files.put(file.getPath(), existingFilesWithPath);
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE))) {
-        filesToSave = new ArrayList<>(existingFilesWithPath);
+        filesToSave = existingFilesWithPath;
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
         List<File> filesWithOldPath = files.get(diff.getOldPath());
         if (filesWithOldPath != null) {
           file.setOldFiles(new ArrayList<>(filesWithOldPath));
         }
-        filesToSave = new ArrayList<>(1);
-        filesToSave.add(file);
+        filesToSave = Collections.singletonList(file);
         existingFilesWithPath.add(file);
         files.put(file.getPath(), existingFilesWithPath);
       } else {
-        filesToSave = new ArrayList<>(1);
-        filesToSave.add(existingFilesWithPath.get(existingFilesWithPath.size() - 1));
+        filesToSave =
+            Collections.singletonList(existingFilesWithPath.get(existingFilesWithPath.size() - 1));
       }
     }
     return filesToSave;

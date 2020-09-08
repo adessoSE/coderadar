@@ -2,10 +2,7 @@ package io.reflectoring.coderadar.projectadministration.domain;
 
 import java.util.Collections;
 import java.util.List;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 /** Represents a file in a VCS repository. */
 @NoArgsConstructor
@@ -17,4 +14,13 @@ public class File {
 
   @EqualsAndHashCode.Exclude @ToString.Exclude
   private List<File> oldFiles = Collections.emptyList();
+
+  public File(String path) {
+    this.path = path;
+  }
+
+  public File(long id, String path) {
+    this.id = id;
+    this.path = path;
+  }
 }

@@ -72,8 +72,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         if (fileId == null || filepath == null) {
           continue;
         }
-        File file =
-            walkedFiles.computeIfAbsent(fileId, id -> new File().setId(id).setPath(filepath));
+        File file = walkedFiles.computeIfAbsent(fileId, id -> new File(id, filepath));
         commit.getChangedFiles().add(file);
       }
       commits.add(commit);

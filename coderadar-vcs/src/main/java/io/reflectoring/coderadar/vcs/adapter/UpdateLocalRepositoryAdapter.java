@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.eclipse.jgit.api.FetchCommand;
@@ -18,10 +19,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.StoredConfig;
+import org.eclipse.jgit.lib.*;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.springframework.stereotype.Service;
@@ -83,25 +81,25 @@ public class UpdateLocalRepositoryAdapter implements UpdateLocalRepositoryPort {
           new UsernamePasswordCredentialsProvider(command.getUsername(), command.getPassword()));
     }
     List<Branch> updatedBranches = new ArrayList<>();
-    fetchCommand
-        .call()
-        .getTrackingRefUpdates()
-        .forEach(
-            trackingRefUpdate -> {
-              if (!trackingRefUpdate.getNewObjectId().equals(trackingRefUpdate.getOldObjectId())) {
-                String[] branchName = trackingRefUpdate.getLocalName().split("/");
-                int length = branchName.length;
-                String truncatedName = branchName[length - 1];
-                updatedBranches.add(
-                    new Branch()
-                        .setName(truncatedName)
-                        .setCommitHash(
-                            trackingRefUpdate
-                                .getNewObjectId()
-                                .abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH)
-                                .name()));
-              }
-            });
+    var trackingRefUpdates = fetchCommand.call().getTrackingRefUpdates();
+
+    List<ObjectId> tags =
+        git.tagList().call().stream().map(Ref::getObjectId).collect(Collectors.toList());
+
+    trackingRefUpdates.forEach(
+        trackingRefUpdate -> {
+          if (!trackingRefUpdate.getNewObjectId().equals(trackingRefUpdate.getOldObjectId())) {
+            String[] branchName = trackingRefUpdate.getLocalName().split("/");
+            int length = branchName.length;
+            String truncatedName = branchName[length - 1];
+            ObjectId objectId = trackingRefUpdate.getNewObjectId();
+            updatedBranches.add(
+                new Branch(
+                    truncatedName,
+                    objectId.abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name(),
+                    tags.contains(objectId)));
+          }
+        });
     git.getRepository().close();
     git.close();
     return updatedBranches;
