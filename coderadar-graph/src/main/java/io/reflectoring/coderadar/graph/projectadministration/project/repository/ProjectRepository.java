@@ -181,6 +181,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param teamId The team id.
    * @return All projects a team is assigned to.
    */
-  @Query("MATCH (t)-[:ASSIGNED_TO]->(p) WHERE ID(t) = {0} AND p.isBeingDeleted = FALSE RETURN p ORDER BY p.name")
+  @Query(
+      "MATCH (t)-[:ASSIGNED_TO]->(p) WHERE ID(t) = {0} AND p.isBeingDeleted = FALSE RETURN p ORDER BY p.name")
   List<ProjectEntity> listProjectsByTeamId(long teamId);
 }
