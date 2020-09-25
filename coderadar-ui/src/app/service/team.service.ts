@@ -83,4 +83,9 @@ export class TeamService {
     return this.httpClient.delete<any>(this.apiURL + 'teams/' + id,
       {observe: 'response'}).toPromise();
   }
+
+  editTeam(teamId: number, name: string, userIds: any) {
+    return this.httpClient.post<any>(this.apiURL + 'teams/' + teamId,
+      {name, userIds}, {observe: 'response'}).toPromise();
+  }
 }

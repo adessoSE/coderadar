@@ -73,6 +73,7 @@ import {DeleteProjectDialogComponent} from './components/delete-project-dialog/d
 import {AddProjectToTeamDialogComponent} from './components/add-project-to-team-dialog/add-project-to-team-dialog.component';
 import {DeleteTeamDialogComponent} from './components/delete-team-dialog/delete-team-dialog.component';
 import {ContributorDialogComponent} from './components/contributor-card/contributor-dialog.component';
+import {EditTeamComponent} from './view/edit-team/edit-team.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -80,6 +81,7 @@ const appRoutes: Routes = [
   {path: 'dashboard', component: MainDashboardComponent},
   {path: 'teams', component: TeamsDashboardComponent},
   {path: 'add-team', component: AddTeamComponent},
+  {path: 'edit-team/:id', component: EditTeamComponent},
   {path: 'user-settings', component: UserSettingsComponent},
   {path: 'add-project', component: AddProjectComponent},
   {path: 'project-configure/:id', component: ConfigureProjectComponent},
@@ -109,6 +111,7 @@ const appRoutes: Routes = [
     TeamsDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
+    EditTeamComponent,
     DependencyRootComponent,
     ContributorMergeDialogComponent,
     DependencyCompareComponent,

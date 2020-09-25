@@ -27,7 +27,7 @@
                     <mat-icon>more_vert</mat-icon>
                   </button>
                   <mat-menu #menu="matMenu" xPosition="before">
-                    <button mat-menu-item>Edit</button>
+                    <button mat-menu-item routerLink="/edit-team/{{team.id}}">Edit</button>
                     <button mat-menu-item (click)="openProjectDeletionDialog(team)">Remove</button>
                   </mat-menu>
                 </mat-card-title>

@@ -3,9 +3,9 @@ import {Team} from '../../model/team';
 import {TeamService} from '../../service/team.service';
 import {UserService} from '../../service/user.service';
 import {FORBIDDEN} from 'http-status-codes';
-import {Project} from '../../model/project';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DeleteTeamDialogComponent} from '../../components/delete-team-dialog/delete-team-dialog.component';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-teams-dashboard',
@@ -17,10 +17,12 @@ export class TeamsDashboardComponent implements OnInit {
   dialogRef: MatDialogRef<DeleteTeamDialogComponent>;
   teams: Team[] = [];
 
-  constructor(private teamService: TeamService, private userService: UserService, private dialog: MatDialog) { }
+  constructor(private teamService: TeamService, private userService: UserService, private dialog: MatDialog,
+              private titleService: Title) { }
 
   ngOnInit() {
     this.getTeams();
+    this.titleService.setTitle('Coderadar - Teams');
   }
 
   private getTeams() {
@@ -33,7 +35,7 @@ export class TeamsDashboardComponent implements OnInit {
     });
   }
 
-  openProjectDeletionDialog(teamToBeDeleted: Project) {
+  openProjectDeletionDialog(teamToBeDeleted: Team) {
     this.dialogRef = this.dialog.open(DeleteTeamDialogComponent, {
       data: {
         team: teamToBeDeleted

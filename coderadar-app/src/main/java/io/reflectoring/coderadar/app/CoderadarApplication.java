@@ -5,11 +5,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @EnableScheduling
 @EnableAsync(proxyTargetClass = true)
@@ -18,15 +19,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 @EntityScan(basePackages = "io.reflectoring.coderadar")
 @SpringBootApplication(scanBasePackages = "io.reflectoring.coderadar")
 @Controller
-public class CoderadarApplication {
+public class CoderadarApplication implements ErrorController {
 
   public static void main(String[] args) {
     Locale.setDefault(Locale.US);
     SpringApplication.run(CoderadarApplication.class, args);
   }
 
-  @GetMapping(value = "/**/{path:[^.]*}")
-  public String redirect() {
+  private static final String PATH = "/error";
+
+  /** @return forwards to index.html (angular app) */
+  @RequestMapping(value = PATH)
+  public String error() {
     return "forward:/index.html";
+  }
+
+  @Override
+  public String getErrorPath() {
+    return PATH;
   }
 }

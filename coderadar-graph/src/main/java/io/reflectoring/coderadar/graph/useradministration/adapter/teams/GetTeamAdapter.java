@@ -20,6 +20,11 @@ public class GetTeamAdapter implements GetTeamPort {
   }
 
   @Override
+  public Team getByName(String name) {
+    return teamMapper.mapGraphObject(teamRepository.findByName(name));
+  }
+
+  @Override
   public boolean existsById(long teamId) {
     return teamRepository.existsById(teamId);
   }

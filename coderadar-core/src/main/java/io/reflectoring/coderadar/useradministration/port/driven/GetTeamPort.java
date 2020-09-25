@@ -10,6 +10,12 @@ public interface GetTeamPort {
   Team get(long teamId);
 
   /**
+   * @param name The team name.
+   * @return The team with the given name.
+   */
+  Team getByName(String name);
+
+  /**
    * @param teamId The id of the team.
    * @return True if a team with the given id exists.
    */

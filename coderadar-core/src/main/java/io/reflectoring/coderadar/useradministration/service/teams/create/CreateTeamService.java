@@ -8,6 +8,8 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.create.CreateTeamCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.create.CreateTeamUseCase;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +18,8 @@ public class CreateTeamService implements CreateTeamUseCase {
   private final CreateTeamPort createTeamPort;
   private final GetTeamPort getTeamPort;
   private final GetUserPort getUserPort;
+
+  private static final Logger logger = LoggerFactory.getLogger(CreateTeamService.class);
 
   @Override
   public Long createTeam(CreateTeamCommand createTeamCommand) {
@@ -29,7 +33,10 @@ public class CreateTeamService implements CreateTeamUseCase {
           }
         }
       }
-      return createTeamPort.createTeam(createTeamCommand);
+      long teamId = createTeamPort.createTeam(createTeamCommand);
+      logger.info(
+          String.format("Created team %s with id: %d", createTeamCommand.getName(), teamId));
+      return teamId;
     }
   }
 }

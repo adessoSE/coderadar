@@ -949,6 +949,20 @@ include::{snippets}/teams/create/http-request.adoc[]
 
 include::{snippets}/teams/create/http-response.adoc[]
 
+=== Updating a team
+
+include::{snippets}/teams/update/request-fields.adoc[]
+
+[discrete]
+==== Example Request
+
+include::{snippets}/teams/update/http-request.adoc[]
+
+[discrete]
+==== Example Response
+
+include::{snippets}/teams/update/http-response.adoc[]
+
 === Deleting a team
 
 [discrete]

@@ -76,4 +76,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
   /** @return All teams in the database along with their members. */
   @Query("MATCH (t:TeamEntity)<-[r:IS_IN*0..1]-(u) RETURN t, r, u")
   List<TeamEntity> findAllWithMembers();
+
+  @Query("MATCH (t:TeamEntity) WHERE t.name = {0} RETURN t")
+  TeamEntity findByName(String name);
 }
