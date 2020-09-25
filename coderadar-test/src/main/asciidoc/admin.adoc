@@ -76,29 +76,36 @@ The credentials for the Neo4j database instance can be configured with the follo
 `spring.data.neo4j.username=neo4j`
 `spring.data.neo4j.password=neo3j`
 
+==== Configuring the git passwords key
+
+Coderadar requires plaintext passwords in order to clone/update private repositories. This is
+problematic as these passwords are saved in the database. To mitigate this problem (at least to some extent),
+the passwords are encrypted (NOT hashed) before they are saved and decrypted when they are needed (again we are talking about per-project repository passwords, not Coderadar passwords, those are hashed using BCrypt).
+The encryption key can be set using the following property:
+
+`coderadar.gitPasswordsEncryptionKey=test-key`
+
 === Starting Coderadar
 
 Starting Coderadar requires a running Neo4j instance on port 7687.
-Once started, the Coderadar REST-API will be available on port 8080.
-If the jar contains the coderadar UI, it will also be available on port 8080.
-For more information on it, have a look at the REST-API documentation:
+Once started, the Coderadar UI and REST-API will be available on port 8080.
+For more information on the REST-API, have a look at the documentation:
 
 https://adessoag.github.io/coderadar/current/docs/restapi.html
 
-=== Starting the Coderadar UI
-
-To start the Coderadar UI, you have to build it first. This requires having NPM installed, going to the `coderadar-ui` directory and
-installing the dependencies by running `npm install` and running the UI-server with `npm start`.
-The UI will be available on port 4200.
+Alternatively, two Docker images can be used. Run the script `run.bat/run.sh` or have a look at its contents
+for more information.
 
 === Coderadar system requirements
 
-For comfortable use, Coderadar itself requires about 2GB of System memory. Note that this largely depends on how large
+For comfortable use, Coderadar itself requires about 2.5GB of System memory. Note that this largely depends on how large
 the projects you're working with are and how many of them are.
 
 In order to save and analyze very large projects, Neo4j should be configured with at least 10GB of available heap memory and 10GB reserved for the page cache.
 Coderadar should be running smoothly with about 5GB of Java heap space. It is highly recommended to run both Coderadar and Neo4j on high-speed SSD storage.
-As an example, saving the entire Spring-Boot repository (~29000 commits) as of 25.09.2020 took 26 minutes and 22GB of disk space.
+As an example, saving the entire Spring-Boot repository (~29000 commits) as of 25.09.2020 took 26 minutes and 22GB of disk space
+(i7-6820HQ; 32GB RAM; NVMe SSD).
+
 
 For more information on how to configure Neo4j have a look at:
 https://neo4j.com/docs/operations-manual/current/performance/memory-configuration/

@@ -8,6 +8,7 @@ coderadar.authentication.accessToken.durationInMinutes=15
 coderadar.authentication.refreshToken.durationInMinutes=86400
 coderadar.authentication.enabled=true
 coderadar.cors.enabled=true
+coderadar.git.passwords.encryption.key=test-key
 
 logging.level.io.reflectoring.coderadar=DEBUG
 logging.level.org.reflections=ERROR

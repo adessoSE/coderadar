@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar;
 
+import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,6 +30,8 @@ public class CoderadarConfigurationProperties {
   @NotNull private Path workdir;
 
   @NotNull private Integer scanIntervalInSeconds = 30;
+
+  @NotNull private String gitPasswordsEncryptionKey;
 
   @NotNull private Locale dateLocale = Locale.ENGLISH;
 
@@ -67,6 +70,11 @@ public class CoderadarConfigurationProperties {
       throw new IllegalArgumentException(
           String.format("directory %s is not writable!", this.workdir));
     }
+  }
+
+  @PostConstruct
+  public void setGitPasswordEncryptionKey() {
+    PasswordUtil.setKey(gitPasswordsEncryptionKey);
   }
 
   @Data

@@ -19,6 +19,7 @@ import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.SetUserRoleForProjectPort;
+import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
 import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
@@ -73,7 +74,7 @@ public class CreateProjectService implements CreateProjectUseCase {
                   command.getVcsUrl(),
                   localDir,
                   project.getVcsUsername(),
-                  project.getVcsPassword());
+                  PasswordUtil.decrypt(project.getVcsPassword()));
           try {
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
             logger.info(
@@ -145,7 +146,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setWorkdirName(workdirName);
     project.setVcsUrl(command.getVcsUrl());
     project.setVcsUsername(command.getVcsUsername());
-    project.setVcsPassword(command.getVcsPassword());
+    project.setVcsPassword(PasswordUtil.encrypt(command.getVcsPassword()));
     project.setVcsStart(command.getStartDate());
     long projectId = createProjectPort.createProject(project);
     project.setId(projectId);

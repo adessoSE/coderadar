@@ -18,6 +18,7 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
+import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
@@ -134,7 +135,7 @@ public class ScanProjectScheduler {
           updateLocalRepositoryUseCase.updateRepository(
               new UpdateRepositoryCommand()
                   .setLocalDir(localDir)
-                  .setPassword(project.getVcsPassword())
+                  .setPassword(PasswordUtil.decrypt(project.getVcsPassword()))
                   .setUsername(project.getVcsUsername())
                   .setRemoteUrl(project.getVcsUrl()));
 

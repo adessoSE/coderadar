@@ -22,6 +22,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.get.Li
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
+import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
 import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
@@ -66,7 +67,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
     project.setName(command.getName());
     project.setVcsUsername(command.getVcsUsername());
-    project.setVcsPassword(command.getVcsPassword());
+    project.setVcsPassword(PasswordUtil.encrypt(command.getVcsPassword()));
     boolean urlChanged = false;
 
     if (!project.getVcsUrl().equals(command.getVcsUrl())) {
@@ -95,7 +96,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
               updateLocalRepositoryUseCase.updateRepository(
                   new UpdateRepositoryCommand()
                       .setLocalDir(localDir)
-                      .setPassword(project.getVcsPassword())
+                      .setPassword(PasswordUtil.decrypt(project.getVcsPassword()))
                       .setUsername(project.getVcsUsername())
                       .setRemoteUrl(project.getVcsUrl()));
 
