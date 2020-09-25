@@ -93,5 +93,12 @@ The UI will be available on port 4200.
 
 === Coderadar system requirements
 
-For comfortable development, Coderadar itself requires about 5GB of System memory. Note that this largely depends on how large
-the projects you're working with are and how many of them are. In order to save and analyze very large projects, Neo4j should be configured with at least 10GB of available heap memeory.
+For comfortable use, Coderadar itself requires about 2GB of System memory. Note that this largely depends on how large
+the projects you're working with are and how many of them are.
+
+In order to save and analyze very large projects, Neo4j should be configured with at least 10GB of available heap memory and 10GB reserved for the page cache.
+Coderadar should be running smoothly with about 5GB of Java heap space. It is highly recommended to run both Coderadar and Neo4j on high-speed SSD storage.
+As an example, saving the entire Spring-Boot repository (~29000 commits) as of 25.09.2020 took 26 minutes and 22GB of disk space.
+
+For more information on how to configure Neo4j have a look at:
+https://neo4j.com/docs/operations-manual/current/performance/memory-configuration/
