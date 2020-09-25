@@ -39,8 +39,7 @@ public class UpdateTeamService implements UpdateTeamUseCase {
         }
       }
       updateTeamPort.updateTeam(teamId, updateTeamCommand);
-      logger.info(
-          String.format("Updated team %s with id: %d", updateTeamCommand.getName(), teamId));
+      logger.info("Updated team {} with id: {}", updateTeamCommand.getName(), teamId);
     }
   }
 }

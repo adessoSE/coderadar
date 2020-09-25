@@ -22,7 +22,7 @@ public class DeleteTeamService implements DeleteTeamUseCase {
   public void deleteTeam(long teamId) {
     if (getTeamPort.existsById(teamId)) {
       deleteTeamPort.deleteTeam(teamId);
-      logger.info(String.format("Deleted team with id: %d", teamId));
+      logger.info("Deleted team with id: {}", teamId);
     } else {
       throw new TeamNotFoundException(teamId);
     }

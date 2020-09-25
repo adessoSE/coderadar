@@ -34,8 +34,7 @@ public class CreateTeamService implements CreateTeamUseCase {
         }
       }
       long teamId = createTeamPort.createTeam(createTeamCommand);
-      logger.info(
-          String.format("Created team %s with id: %d", createTeamCommand.getName(), teamId));
+      logger.info("Created team {} with id: {}", createTeamCommand.getName(), teamId);
       return teamId;
     }
   }

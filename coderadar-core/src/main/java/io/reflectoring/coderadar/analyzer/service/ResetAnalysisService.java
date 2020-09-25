@@ -32,7 +32,7 @@ public class ResetAnalysisService implements ResetAnalysisUseCase {
     processProjectService.executeTask(
         () -> {
           resetAnalysisPort.resetAnalysis(projectId);
-          logger.info(String.format("Reset analysis results for project with id %d", projectId));
+          logger.info("Reset analysis results for project with id {}", projectId);
         },
         projectId);
   }

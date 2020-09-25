@@ -8,6 +8,8 @@ import io.reflectoring.coderadar.useradministration.port.driven.AddTeamToProject
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.AddTeamToProjectUseCase;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +20,8 @@ public class AddTeamToProjectService implements AddTeamToProjectUseCase {
   private final AddTeamToProjectPort addTeamToProjectPort;
   private final GetTeamPort getTeamPort;
 
+  private static final Logger logger = LoggerFactory.getLogger(AddTeamToProjectService.class);
+
   @Override
   public void addTeamToProject(long projectId, long teamId, ProjectRole role) {
     if (!getProjectPort.existsById(projectId)) {
@@ -27,5 +31,10 @@ public class AddTeamToProjectService implements AddTeamToProjectUseCase {
       throw new TeamNotFoundException(teamId);
     }
     addTeamToProjectPort.addTeamToProject(projectId, teamId, role);
+    logger.info(
+        "Assigned team with id: {} to project with id: {} with the role: {}",
+        teamId,
+        projectId,
+        role.getValue());
   }
 }

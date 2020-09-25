@@ -8,6 +8,8 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.SetUserRoleForProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driver.permissions.SetUserRoleForProjectUseCase;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +20,8 @@ public class SetUserRoleForProjectService implements SetUserRoleForProjectUseCas
   private final GetUserPort getUserPort;
   private final SetUserRoleForProjectPort setUserRoleForProjectPort;
 
+  private static final Logger logger = LoggerFactory.getLogger(SetUserRoleForProjectService.class);
+
   @Override
   public void setRole(long projectId, long userId, ProjectRole role) {
     if (!getProjectPort.existsById(projectId)) {
@@ -27,5 +31,10 @@ public class SetUserRoleForProjectService implements SetUserRoleForProjectUseCas
       throw new UserNotFoundException(userId);
     }
     setUserRoleForProjectPort.setRole(projectId, userId, role);
+    logger.info(
+        "Assigned user with id: {} to project with id: {}, with the role: {}",
+        userId,
+        projectId,
+        role.getValue());
   }
 }

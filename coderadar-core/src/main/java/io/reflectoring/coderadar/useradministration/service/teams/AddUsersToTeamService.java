@@ -8,6 +8,8 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.AddUsersToTeamUseCase;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +19,8 @@ public class AddUsersToTeamService implements AddUsersToTeamUseCase {
   private final GetTeamPort getTeamPort;
   private final GetUserPort getUserPort;
   private final AddUsersToTeamPort addUsersToTeamPort;
+
+  private static final Logger logger = LoggerFactory.getLogger(AddUsersToTeamService.class);
 
   @Override
   public void addUsersToTeam(long teamId, List<Long> userIds) {
@@ -29,5 +33,6 @@ public class AddUsersToTeamService implements AddUsersToTeamUseCase {
       }
     }
     addUsersToTeamPort.addUsersToTeam(teamId, userIds);
+    logger.info("Assigned users with ids: {} to team with id: {}", userIds, teamId);
   }
 }

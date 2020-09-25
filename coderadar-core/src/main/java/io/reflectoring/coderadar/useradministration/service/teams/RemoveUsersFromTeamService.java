@@ -9,6 +9,8 @@ import io.reflectoring.coderadar.useradministration.port.driven.RemoveUsersFromT
 import io.reflectoring.coderadar.useradministration.port.driver.teams.RemoveUsersFromTeamUseCase;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +20,8 @@ public class RemoveUsersFromTeamService implements RemoveUsersFromTeamUseCase {
   private final GetTeamPort getTeamPort;
   private final GetUserPort getUserPort;
   private final RemoveUsersFromTeamPort removeUsersFromTeamPort;
+
+  private static final Logger logger = LoggerFactory.getLogger(RemoveUsersFromTeamService.class);
 
   @Override
   public void removeUsersFromTeam(long teamId, List<Long> userIds) {
@@ -33,5 +37,6 @@ public class RemoveUsersFromTeamService implements RemoveUsersFromTeamUseCase {
       }
     }
     removeUsersFromTeamPort.removeUsersFromTeam(teamId, userIds);
+    logger.info("Removed users with ids: {} from team with id: {}", userIds, teamId);
   }
 }
