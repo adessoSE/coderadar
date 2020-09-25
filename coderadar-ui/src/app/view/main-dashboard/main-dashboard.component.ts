@@ -78,18 +78,30 @@ export class MainDashboardComponent implements OnInit {
   }
 
   openAddToTeamDialog(project: Project): void {
-    const dialogRef = this.dialog.open(AddProjectToTeamDialogComponent, {
-      width: '300px',
-      data: {teams: this.teams, project}
-    });
+    this.teamService.listTeamsForProject(project.id).then(value => {
+      const dialogRef = this.dialog.open(AddProjectToTeamDialogComponent, {
+        width: '300px',
+        data: {teams: this.teams, project, teamsForProject: value.body}
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        for (const team of result.teams) {
-          this.teamService.addTeamToProject(project.id, team.id, result.role);
+      dialogRef.afterClosed().subscribe(result => {
+        if (result !== undefined) {
+          for (const team of result.teamsForProject) {
+            if (result.teams.find(t => t.name === team.name) === undefined) {
+              this.teamService.removeTeamFromProject(project.id, team.id);
+            }
+          }
+          for (const team of result.teams) {
+            this.teamService.addTeamToProject(project.id, team.id, result.role);
+          }
         }
+      });
+    }).catch(e => {
+      if (e.status && e.status === FORBIDDEN) {
+        this.userService.refresh(() => this.openAddToTeamDialog(project));
       }
     });
+
   }
 
   /**
