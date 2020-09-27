@@ -22,4 +22,9 @@ public class GetAnalyzerConfigurationAdapter implements GetAnalyzerConfiguration
             .findById(id, 0)
             .orElseThrow(() -> new AnalyzerConfigurationNotFoundException(id)));
   }
+
+  @Override
+  public boolean existsById(long configurationId) {
+    return analyzerConfigurationRepository.existsById(configurationId);
+  }
 }

@@ -5,7 +5,6 @@ import java.security.*;
 import java.util.Arrays;
 import java.util.Base64;
 import javax.crypto.*;
-import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,14 +43,15 @@ public class PasswordUtil {
     }
   }
 
-    public static String encrypt(String strToEncrypt) {
-    if(strToEncrypt == null) {
+  public static String encrypt(String strToEncrypt) {
+    if (strToEncrypt == null) {
       return null;
     }
     try {
       Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
       cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-      return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8)));
+      return Base64.getEncoder()
+          .encodeToString(cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8)));
 
     } catch (Exception e) {
       logger.error("Error while encrypting: {}", e.toString());
@@ -60,7 +60,7 @@ public class PasswordUtil {
   }
 
   public static String decrypt(String strToDecrypt) {
-    if(strToDecrypt == null) {
+    if (strToDecrypt == null) {
       return null;
     }
     try {
@@ -72,5 +72,4 @@ public class PasswordUtil {
     }
     return null;
   }
-
 }

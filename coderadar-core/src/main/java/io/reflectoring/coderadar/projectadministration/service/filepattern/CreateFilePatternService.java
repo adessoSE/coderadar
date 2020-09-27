@@ -1,7 +1,9 @@
 package io.reflectoring.coderadar.projectadministration.service.filepattern;
 
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.CreateFilePatternPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternUseCase;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +16,14 @@ import org.springframework.stereotype.Service;
 public class CreateFilePatternService implements CreateFilePatternUseCase {
 
   private final CreateFilePatternPort createFilePatternPort;
+  private final GetProjectPort getProjectPort;
   private static final Logger logger = LoggerFactory.getLogger(CreateFilePatternService.class);
 
   @Override
   public Long createFilePattern(CreateFilePatternCommand command, long projectId) {
+    if (!getProjectPort.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
+    }
     FilePattern filePattern = new FilePattern();
     filePattern.setPattern(command.getPattern());
     filePattern.setInclusionType(command.getInclusionType());

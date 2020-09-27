@@ -24,5 +24,7 @@ public class Neo4jIndexesConfiguration {
         Collections.emptyMap());
     session.query(
         "CREATE CONSTRAINT ON (u:UserEntity) ASSERT u.username IS UNIQUE", Collections.emptyMap());
+    session.query(
+        "CREATE CONSTRAINT ON (t:TeamEntity) ASSERT t.name IS UNIQUE", Collections.emptyMap());
   }
 }

@@ -11,4 +11,10 @@ public interface GetAnalyzerConfigurationPort {
    * @return The configuration.
    */
   AnalyzerConfiguration getAnalyzerConfiguration(long id);
+
+  /**
+   * @param configurationId The analyzer configuration id.
+   * @return True if an analyzer configuration with the given id exists.
+   */
+  boolean existsById(long configurationId);
 }

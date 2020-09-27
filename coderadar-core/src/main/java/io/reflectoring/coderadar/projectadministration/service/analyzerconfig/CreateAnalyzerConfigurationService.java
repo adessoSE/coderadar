@@ -4,7 +4,9 @@ import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.service.ListAnalyzersService;
 import io.reflectoring.coderadar.plugin.api.AnalyzerConfigurationException;
 import io.reflectoring.coderadar.projectadministration.AnalyzerNotFoundException;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
 import java.util.List;
@@ -20,11 +22,16 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
   private final CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort;
   private final ListAnalyzersService listAnalyzerService;
   private final ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService;
+  private final GetProjectPort getProjectPort;
   private static final Logger logger =
       LoggerFactory.getLogger(CreateAnalyzerConfigurationService.class);
 
   @Override
   public Long create(CreateAnalyzerConfigurationCommand command, long projectId) {
+    if (!getProjectPort.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
+    }
+
     List<String> analyzers = listAnalyzerService.listAvailableAnalyzers();
     if (analyzers.contains(command.getAnalyzerName())) {
       if (listAnalyzerConfigurationsFromProjectService.get(projectId).stream()
@@ -43,8 +50,7 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
             "An analyzer with this name is already configured for the project!");
       }
     } else {
-      throw new AnalyzerNotFoundException(
-          "Analyzer with name " + command.getAnalyzerName() + " not found");
+      throw new AnalyzerNotFoundException(command.getAnalyzerName());
     }
   }
 }
