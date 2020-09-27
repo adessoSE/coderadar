@@ -1,11 +1,13 @@
 package io.reflectoring.coderadar.projectadministration.filepattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.CreateFilePatternPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.CreateFilePatternService;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,12 +20,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CreateFilePatternServiceTest {
 
   @Mock private CreateFilePatternPort createFilePatternPort;
+  @Mock private GetProjectPort getProjectPort;
 
   private CreateFilePatternService testSubject;
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new CreateFilePatternService(createFilePatternPort);
+    this.testSubject = new CreateFilePatternService(createFilePatternPort, getProjectPort);
   }
 
   @Test
@@ -37,6 +40,8 @@ class CreateFilePatternServiceTest {
     FilePattern filePattern = new FilePattern().setPattern(pattern).setInclusionType(inclusionType);
 
     CreateFilePatternCommand command = new CreateFilePatternCommand(pattern, inclusionType);
+
+    when(getProjectPort.existsById(anyLong())).thenReturn(true);
 
     when(createFilePatternPort.createFilePattern(filePattern, projectId))
         .thenReturn(expectedFilePatternId);
