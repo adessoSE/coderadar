@@ -26,16 +26,16 @@ public class CoderadarApplication implements ErrorController {
     SpringApplication.run(CoderadarApplication.class, args);
   }
 
-  private static final String PATH = "/error";
+  private static final String ERROR = "/error";
 
   /** @return forwards to index.html (angular app) */
-  @RequestMapping(value = PATH)
+  @RequestMapping(value = ERROR)
   public String error() {
     return "forward:/index.html";
   }
 
   @Override
   public String getErrorPath() {
-    return PATH;
+    return ERROR;
   }
 }

@@ -2,7 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AddProjectToTeamDialogData} from './add-project-to-team-dialog-data';
-import {ProjectRole} from '../../model/project-role';
 
 @Component({
   selector: 'app-add-project-to-team-dialog',

@@ -1,10 +1,13 @@
 package io.reflectoring.coderadar.useradministration.service.security;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Base64;
-import javax.crypto.*;
+import javax.crypto.Cipher;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,32 +46,57 @@ public class PasswordUtil {
     }
   }
 
-  public static String encrypt(String strToEncrypt) {
-    if (strToEncrypt == null) {
-      return null;
-    }
-    try {
-      Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-      cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-      return Base64.getEncoder()
-          .encodeToString(cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8)));
+  public static String encrypt(String messageToEncrypt) {
+    if (messageToEncrypt != null) {
+      try {
+        byte[] plainBytes = messageToEncrypt.getBytes();
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] key = new byte[16];
+        secureRandom.nextBytes(key);
 
-    } catch (Exception e) {
-      logger.error("Error while encrypting: {}", e.toString());
+        byte[] iv = new byte[12];
+        secureRandom.nextBytes(iv);
+
+        final Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        GCMParameterSpec parameterSpec = new GCMParameterSpec(128, iv);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
+
+        byte[] cipherText = cipher.doFinal(plainBytes);
+
+        ByteBuffer byteBuffer = ByteBuffer.allocate(4 + iv.length + cipherText.length);
+        byteBuffer.putInt(iv.length);
+        byteBuffer.put(iv);
+        byteBuffer.put(cipherText);
+        byte[] cipherMessage = byteBuffer.array();
+        return new String(cipherMessage);
+      } catch (Exception e) {
+        logger.error("Error while encrypting: {}", e.toString());
+      }
     }
     return null;
   }
 
-  public static String decrypt(String strToDecrypt) {
-    if (strToDecrypt == null) {
-      return null;
-    }
-    try {
-      Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-      cipher.init(Cipher.DECRYPT_MODE, secretKey);
-      return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
-    } catch (Exception e) {
-      logger.error("Error while decrypting: {}", e.toString());
+  public static String decrypt(String cipherMessage) {
+    if (cipherMessage != null) {
+      try {
+        ByteBuffer byteBuffer = ByteBuffer.wrap(cipherMessage.getBytes());
+        int ivLength = byteBuffer.getInt();
+        if (ivLength < 12 || ivLength >= 16) {
+          throw new IllegalArgumentException("Invalid iv length");
+        }
+        byte[] iv = new byte[ivLength];
+        byteBuffer.get(iv);
+        byte[] cipherText = new byte[byteBuffer.remaining()];
+        byteBuffer.get(cipherText);
+
+        final Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
+
+        byte[] plainText = cipher.doFinal(cipherText);
+        return new String(plainText);
+      } catch (Exception e) {
+        logger.error("Error while decrypting: {}", e.toString());
+      }
     }
     return null;
   }
