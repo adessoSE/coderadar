@@ -22,6 +22,8 @@ public class TokenService {
   private final CoderadarConfigurationProperties configuration;
   private final SecretKeyService secretKeyService;
 
+  private boolean shuttingDown = false;
+
   /**
    * This method generates a JSON Web Token for access to resources. The token contains the
    * expiration date, userId, username and issuer and is signed with HMAC256.
@@ -58,6 +60,9 @@ public class TokenService {
    * @return decoded Token
    */
   public DecodedJWT verify(String token) {
+    if (shuttingDown) {
+      return null;
+    }
     byte[] secret = secretKeyService.getSecretKey().getEncoded();
     JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret)).withIssuer("coderadar").build();
     try {
@@ -119,5 +124,9 @@ public class TokenService {
     JWT jwt = JWT.decode(refreshToken);
     Claim claim = jwt.getClaim("username");
     return claim.asString();
+  }
+
+  public void setShuttingDown(boolean shuttingDown) {
+    this.shuttingDown = shuttingDown;
   }
 }

@@ -12,6 +12,7 @@ public class UserMapper implements Mapper<User, UserEntity> {
     user.setId(nodeEntity.getId());
     user.setUsername(nodeEntity.getUsername());
     user.setPassword(nodeEntity.getPassword());
+    user.setPlatformAdmin(nodeEntity.isPlatformAdmin());
     return user;
   }
 
@@ -20,6 +21,7 @@ public class UserMapper implements Mapper<User, UserEntity> {
     UserEntity userEntity = new UserEntity();
     userEntity.setPassword(domainObject.getPassword());
     userEntity.setUsername(domainObject.getUsername());
+    userEntity.setPlatformAdmin(domainObject.isPlatformAdmin());
     return userEntity;
   }
 }

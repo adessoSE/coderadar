@@ -74,6 +74,7 @@ import {AddProjectToTeamDialogComponent} from './components/add-project-to-team-
 import {DeleteTeamDialogComponent} from './components/delete-team-dialog/delete-team-dialog.component';
 import {ContributorDialogComponent} from './components/contributor-card/contributor-dialog.component';
 import {EditTeamComponent} from './view/edit-team/edit-team.component';
+import {ShutdownDialogComponent} from './components/shutdown-dialog/shutdown-dialog.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -122,6 +123,7 @@ const appRoutes: Routes = [
     FileViewComponent,
     TeamsDashboardComponent,
     AddProjectToTeamDialogComponent,
+    ShutdownDialogComponent,
     AddTeamComponent,
     SidenavContentComponent,
     ContributorCardComponent,
@@ -201,7 +203,8 @@ const appRoutes: Routes = [
     ContributorMergeDialogComponent,
     ContributorDialogComponent,
     DeleteProjectDialogComponent,
-    DeleteTeamDialogComponent
+    DeleteTeamDialogComponent,
+    ShutdownDialogComponent
   ]
 })
 export class AppModule {

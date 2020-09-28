@@ -117,7 +117,8 @@ public class AnalyzingService
     Map<Long, List<MetricValue>> fileMetrics =
         saveMetricPort.getMetricsForFiles(projectId, branchName);
     for (Commit commit : commits) {
-      if (Boolean.FALSE.equals(activeAnalysis.get(projectId))) {
+      if (!activeAnalysis.containsKey(projectId)
+          || Boolean.FALSE.equals(activeAnalysis.get(projectId))) {
         break;
       }
       List<MetricValue> metrics =
@@ -216,5 +217,9 @@ public class AnalyzingService
 
   public boolean getStatus(long projectId) {
     return activeAnalysis.containsKey(projectId);
+  }
+
+  public void onShutdown() {
+    activeAnalysis.clear();
   }
 }

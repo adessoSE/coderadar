@@ -19,4 +19,9 @@ public class ListUsersAdapter implements ListUsersPort {
   public List<User> listUsers() {
     return userMapper.mapNodeEntities(userRepository.findAll());
   }
+
+  @Override
+  public boolean usersExist() {
+    return userRepository.count() > 0;
+  }
 }

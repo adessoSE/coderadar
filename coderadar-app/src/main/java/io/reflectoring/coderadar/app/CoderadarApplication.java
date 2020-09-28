@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @EnableScheduling
 @EnableAsync(proxyTargetClass = true)
@@ -29,7 +29,7 @@ public class CoderadarApplication implements ErrorController {
   private static final String ERROR = "/error";
 
   /** @return forwards to index.html (angular app) */
-  @RequestMapping(value = ERROR)
+  @GetMapping(value = ERROR)
   public String error() {
     return "forward:/index.html";
   }

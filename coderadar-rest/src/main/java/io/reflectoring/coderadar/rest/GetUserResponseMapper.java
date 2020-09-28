@@ -9,7 +9,7 @@ public class GetUserResponseMapper {
   private GetUserResponseMapper() {}
 
   public static GetUserResponse mapUser(User user) {
-    return new GetUserResponse(user.getId(), user.getUsername());
+    return new GetUserResponse(user.getId(), user.getUsername(), user.isPlatformAdmin());
   }
 
   public static List<GetUserResponse> mapUsers(List<User> users) {

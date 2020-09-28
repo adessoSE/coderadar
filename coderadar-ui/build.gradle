@@ -23,6 +23,13 @@ npm_run_lint {
   outputs.files fileTree("dist")
 }
 
+task('npm_rebuild_node-sass') {
+  inputs.files fileTree("src")
+  inputs.file "package.json"
+  inputs.file "package-lock.json"
+  outputs.files fileTree("dist")
+}
+
 jar.dependsOn 'npm_rebuild_node-sass'
 jar.dependsOn 'npm_run_lint'
 jar.dependsOn 'npm_run_build'

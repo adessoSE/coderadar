@@ -13,6 +13,7 @@ public class UserEntity {
   private Long id;
   private String username;
   private String password;
+  private boolean platformAdmin = false;
 
   @Relationship(value = "HAS")
   private List<RefreshTokenEntity> refreshTokens;

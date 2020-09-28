@@ -6,10 +6,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driven.ListProjectsForUserPort;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +33,7 @@ public class ListProjectsForUserAdapter implements ListProjectsForUserPort {
                   .map(s -> ProjectRole.valueOf(s.toUpperCase()))
                   .collect(Collectors.toList())));
     }
+    projects.sort(Comparator.comparing(p -> p.getProject().getName()));
     return projects;
   }
 }

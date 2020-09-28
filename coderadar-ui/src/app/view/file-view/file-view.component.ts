@@ -19,6 +19,7 @@ import 'prismjs/components/prism-scss';
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-groovy';
 import 'prismjs/components/prism-diff';
+import 'prismjs/components/prism-yaml';
 import 'prismjs/plugins/diff-highlight/prism-diff-highlight';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
 import 'prismjs/plugins/line-highlight/prism-line-highlight';

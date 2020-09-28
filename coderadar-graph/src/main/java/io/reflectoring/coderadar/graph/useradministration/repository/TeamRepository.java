@@ -13,7 +13,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
    */
   @Query(
       "MATCH (u)-[:IS_IN]->(t) WHERE ID(u) = {0} WITH t "
-          + "OPTIONAL MATCH (t)<-[r:IS_IN]-(u) RETURN t, r, u")
+          + "OPTIONAL MATCH (t)<-[r:IS_IN]-(u) RETURN t, r, u ORDER BY t.name")
   List<TeamEntity> listTeamsByUserId(long userId);
 
   /**
@@ -61,7 +61,8 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
    * @param projectId The project id.
    * @return All teams assigned to the project along with their members.
    */
-  @Query("MATCH (p)<-[:ASSIGNED_TO]-(t)<-[r:IS_IN*0..1]-(u) WHERE ID(p) = {0} RETURN t, r, u")
+  @Query(
+      "MATCH (p)<-[:ASSIGNED_TO]-(t)<-[r:IS_IN*0..1]-(u) WHERE ID(p) = {0} RETURN t, r, u ORDER BY t.name")
   List<TeamEntity> listTeamsByProjectIdWithMembers(long projectId);
 
   /**

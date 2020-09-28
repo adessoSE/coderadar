@@ -1,4 +1,4 @@
-<app-header [title]="[{location: '/dashboard', name: 'Dashboard'}]"></app-header>
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/edit-team/' + teamId, name: 'Edit ' + teamName}]"></app-header>
 <mat-sidenav-container class="sidenav">
   <mat-sidenav mode="side" opened style="width: 15%">
     <app-sidenav-content></app-sidenav-content>

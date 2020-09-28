@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
+import io.reflectoring.coderadar.useradministration.port.driven.ListUsersPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RegisterUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserCommand;
 import io.reflectoring.coderadar.useradministration.service.register.RegisterUserService;
@@ -26,13 +27,16 @@ class RegisterUserServiceTest {
 
   @Mock private GetUserPort getUserPortMock;
 
+  @Mock private ListUsersPort listUsersPort;
+
   @Captor private ArgumentCaptor<User> userArgumentCaptor;
 
   private RegisterUserService testSubject;
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new RegisterUserService(registerUserPortMock, getUserPortMock);
+    this.testSubject =
+        new RegisterUserService(registerUserPortMock, getUserPortMock, listUsersPort);
   }
 
   @Test

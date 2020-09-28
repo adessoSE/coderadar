@@ -36,7 +36,7 @@ public class LoginUserService implements LoginUserUseCase {
     String accessToken = tokenService.generateAccessToken(user.getId(), user.getUsername());
     String refreshToken = tokenService.generateRefreshToken(user.getId(), user.getUsername());
     saveRefreshToken(user, refreshToken);
-    return new LoginUserResponse(accessToken, refreshToken, user.getId());
+    return new LoginUserResponse(accessToken, refreshToken, user.getId(), user.isPlatformAdmin());
   }
 
   /**
