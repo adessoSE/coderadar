@@ -374,6 +374,8 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
   }
 
   private void testSavingAnalyzerConfiguration(Long projectId) throws Exception {
+    analyzerConfigurationRepository.deleteAll();
+
     // Add analyzer configuration
     CreateAnalyzerConfigurationCommand analyzerConfigurationCommand =
         new CreateAnalyzerConfigurationCommand(
@@ -399,6 +401,8 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
   }
 
   private void testSavingFilePatterns(Long projectId) throws Exception {
+    filePatternRepository.deleteAll();
+
     // Add file patterns
     CreateFilePatternCommand filePatternCommand =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);

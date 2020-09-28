@@ -17,12 +17,12 @@
         </div>
 
         <!--Teams card list-->
-        <mat-grid-list cols="2" rowHeight="170px">
+        <mat-grid-list cols="2" rowHeight="175px">
           <mat-grid-tile *ngFor="let team of teams" [colspan]="2" [rowspan]="1">
             <mat-card class="dashboard-card">
               <mat-card-header>
                 <mat-card-title>
-                  <a mat-button>{{team.name}}</a>
+                  <a mat-button disabled style="color: black">{{team.name}}</a>
                   <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>
                     <mat-icon>more_vert</mat-icon>
                   </button>
@@ -33,9 +33,14 @@
                 </mat-card-title>
               </mat-card-header>
               <mat-card-content class="mat-card-content">
-                <mat-label>Team members:</mat-label>
+                <mat-label>Members:</mat-label>
                 <span *ngFor="let member of team.members">
-                  <span style="font-weight: bold; margin-left: 10px">{{member.username}}</span>
+                  <a mat-button style="color: black; margin-right: -25px" disabled>{{member.username}}</a>
+                </span>
+                <br>
+                <mat-label>Projects:</mat-label>
+                <span *ngFor="let project of listProjectsForTeam(team.id)">
+                  <a mat-button routerLink="/project/{{project.id}}/master">{{project.name}}</a>
                 </span>
               </mat-card-content>
             </mat-card>

@@ -1,15 +1,17 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
+import io.reflectoring.coderadar.analyzer.port.driver.ListAnalyzersUseCase;
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
 import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
 import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.domain.*;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.CreateFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
@@ -53,6 +55,9 @@ public class CreateProjectService implements CreateProjectUseCase {
   private final GetUserPort getUserPort;
   private final CloneRepositoryUseCase cloneRepositoryUseCase;
   private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
+  private final CreateFilePatternPort createFilePatternPort;
+  private final CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort;
+  private final ListAnalyzersUseCase listAnalyzersUseCase;
 
   private static final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 
@@ -81,11 +86,10 @@ public class CreateProjectService implements CreateProjectUseCase {
                 "Cloned project {} from repository {}",
                 project.getName(),
                 cloneRepositoryCommand.getRemoteUrl());
-            List<Commit> commits =
-                extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
 
             saveContributors(project);
-
+            List<Commit> commits =
+                extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
             List<Branch> branches = getAvailableBranchesPort.getAvailableBranches(localDir);
             saveCommitPort.saveCommits(commits, branches, project.getId());
             logger.info("Saved project {}", project.getName());
@@ -94,7 +98,19 @@ public class CreateProjectService implements CreateProjectUseCase {
           }
         },
         project.getId());
+    setDefaultConfiguration(project.getId());
     return project.getId();
+  }
+
+  private void setDefaultConfiguration(long id) {
+    // Set default file pattern
+    createFilePatternPort.createFilePattern(
+        new FilePattern(0, "**/*.java", InclusionType.INCLUDE), id);
+
+    // Add all analyzers per default
+    for (String analyzerName : listAnalyzersUseCase.listAvailableAnalyzers()) {
+      createAnalyzerConfigurationPort.create(new AnalyzerConfiguration(0, analyzerName, true), id);
+    }
   }
 
   private void setAdminRoleForCurrentUser(Long projectId) {
@@ -139,7 +155,7 @@ public class CreateProjectService implements CreateProjectUseCase {
    * @return The newly saved project.
    */
   private Project saveProject(CreateProjectCommand command) {
-    String workdirName = UUID.randomUUID().toString();
+    String workdirName = String.format("%s-%s", command.getName(), UUID.randomUUID().toString());
 
     Project project = new Project();
     project.setName(command.getName());

@@ -10,10 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
@@ -34,6 +33,7 @@ class StartAnalysisControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private CommitRepository commitRepository;
   @Autowired private MetricRepository metricRepository;
   @Autowired private Session session;
+  @Autowired private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
   private Long projectId;
 
@@ -57,14 +57,7 @@ class StartAnalysisControllerIntegrationTest extends ControllerTestTemplate {
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-
-    CreateFilePatternCommand createFilePatternCommand =
-        new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
-    mvc()
-        .perform(
-            post("/api/projects/" + projectId + "/filePatterns")
-                .content(toJson(createFilePatternCommand))
-                .contentType(MediaType.APPLICATION_JSON));
+    analyzerConfigurationRepository.deleteAll();
   }
 
   @Test

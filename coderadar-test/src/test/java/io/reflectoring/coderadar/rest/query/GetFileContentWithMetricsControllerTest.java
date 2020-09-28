@@ -5,9 +5,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
 import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsCommand;
@@ -18,12 +17,15 @@ import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 class GetFileContentWithMetricsControllerTest extends ControllerTestTemplate {
 
   long projectId;
+
+  @Autowired private AnalyzerConfigurationRepository configurationRepository;
 
   @BeforeEach
   void setUp() throws Exception {
@@ -45,14 +47,7 @@ class GetFileContentWithMetricsControllerTest extends ControllerTestTemplate {
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-
-    CreateFilePatternCommand command2 =
-        new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
-    mvc()
-        .perform(
-            post("/api/projects/" + projectId + "/filePatterns")
-                .content(toJson(command2))
-                .contentType(MediaType.APPLICATION_JSON));
+    configurationRepository.deleteAll();
 
     CreateAnalyzerConfigurationCommand command3 =
         new CreateAnalyzerConfigurationCommand(

@@ -40,12 +40,12 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
         .andExpect(status().isCreated())
         .andDo(
             result -> {
-              Long id =
+              long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
               ProjectEntity project = projectRepository.findById(id).get();
               Assertions.assertEquals("project", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());
-              Assertions.assertEquals("HV9R3h7Kq54S9WvL8laLCg==", project.getVcsPassword());
+              Assertions.assertNotEquals("password", project.getVcsPassword());
               Assertions.assertEquals(testRepoURL.toString(), project.getVcsUrl());
               List<CommitEntity> commits =
                   commitRepository.findByProjectIdAndBranchName(id, "master");

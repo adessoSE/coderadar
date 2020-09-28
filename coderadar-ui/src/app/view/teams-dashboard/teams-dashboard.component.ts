@@ -6,6 +6,7 @@ import {FORBIDDEN} from 'http-status-codes';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DeleteTeamDialogComponent} from '../../components/delete-team-dialog/delete-team-dialog.component';
 import {Title} from '@angular/platform-browser';
+import {Project} from '../../model/project';
 
 @Component({
   selector: 'app-teams-dashboard',
@@ -16,6 +17,7 @@ export class TeamsDashboardComponent implements OnInit {
   waiting = false;
   dialogRef: MatDialogRef<DeleteTeamDialogComponent>;
   teams: Team[] = [];
+  projectsForTeams: Record<number, Project[]> = {};
 
   constructor(private teamService: TeamService, private userService: UserService, private dialog: MatDialog,
               private titleService: Title) { }
@@ -26,8 +28,10 @@ export class TeamsDashboardComponent implements OnInit {
   }
 
   private getTeams() {
-    this.teamService.listTeamsForUser(UserService.getLoggedInUser().userId).then(value =>
-      this.teams = value.body
+    this.teamService.listTeamsForUser(UserService.getLoggedInUser().userId).then(value => {
+        this.teams = value.body;
+        this.getProjectsForTeams();
+      }
     ) .catch(e => {
       if (e.status && e.status === FORBIDDEN) {
         this.userService.refresh(() => this.getTeams());
@@ -62,5 +66,17 @@ export class TeamsDashboardComponent implements OnInit {
           this.userService.refresh(() => this.deleteTeam(team));
         }
       });
+  }
+
+  private getProjectsForTeams() {
+    this.teams.forEach(team => {
+      this.teamService.listProjectsForTeam(team.id).then(value => {
+        this.projectsForTeams[team.id] = value.body;
+      });
+    });
+  }
+
+  listProjectsForTeam(teamId: number): Project[] {
+    return this.projectsForTeams[teamId];
   }
 }

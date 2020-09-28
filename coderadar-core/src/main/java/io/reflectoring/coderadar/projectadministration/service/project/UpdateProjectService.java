@@ -67,7 +67,9 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
     project.setName(command.getName());
     project.setVcsUsername(command.getVcsUsername());
-    project.setVcsPassword(PasswordUtil.encrypt(command.getVcsPassword()));
+    if (command.getVcsPassword() != null && !command.getVcsPassword().isEmpty()) {
+      project.setVcsPassword(PasswordUtil.encrypt(command.getVcsPassword()));
+    }
     boolean urlChanged = false;
 
     if (!project.getVcsUrl().equals(command.getVcsUrl())) {
@@ -115,15 +117,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
               // Get contributors anew
               detachContributorPort.detachContributorsFromProject(
                   listContributorsPort.listAllByProjectId(projectId), projectId);
-              List<Contributor> contributors =
-                  computeContributorsPort.computeContributors(
-                      coderadarConfigurationProperties.getWorkdir()
-                          + "/projects/"
-                          + project.getWorkdirName(),
-                      listContributorsPort.listAll(),
-                      getProjectDateRange(project));
-              saveContributorsPort.save(contributors, projectId);
-
+              saveContributors(project);
             } catch (Exception e) {
               logger.error("Unable to update project! {}", e.getMessage());
             }
@@ -142,5 +136,15 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       datesChanged = true;
     }
     return datesChanged;
+  }
+
+  private synchronized void saveContributors(Project project) {
+    List<Contributor> contributors = listContributorsPort.listAll();
+    contributors =
+        computeContributorsPort.computeContributors(
+            coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName(),
+            contributors,
+            getProjectDateRange(project));
+    saveContributorsPort.save(contributors, project.getId());
   }
 }
