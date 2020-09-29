@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Transactional
 @RestController
 @RequiredArgsConstructor
-public class
-ShutdownController implements AbstractBaseController {
+public class ShutdownController implements AbstractBaseController {
 
   private final ShutdownUseCase shutdownUseCase;
   private final AuthenticationService authenticationService;
