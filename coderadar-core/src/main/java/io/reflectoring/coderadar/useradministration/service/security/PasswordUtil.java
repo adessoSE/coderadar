@@ -46,7 +46,7 @@ public class PasswordUtil {
     }
   }
 
-  public static String encrypt(String messageToEncrypt) {
+  public static byte[] encrypt(String messageToEncrypt) {
     if (messageToEncrypt != null) {
       try {
         byte[] plainBytes = messageToEncrypt.getBytes();
@@ -67,8 +67,7 @@ public class PasswordUtil {
         byteBuffer.putInt(iv.length);
         byteBuffer.put(iv);
         byteBuffer.put(cipherText);
-        byte[] cipherMessage = byteBuffer.array();
-        return new String(cipherMessage);
+        return byteBuffer.array();
       } catch (Exception e) {
         logger.error("Error while encrypting: {}", e.toString());
       }
@@ -76,10 +75,10 @@ public class PasswordUtil {
     return null;
   }
 
-  public static String decrypt(String cipherMessage) {
+  public static String decrypt(byte[] cipherMessage) {
     if (cipherMessage != null) {
       try {
-        ByteBuffer byteBuffer = ByteBuffer.wrap(cipherMessage.getBytes());
+        ByteBuffer byteBuffer = ByteBuffer.wrap(cipherMessage);
         int ivLength = byteBuffer.getInt();
         if (ivLength < 12 || ivLength >= 16) {
           throw new IllegalArgumentException("Invalid iv length");

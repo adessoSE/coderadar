@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProjectWithRolesResponse {
   private GetProjectResponse project;
-  List<ProjectRole> roles;
+  private List<ProjectRole> roles;
 }

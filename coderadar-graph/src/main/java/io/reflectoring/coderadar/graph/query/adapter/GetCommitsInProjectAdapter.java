@@ -61,7 +61,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       var files = (Object[]) result.get("files");
       Commit commit =
           new Commit()
-              .setId((Long) commitEntity.get("id"))
+              .setId((long) commitEntity.get("id"))
               .setHash((String) commitEntity.get("hash"));
 
       commit.setChangedFiles(new ArrayList<>(files.length));

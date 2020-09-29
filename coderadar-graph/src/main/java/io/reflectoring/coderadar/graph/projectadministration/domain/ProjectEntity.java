@@ -20,7 +20,7 @@ public class ProjectEntity {
   private String workdirName;
   private String vcsUrl;
   private String vcsUsername;
-  private String vcsPassword;
+  private byte[] vcsPassword;
   private Date vcsStart;
 
   private boolean isBeingProcessed = false;

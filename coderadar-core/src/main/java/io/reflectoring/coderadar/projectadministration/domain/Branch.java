@@ -1,15 +1,13 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
 /** This class represents a branch in a project. */
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@Value
 public class Branch {
-  private String name;
-  private String commitHash;
-  private boolean isTag;
+  String name;
+  String commitHash;
+  boolean isTag;
 }

@@ -18,6 +18,10 @@ public class GetMetricsAndFindingsForFileAdapter implements GetMetricsAndFinding
   private final MetricQueryRepository metricQueryRepository;
   private final FindingsMapper findingsMapper = new FindingsMapper();
 
+  private static final String NAME = "name";
+  private static final String VALUE = "value";
+  private static final String FINDINGS = "findings";
+
   public List<MetricWithFindings> getMetricsAndFindingsForFile(
       long projectId, String commitHash, String filepath) {
     List<Map<String, Object>> metrics =
@@ -25,9 +29,9 @@ public class GetMetricsAndFindingsForFileAdapter implements GetMetricsAndFinding
             projectId, commitHash, filepath);
     List<MetricWithFindings> result = new ArrayList<>(metrics.size());
     for (Map<String, Object> metric : metrics) {
-      String name = (String) metric.get("name");
-      long value = (long) metric.get("value");
-      var findingsTemp = (Object[]) metric.get("findings");
+      String name = (String) metric.get(NAME);
+      long value = (long) metric.get(VALUE);
+      var findingsTemp = (Object[]) metric.get(FINDINGS);
       List<String> strings = new ArrayList<>(findingsTemp.length);
       for (Object f : findingsTemp) {
         strings.add((String) f);

@@ -52,7 +52,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
           + "RETURN node ORDER BY node.timestamp DESC")
-  List<CommitEntity> findByProjectIdAndBranchName(long projectId, String branch);
+  List<CommitEntity> findByProjectIdAndBranchName(long projectId, @NonNull String branch);
 
   /**
    * Returns all commits in a project. (Files and parents are not initialized).
@@ -98,7 +98,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "MATCH (c1) WHERE ID(c1) = c[0] "
           + "MATCH (c2) WHERE ID(c2) = c[1] "
           + "CREATE (c1)-[:IS_CHILD_OF {parentOrder: c[2]}]->(c2)")
-  void createParentRelationships(List<Long[]> parentRels);
+  void createParentRelationships(@NonNull List<Long[]> parentRels);
 
   /**
    * Creates [:CHANGED_IN] Relationships between files and commits.
@@ -111,14 +111,14 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "MATCH (c) WHERE ID(c) = x[0] "
           + "MATCH (f) WHERE ID(f) = x[1] "
           + "CREATE (f)-[:CHANGED_IN]->(c)")
-  void createFileRelationships(List<long[]> fileRels);
+  void createFileRelationships(@NonNull List<long[]> fileRels);
 
   @Query(
       "UNWIND {0} as x "
           + "MATCH (c) WHERE ID(c) = x[0] "
           + "MATCH (f) WHERE ID(f) = x[1] "
           + "CREATE (f)-[:DELETED_IN]->(c)")
-  void createFileDeleteRelationships(List<long[]> fileRels);
+  void createFileDeleteRelationships(@NonNull List<long[]> fileRels);
 
   /**
    * @param commit1 The full hash of the first commit.
@@ -150,5 +150,5 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "WHERE toLower(c.authorEmail) IN emails "
           + "RETURN c ORDER BY c.timestamp DESC")
   List<CommitEntity> findByProjectIdBranchNameAndContributor(
-      long projectId, String branchName, String email);
+      long projectId, @NonNull String branchName, @NonNull String email);
 }

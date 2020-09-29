@@ -160,7 +160,7 @@ public class AnalyzingService
                             && metricValue.getFileId() == value.getFileId())) {
           metrics.add(
               new MetricValue(
-                  value.getName(), 0L, commit.getId(), value.getFileId(), Collections.emptyList()));
+                  value.getName(), 0, commit.getId(), value.getFileId(), Collections.emptyList()));
         }
       }
     }

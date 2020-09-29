@@ -4,7 +4,7 @@ import java.util.*;
 
 public class FileMetrics {
 
-    private Map<Metric, Long> counts = new HashMap<>();
+    private Map<Metric, Integer> counts = new HashMap<>();
 
     private Map<Metric, List<Finding>> findings = new HashMap<>();
 
@@ -39,12 +39,12 @@ public class FileMetrics {
      * @param metric the metric whose count to return.
      * @return count of the specified metric.
      */
-    public Long getMetricCount(Metric metric) {
-        Long result = counts.get(metric);
+    public int getMetricCount(Metric metric) {
+        Integer result = counts.get(metric);
         if (result != null) {
             return result;
         } else {
-            return 0L;
+            return 0;
         }
     }
 
@@ -54,25 +54,25 @@ public class FileMetrics {
      * @param metric the metric whose count to set.
      * @param count  the value to which to set the count.
      */
-    public void setMetricCount(Metric metric, Long count) {
+    public void setMetricCount(Metric metric, int count) {
         counts.put(metric, count);
     }
 
     /**
      * Increments the count of the specified metric for this file by one.
      *
-     * @param metric the metric whose count to increment by one.
+     * @param metric the metric whose count to increment.
      */
-    private void incrementMetricCount(Metric metric, Long increment) {
-        Long count = counts.get(metric);
+    private void incrementMetricCount(Metric metric, int increment) {
+        Integer count = counts.get(metric);
         if (count == null) {
-            count = 0L;
+            count = 0;
         }
         counts.put(metric, count + increment);
     }
 
     public void incrementMetricCount(Metric metric) {
-        incrementMetricCount(metric, 1L);
+        incrementMetricCount(metric, 1);
     }
 
     /**
@@ -84,7 +84,7 @@ public class FileMetrics {
      * @param finding the finding to add.
      */
     public void addFinding(Metric metric, Finding finding) {
-        addFinding(metric, finding, 1L);
+        addFinding(metric, finding, 1);
     }
 
     /**
@@ -96,7 +96,7 @@ public class FileMetrics {
      * @param finding the finding to add.
      * @param count   the number by which to increment the metric count
      */
-    public void addFinding(Metric metric, Finding finding, Long count) {
+    public void addFinding(Metric metric, Finding finding, Integer count) {
         List<Finding> findingsForMetric = findings.computeIfAbsent(metric, k -> new ArrayList<>());
         incrementMetricCount(metric, count);
         findingsForMetric.add(finding);
@@ -112,7 +112,7 @@ public class FileMetrics {
      */
     public void addFindings(Metric metric, Collection<Finding> findingsToAdd) {
         List<Finding> findingsForMetric = findings.computeIfAbsent(metric, k -> new ArrayList<>());
-        incrementMetricCount(metric, (long) findingsToAdd.size());
+        incrementMetricCount(metric, findingsToAdd.size());
         findingsForMetric.addAll(findingsToAdd);
     }
 
@@ -138,9 +138,9 @@ public class FileMetrics {
      */
     public void add(FileMetrics metrics) {
         for (Metric metric : metrics.getMetrics()) {
-            Long currentValue = counts.get(metric);
+            Integer currentValue = counts.get(metric);
             if (currentValue == null) {
-                currentValue = 0L;
+                currentValue = 0;
             }
             counts.put(metric, currentValue + metrics.getMetricCount(metric));
             findings.put(metric, metrics.getFindings(metric));

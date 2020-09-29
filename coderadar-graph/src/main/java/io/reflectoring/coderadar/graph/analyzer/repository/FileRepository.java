@@ -36,7 +36,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    */
   @Query(
       "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.path = {1} RETURN f LIMIT 1 ")
-  FileEntity getFileInProjectByPath(long projectId, String path);
+  FileEntity getFileInProjectByPath(long projectId, @NonNull String path);
 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND "
@@ -56,7 +56,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "WHERE size(commits) >= {3} RETURN f.path AS path, commits ORDER BY f.path")
   List<FileAndCommitsForTimePeriodQueryResult> getFrequentlyChangedFiles(
       long projectId,
-      String commitHash,
+      @NonNull String commitHash,
       long dateTime,
       int frequency,
       @NonNull List<String> includes,

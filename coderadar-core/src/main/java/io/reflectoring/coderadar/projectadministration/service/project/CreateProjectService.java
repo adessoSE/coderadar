@@ -79,7 +79,7 @@ public class CreateProjectService implements CreateProjectUseCase {
                   command.getVcsUrl(),
                   localDir,
                   project.getVcsUsername(),
-                  PasswordUtil.decrypt(project.getVcsPassword()));
+                  command.getVcsPassword());
           try {
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
             logger.info(

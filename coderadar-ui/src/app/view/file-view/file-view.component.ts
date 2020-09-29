@@ -11,6 +11,7 @@ import * as Prism from 'prismjs';
 
 import 'prismjs/components/prism-java';
 import 'prismjs/components/prism-markdown';
+import 'prismjs/components/prism-properties';
 import 'prismjs/components/prism-asciidoc';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-css';
@@ -234,7 +235,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
       return 'language-diff-' + fileExtension + ' diff-highlight';
     } else {
       if (fileExtension === 'gradle') {
-        return 'line-numbers language-groovy';
+        return 'language-groovy';
       }
       return 'language-' + fileExtension;
     }

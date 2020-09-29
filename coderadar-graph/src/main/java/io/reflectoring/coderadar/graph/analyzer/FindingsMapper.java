@@ -11,30 +11,14 @@ public class FindingsMapper implements Mapper<Finding, String> {
 
   @Override
   public Finding mapGraphObject(String findingsString) {
-    Finding domainObject = new Finding();
-    String[] values = findingsString.split("-");
-    domainObject.setLineStart(Integer.parseInt(values[0]));
-    domainObject.setLineEnd(Integer.parseInt(values[1]));
-    domainObject.setCharStart(Integer.parseInt(values[2]));
-    domainObject.setCharEnd(Integer.parseInt(values[3]));
-    StringBuilder message = new StringBuilder();
-    message.append(values[4]).append("-");
-    for (int i = 5; i < values.length; i++) {
-      message.append(values[i]).append("-");
-    }
-    message.deleteCharAt(message.length() - 1);
-    domainObject.setMessage(message.toString());
-    return domainObject;
+    String[] values = findingsString.split("-", 3);
+    return new Finding(Integer.parseInt(values[0]), Integer.parseInt(values[1]), values[2]);
   }
 
   @Override
   public String mapDomainObject(Finding domainObject) {
     return String.format(
-        "%d-%d-%d-%d-%s",
-        domainObject.getLineStart(),
-        domainObject.getLineEnd(),
-        domainObject.getCharStart(),
-        domainObject.getCharEnd(),
-        domainObject.getMessage());
+        "%d-%d-%s",
+        domainObject.getLineStart(), domainObject.getLineEnd(), domainObject.getMessage());
   }
 }

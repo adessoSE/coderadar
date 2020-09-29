@@ -41,10 +41,8 @@ public class CoderadarAuditListener implements AuditListener {
   public void addError(AuditEvent evt) {
     if (evt.getSeverityLevel() != SeverityLevel.IGNORE) {
       Metric metric = new Metric("checkstyle:" + evt.getSourceName());
-      Finding finding =
-          new Finding(
-              evt.getLine(), evt.getLine(), evt.getColumn(), evt.getColumn(), evt.getMessage());
-      Long metricCount = metricCountExtractor.extractMetricCount(evt);
+      Finding finding = new Finding(evt.getLine(), evt.getLine(), evt.getMessage());
+      int metricCount = metricCountExtractor.extractMetricCount(evt);
       metrics.addFinding(metric, finding, metricCount);
     }
   }

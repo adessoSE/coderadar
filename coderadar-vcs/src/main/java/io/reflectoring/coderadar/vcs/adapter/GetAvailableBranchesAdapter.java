@@ -36,11 +36,10 @@ public class GetAvailableBranchesAdapter implements GetAvailableBranchesPort {
       String truncatedName = branchName[length - 1];
       if (result.stream().noneMatch(branch -> branch.getName().equals(truncatedName))) {
         result.add(
-            new Branch()
-                .setName(truncatedName)
-                .setCommitHash(
-                    ref.getObjectId().abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name())
-                .setTag(tags.contains(ref)));
+            new Branch(
+                truncatedName,
+                ref.getObjectId().abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name(),
+                tags.contains(ref)));
       }
     }
     return result;

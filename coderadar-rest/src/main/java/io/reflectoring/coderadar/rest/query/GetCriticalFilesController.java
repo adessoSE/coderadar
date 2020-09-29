@@ -55,10 +55,7 @@ public class GetCriticalFilesController implements AbstractBaseController {
       List<FileAndCommitsForTimePeriod> files) {
     List<FileAndCommitsForTimePeriodResponse> result = new ArrayList<>(files.size());
     for (FileAndCommitsForTimePeriod f : files) {
-      FileAndCommitsForTimePeriodResponse resultItem = new FileAndCommitsForTimePeriodResponse();
-      resultItem.setPath(f.getPath());
-      resultItem.setCommits(mapCommits(f.getCommits()));
-      result.add(resultItem);
+      result.add(new FileAndCommitsForTimePeriodResponse(f.getPath(), mapCommits(f.getCommits())));
     }
     return result;
   }

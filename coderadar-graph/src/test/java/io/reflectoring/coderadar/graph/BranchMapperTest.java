@@ -11,21 +11,23 @@ class BranchMapperTest {
 
   @Test
   void testMapDomainObject() {
-    Branch testBranch = new Branch().setCommitHash("testHash").setName("testName");
+    Branch testBranch = new Branch("testName", "testHash", true);
 
     BranchEntity result = branchMapper.mapDomainObject(testBranch);
     Assertions.assertEquals("testHash", result.getCommitHash());
     Assertions.assertEquals("testName", result.getName());
+    Assertions.assertTrue(result.isTag());
     Assertions.assertNull(result.getId());
   }
 
   @Test
   void testMapGraphObject() {
     BranchEntity testBranch =
-        new BranchEntity().setId(1L).setCommitHash("testHash").setName("testName");
+        new BranchEntity().setId(1L).setCommitHash("testHash").setName("testName").setTag(true);
 
     Branch result = branchMapper.mapGraphObject(testBranch);
     Assertions.assertEquals("testHash", result.getCommitHash());
     Assertions.assertEquals("testName", result.getName());
+    Assertions.assertTrue(result.isTag());
   }
 }
