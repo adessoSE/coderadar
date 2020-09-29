@@ -26,7 +26,6 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsStart(new Date());
-    testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
     testProject.setWorkdirName(UUID.randomUUID().toString());
     testProject = projectRepository.save(testProject);

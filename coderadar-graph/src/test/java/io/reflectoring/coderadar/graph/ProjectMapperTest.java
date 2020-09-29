@@ -17,7 +17,7 @@ class ProjectMapperTest {
             .setId(1L)
             .setName("testName")
             .setVcsStart(new Date(123L))
-            .setVcsPassword("testPassword")
+            .setVcsPassword(new byte[] {1})
             .setVcsUsername("testUsername")
             .setWorkdirName("workdir")
             .setVcsUrl("testUrl");
@@ -25,7 +25,7 @@ class ProjectMapperTest {
     ProjectEntity result = projectMapper.mapDomainObject(testProject);
     Assertions.assertEquals("testName", result.getName());
     Assertions.assertEquals("testUsername", result.getVcsUsername());
-    Assertions.assertEquals("testPassword", result.getVcsPassword());
+    Assertions.assertEquals(1, result.getVcsPassword()[0]);
     Assertions.assertEquals("testUrl", result.getVcsUrl());
     Assertions.assertEquals(new Date(123L), result.getVcsStart());
     Assertions.assertEquals("workdir", result.getWorkdirName());
@@ -39,14 +39,14 @@ class ProjectMapperTest {
             .setId(1L)
             .setName("testName")
             .setVcsStart(new Date(123L))
-            .setVcsPassword("testPassword")
+            .setVcsPassword(new byte[] {1})
             .setVcsUsername("testUsername")
             .setWorkdirName("workdir")
             .setVcsUrl("testUrl");
     Project result = projectMapper.mapGraphObject(testProject);
     Assertions.assertEquals("testName", result.getName());
     Assertions.assertEquals("testUsername", result.getVcsUsername());
-    Assertions.assertEquals("testPassword", result.getVcsPassword());
+    Assertions.assertEquals(1, result.getVcsPassword()[0]);
     Assertions.assertEquals("testUrl", result.getVcsUrl());
     Assertions.assertEquals(new Date(123L), result.getVcsStart());
     Assertions.assertEquals("workdir", result.getWorkdirName());

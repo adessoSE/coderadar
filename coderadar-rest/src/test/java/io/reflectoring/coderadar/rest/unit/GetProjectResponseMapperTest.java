@@ -18,7 +18,7 @@ class GetProjectResponseMapperTest {
         new Project()
             .setName("testProject1")
             .setVcsUsername("testUsername1")
-            .setVcsPassword("testPassword1")
+            .setVcsPassword(new byte[] {1, 2, 3})
             .setId(1L)
             .setVcsStart(new Date(123L))
             .setVcsUrl("testUrl1"));
@@ -27,7 +27,7 @@ class GetProjectResponseMapperTest {
         new Project()
             .setName("testProject2")
             .setVcsUsername("testUsername2")
-            .setVcsPassword("testPassword2")
+            .setVcsPassword(new byte[] {1, 2, 3})
             .setId(2L)
             .setVcsStart(new Date(345L))
             .setVcsUrl("testUrl2"));
@@ -56,7 +56,7 @@ class GetProjectResponseMapperTest {
         new Project()
             .setName("testProject1")
             .setVcsUsername("testUsername1")
-            .setVcsPassword("testPassword1")
+            .setVcsPassword(new byte[] {1, 2, 3})
             .setId(1L)
             .setVcsStart(new Date(123L))
             .setVcsUrl("testUrl1");
