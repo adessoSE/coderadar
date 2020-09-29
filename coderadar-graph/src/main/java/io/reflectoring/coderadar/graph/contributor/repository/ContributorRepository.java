@@ -18,7 +18,7 @@ public interface ContributorRepository extends Neo4jRepository<ContributorEntity
   @Query("MATCH (co:ContributorEntity) WHERE SIZE((co)-[:WORKS_ON]->()) = 0 DELETE co")
   void deleteContributorsWithoutProjects();
 
-  @Query("MATCH (c)-[:WORKS_ON]->(p) WHERE ID(p) = {0} RETURN c ORDER BY c.displayName")
+  @Query("MATCH (c)-[:WORKS_ON]->(p) WHERE ID(p) = {0} RETURN c ORDER BY toLower(c.displayName)")
   List<ContributorEntity> findAllByProjectId(long projectId);
 
   @Query("MATCH (c:ContributorEntity) RETURN c ORDER BY c.displayName")

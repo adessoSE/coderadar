@@ -33,7 +33,6 @@ public class ListProjectsForUserAdapter implements ListProjectsForUserPort {
                   .map(s -> ProjectRole.valueOf(s.toUpperCase()))
                   .collect(Collectors.toList())));
     }
-    projects.sort(Comparator.comparing(p -> p.getProject().getName()));
     return projects;
   }
 }
