@@ -42,7 +42,7 @@ public class PasswordUtil {
       key = Arrays.copyOf(key, 16);
       secretKey = new SecretKeySpec(key, "AES");
     } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
+      logger.error("Error while setting key: {}", e.toString());
     }
   }
 
