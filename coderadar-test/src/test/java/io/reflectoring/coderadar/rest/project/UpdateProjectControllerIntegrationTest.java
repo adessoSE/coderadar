@@ -45,7 +45,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
               ProjectEntity project = projectRepository.findById(id).get();
               Assertions.assertEquals("new-project-name", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());
-              Assertions.assertNotEquals("password", project.getVcsPassword());
+              Assertions.assertNotEquals("password", new String(project.getVcsPassword()));
               Assertions.assertEquals("http://valid.url", project.getVcsUrl());
             })
         .andDo(document("projects/update"));
