@@ -12,9 +12,9 @@ exit_func() {
     exit
 }
 
-docker pull neo4j:3.5.19
+docker pull neo4j:3.5.20
 
-docker run --rm -t --publish=7687:7687 \
+docker run -t --publish=7687:7687 \
             --publish=7474:7474 --name neo4j \
             --volume=$HOME/neo4j_docker/data:/data \
             --env NEO4J_dbms_connector_bolt_tls__level=OPTIONAL \
@@ -25,5 +25,5 @@ docker pull maxim615/coderadar
 
 
 sleep 30
-docker run -it --rm --name coderadar --network="host" maxim615/coderadar
+docker run -it --name coderadar --network="host" maxim615/coderadar
 docker kill neo4j &> /dev/null
