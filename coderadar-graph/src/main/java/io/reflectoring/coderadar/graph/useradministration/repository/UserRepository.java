@@ -85,6 +85,6 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
   @Query("MATCH (u:UserEntity) RETURN u ORDER BY toLower(u.username)")
   List<UserEntity> findAll();
 
-  @Query("MATCH (u) WHERE ID(u) = {0} SET u.platformAdmin = {1}")
-  void setAdmin(long userId, boolean isAdmin);
+  @Query("MATCH (u:UserEntity) WHERE ID(u) = {0} SET u.platformAdmin = {1}")
+  void setPlatformPermission(long userId, boolean isAdmin);
 }

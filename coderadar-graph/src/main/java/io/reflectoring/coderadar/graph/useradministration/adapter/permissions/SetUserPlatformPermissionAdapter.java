@@ -13,6 +13,6 @@ public class SetUserPlatformPermissionAdapter implements SetUserPlatformPermissi
 
   @Override
   public void setUserPlatformPermission(long userId, boolean isAdmin) {
-    userRepository.setAdmin(userId, isAdmin);
+    userRepository.setPlatformPermission(userId, isAdmin);
   }
 }

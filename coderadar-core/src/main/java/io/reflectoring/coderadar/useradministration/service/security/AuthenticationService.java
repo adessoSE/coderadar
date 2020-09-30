@@ -27,11 +27,13 @@ public class AuthenticationService {
   }
 
   public void authenticatePlatformAdmin() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (!getUserPort
-        .getUserByUsername(((String) authentication.getPrincipal()))
-        .isPlatformAdmin()) {
-      throw new UserUnauthenticatedException();
+    if (coderadarConfigurationProperties.getAuthentication().isEnabled()) {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      if (!getUserPort
+          .getUserByUsername(((String) authentication.getPrincipal()))
+          .isPlatformAdmin()) {
+        throw new UserUnauthenticatedException();
+      }
     }
   }
 

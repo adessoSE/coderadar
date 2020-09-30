@@ -88,9 +88,8 @@ The encryption key can be set using the following property:
 === Coderadar platform admin
 
 The first user to register will receive a platform admin flag.
-This gives the user the needed permission to shut down the app.
-Creating additional platform admins is currenlty only possible via direct
-DB manipulation.
+This gives the user the needed permission to shut down the app
+and access the "Manage users" page.
 
 === Starting Coderadar
 

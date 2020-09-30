@@ -253,6 +253,24 @@ include::{snippets}/project/list/users/http-request.adoc[]
 ===== Example Response
 include::{snippets}/project/list/users/http-response.adoc[]
 
+==== Setting user platform permissions
+
+===== Example Request
+include::{snippets}/user/permission/set/http-request.adoc[]
+
+===== Example Response
+include::{snippets}/user/permission/set/http-response.adoc[]
+
+==== Deleting a user
+
+===== Example Request
+include::{snippets}/user/delete/http-request.adoc[]
+
+===== Example Response
+include::{snippets}/user/delete/http-response.adoc[]
+
+Note: Deleting a user will also delete all projects created by them.
+
 == Configuring a Project
 anchor:chapter-configure[]
 
