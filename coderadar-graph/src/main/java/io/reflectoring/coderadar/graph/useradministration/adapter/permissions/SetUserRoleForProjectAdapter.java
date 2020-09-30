@@ -12,7 +12,7 @@ public class SetUserRoleForProjectAdapter implements SetUserRoleForProjectPort {
   private final UserRepository userRepository;
 
   @Override
-  public void setRole(long projectId, long userId, ProjectRole role) {
-    userRepository.setUserRoleForProject(projectId, userId, role.getValue());
+  public void setRole(long projectId, long userId, ProjectRole role, boolean creator) {
+    userRepository.setUserRoleForProject(projectId, userId, role.getValue(), creator);
   }
 }

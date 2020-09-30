@@ -52,12 +52,13 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
    * @param projectId The of the project.
    * @param userId The id of the user.
    * @param role The role to set.
+   * @param creator Set to true if the user is the creator of this project.
    */
   @Query(
       "MATCH (p), (u) WHERE ID(p) = {0} AND ID(u) = {1} WITH p, u "
           + "OPTIONAL MATCH (p)<-[r:ASSIGNED_TO]-(u) DELETE r "
-          + "CREATE (p)<-[r1:ASSIGNED_TO {role: {2}}]-(u)")
-  void setUserRoleForProject(long projectId, long userId, String role);
+          + "CREATE (p)<-[r1:ASSIGNED_TO {creator: {3}, role: {2}}]-(u)")
+  void setUserRoleForProject(long projectId, long userId, String role, boolean creator);
 
   @Query("MATCH (p)<-[r:ASSIGNED_TO]-(u) WHERE ID(p) = {0} AND ID(u) = {1} RETURN r.role LIMIT 1")
   String getUserRoleForProject(long projectId, long userId);
@@ -81,6 +82,9 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
   List<UserEntity> listUsersForProject(long projectId);
 
   /** @return All users in the database. */
-  @Query("MATCH (u:UserEntity) RETURN u")
+  @Query("MATCH (u:UserEntity) RETURN u ORDER BY toLower(u.username)")
   List<UserEntity> findAll();
+
+  @Query("MATCH (u) WHERE ID(u) = {0} SET u.platformAdmin = {1}")
+  void setAdmin(long userId, boolean isAdmin);
 }

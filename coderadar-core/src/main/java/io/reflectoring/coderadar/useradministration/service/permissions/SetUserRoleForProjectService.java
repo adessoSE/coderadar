@@ -30,7 +30,7 @@ public class SetUserRoleForProjectService implements SetUserRoleForProjectUseCas
     if (!getUserPort.existsById(userId)) {
       throw new UserNotFoundException(userId);
     }
-    setUserRoleForProjectPort.setRole(projectId, userId, role);
+    setUserRoleForProjectPort.setRole(projectId, userId, role, false);
     logger.info(
         "Assigned user with id: {} to project with id: {}, with the role: {}",
         userId,

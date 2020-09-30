@@ -11,6 +11,7 @@ public interface SetUserRoleForProjectPort {
    * @param projectId The id of the project.
    * @param userId The id of the user.
    * @param role The role to set.
+   * @param creator Set to true if the user the creator of this project.
    */
-  void setRole(long projectId, long userId, ProjectRole role);
+  void setRole(long projectId, long userId, ProjectRole role, boolean creator);
 }

@@ -75,6 +75,7 @@ import {DeleteTeamDialogComponent} from './components/delete-team-dialog/delete-
 import {ContributorDialogComponent} from './components/contributor-card/contributor-dialog.component';
 import {EditTeamComponent} from './view/edit-team/edit-team.component';
 import {ShutdownDialogComponent} from './components/shutdown-dialog/shutdown-dialog.component';
+import { ManageUsersComponent } from './view/manage-users/manage-users.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -85,6 +86,7 @@ const appRoutes: Routes = [
   {path: 'edit-team/:id', component: EditTeamComponent},
   {path: 'user-settings', component: UserSettingsComponent},
   {path: 'add-project', component: AddProjectComponent},
+  {path: 'manage-users', component: ManageUsersComponent},
   {path: 'project-configure/:id', component: ConfigureProjectComponent},
   {path: 'city/:id', component: CityViewComponent},
   {path: 'project-edit/:id', component: EditProjectComponent},
@@ -130,7 +132,8 @@ const appRoutes: Routes = [
     ContributorDialogComponent,
     FileViewComponent,
     DeleteProjectDialogComponent,
-    DeleteTeamDialogComponent
+    DeleteTeamDialogComponent,
+    ManageUsersComponent
   ],
   imports: [
     BrowserModule,

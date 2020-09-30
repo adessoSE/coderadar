@@ -108,7 +108,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param value The status.
    */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingProcessed = {1}")
-  void setBeingProcessed(long id, @NonNull Boolean value);
+  void setBeingProcessed(long id, boolean value);
 
   /**
    * @param id The project id.
@@ -184,4 +184,8 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query(
       "MATCH (t)-[:ASSIGNED_TO]->(p) WHERE ID(t) = {0} AND p.isBeingDeleted = FALSE RETURN p ORDER BY toLower(p.name)")
   List<ProjectEntity> listProjectsByTeamId(long teamId);
+
+  @Query(
+      "MATCH (u)-[:ASSIGNED_TO {creator: true, role: \"admin\"}]->(p) WHERE ID(u) = {0} RETURN p")
+  List<ProjectEntity> findProjectsCreatedByUser(long userId);
 }

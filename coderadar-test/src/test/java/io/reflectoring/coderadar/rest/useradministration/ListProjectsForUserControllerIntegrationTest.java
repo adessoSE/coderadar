@@ -44,7 +44,7 @@ class ListProjectsForUserControllerIntegrationTest extends ControllerTestTemplat
     userRepository.save(testUser);
 
     userRepository.setUserRoleForProject(
-        testProject.getId(), testUser.getId(), ProjectRole.ADMIN.toString());
+        testProject.getId(), testUser.getId(), ProjectRole.ADMIN.toString(), true);
   }
 
   @Test

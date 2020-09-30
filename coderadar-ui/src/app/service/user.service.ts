@@ -122,4 +122,13 @@ export class UserService {
     return this.httpClient.get<User[]>(this.apiURL + 'users',
       {observe: 'response'}).toPromise();
   }
+
+  public setUserPlatformPermission(userId: number, isAdmin: boolean) {
+    return this.httpClient.post(this.apiURL + 'users/' + userId + '/admin?isAdmin=' + isAdmin,
+      {}, {observe: 'response'}).toPromise();
+  }
+
+  public deleteUser(userId: number) {
+    return this.httpClient.delete(this.apiURL + 'users/' + userId, {observe: 'response'}).toPromise();
+  }
 }

@@ -119,7 +119,8 @@ public class CreateProjectService implements CreateProjectUseCase {
       setUserRoleForProjectPort.setRole(
           projectId,
           getUserPort.getUserByUsername(((String) authentication.getPrincipal())).getId(),
-          ProjectRole.ADMIN);
+          ProjectRole.ADMIN,
+          true);
     }
   }
 
