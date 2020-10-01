@@ -20,26 +20,18 @@ public class SaveMetricAdapter implements SaveMetricPort {
 
   @Override
   public void saveMetricValues(List<MetricValue> metricValues) {
-    int metricValuesSize = metricValues.size();
-    List<MetricValueEntity> metricValueEntities = new ArrayList<>(metricValuesSize);
+    List<Object> saveData = new ArrayList<>(metricValues.size());
     for (MetricValue metricValue : metricValues) {
-      MetricValueEntity metricValueEntity = new MetricValueEntity();
-      metricValueEntity.setValue(metricValue.getValue());
-      metricValueEntity.setName(metricValue.getName());
-      metricValueEntity.setFindings(findingsMapper.mapDomainObjects(metricValue.getFindings()));
-      metricValueEntities.add(metricValueEntity);
-    }
-    metricRepository.save(metricValueEntities, 0);
-    List<long[]> commitAndFileRels = new ArrayList<>(metricValuesSize);
-    for (int i = 0; i < metricValuesSize; i++) {
-      commitAndFileRels.add(
-          new long[] {
-            metricValueEntities.get(i).getId(),
-            metricValues.get(i).getFileId(),
-            metricValues.get(i).getCommitId()
+      saveData.add(
+          new Object[] {
+            metricValue.getValue(),
+            metricValue.getName(),
+            findingsMapper.mapDomainObjects(metricValue.getFindings()),
+            metricValue.getFileId(),
+            metricValue.getCommitId()
           });
     }
-    metricRepository.createFileAndCommitRelationships(commitAndFileRels);
+    metricRepository.saveMetrics(saveData);
   }
 
   @Override
