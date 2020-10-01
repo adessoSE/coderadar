@@ -223,6 +223,8 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.updateStatusesTimer.unsubscribe();
+    if (this.updateStatusesTimer !== undefined) {
+      this.updateStatusesTimer.unsubscribe();
+    }
   }
 }
