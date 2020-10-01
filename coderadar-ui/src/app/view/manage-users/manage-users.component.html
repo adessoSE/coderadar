@@ -1,4 +1,7 @@
 <app-header [title]="[{location: '/manage-users', name: 'Manage users'}]"></app-header>
+<div *ngIf="waiting" class="dark-overlay">
+  <mat-spinner class="waitingIndicator" [diameter]="100"></mat-spinner>
+</div>
 <mat-sidenav-container class="sidenav">
   <mat-sidenav mode="side" opened style="width: 15%">
     <app-sidenav-content></app-sidenav-content>

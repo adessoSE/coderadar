@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
@@ -47,6 +48,9 @@ public class ProcessProjectService {
             } finally { // No matter what happens, reset the flag
               projectStatusPort.setBeingProcessed(projectId, false);
               tasks.remove(projectId);
+              synchronized (tasks) {
+                tasks.notifyAll();
+              }
             }
           };
       tasks.put(projectId, taskExecutor.submit(task));
@@ -55,7 +59,16 @@ public class ProcessProjectService {
 
   public void onShutdown() throws InterruptedException {
     while (!tasks.isEmpty()) {
-      Thread.sleep(1);
+      synchronized (tasks) {
+        tasks.wait();
+      }
+    }
+  }
+
+  @SneakyThrows
+  public void waitForProjectTasks(long id) {
+    if (tasks.containsKey(id)) {
+      tasks.get(id).get();
     }
   }
 }

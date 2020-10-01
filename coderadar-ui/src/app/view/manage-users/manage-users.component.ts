@@ -13,6 +13,7 @@ import {MatSnackBar} from '@angular/material';
 export class ManageUsersComponent implements OnInit {
 
   users: User[] = [];
+  waiting = false;
 
   constructor(private userService: UserService, private router: Router,
               private snackBar: MatSnackBar) {
@@ -50,7 +51,7 @@ export class ManageUsersComponent implements OnInit {
       .then(value => {
         this.getUsers();
         if (!isAdmin && id === UserService.getLoggedInUser().userId) {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/login']);
         }
       })
       .catch(e => {
@@ -68,9 +69,11 @@ export class ManageUsersComponent implements OnInit {
       }
     }
 
+    this.waiting = true;
     this.userService.deleteUser(userId)
-      .then(value => {
+      .then(() => {
         this.getUsers();
+        this.waiting = false;
         if (userId === UserService.getLoggedInUser().userId) {
           this.userService.logout();
           this.router.navigate(['/login']);

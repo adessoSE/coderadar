@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.port.driver.StopAnalyzingUseCase;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -21,13 +23,21 @@ public class DeleteProjectService implements DeleteProjectUseCase {
   private final ProcessProjectService processProjectService;
   private final GetProjectPort getProjectPort;
   private final DeleteLocalRepositoryPort deleteLocalRepositoryPort;
+  private final ScanProjectScheduler scanProjectScheduler;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
+  private final StopAnalyzingUseCase stopAnalyzingUseCase;
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteProjectService.class);
 
   @Override
   public void delete(long id) {
+    if (!getProjectPort.existsById(id)) {
+      throw new ProjectNotFoundException(id);
+    }
     Project project = getProjectPort.get(id);
+    stopAnalyzingUseCase.stop(id);
+    processProjectService.waitForProjectTasks(id);
+    scanProjectScheduler.stopUpdateTask(id);
     processProjectService.executeTask(
         () -> {
           deleteProjectPort.delete(id);

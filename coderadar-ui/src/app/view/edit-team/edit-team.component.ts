@@ -44,7 +44,7 @@ export class EditTeamComponent implements OnInit {
       if (error.status && error.status === FORBIDDEN) {
         this.userService.refresh(() => this.getAllUsers());
       } else if (error.status && error.status === NOT_FOUND) {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/teams']);
       }
     });
   }

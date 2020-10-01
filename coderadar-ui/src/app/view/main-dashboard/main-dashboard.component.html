@@ -1,5 +1,5 @@
 <app-header [title]="[{location: '/dashboard', name: 'Dashboard'}]"></app-header>
-<div *ngIf="waiting" style="height: 100%">
+<div *ngIf="waiting" style="height: 100%" [class.dark-overlay]="deletingProject">
   <mat-spinner class="waitingIndicator" [diameter]="100"></mat-spinner>
 </div>
 <mat-sidenav-container class="sidenav">

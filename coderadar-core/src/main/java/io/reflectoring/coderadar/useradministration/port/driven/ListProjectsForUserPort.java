@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.useradministration.port.driven;
 
+import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
 import java.util.List;
 
@@ -10,4 +11,6 @@ public interface ListProjectsForUserPort {
    * @return All projects this user has access to.
    */
   List<ProjectWithRoles> listProjects(long userId);
+
+  List<Project> listProjectsCreatedByUser(long userId);
 }

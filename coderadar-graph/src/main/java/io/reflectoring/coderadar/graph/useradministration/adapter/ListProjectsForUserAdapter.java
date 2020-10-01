@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.graph.useradministration.adapter;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.ProjectMapper;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
+import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driven.ListProjectsForUserPort;
@@ -34,5 +35,10 @@ public class ListProjectsForUserAdapter implements ListProjectsForUserPort {
                   .collect(Collectors.toList())));
     }
     return projects;
+  }
+
+  @Override
+  public List<Project> listProjectsCreatedByUser(long userId) {
+    return projectMapper.mapNodeEntities(projectRepository.findProjectsCreatedByUser(userId));
   }
 }

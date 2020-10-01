@@ -29,6 +29,7 @@ export class MainDashboardComponent implements OnInit {
   appComponent = AppComponent;
   waiting = false;
   selectedTeam: Team;
+  deletingProject = false;
 
   constructor(private snackBar: MatSnackBar, private titleService: Title, private userService: UserService,
               private router: Router, private projectService: ProjectService, private dialog: MatDialog,
@@ -47,8 +48,12 @@ export class MainDashboardComponent implements OnInit {
    * @param project The project to delete
    */
   deleteProject(project: ProjectWithRoles): void {
+    this.waiting = true;
+    this.deletingProject = true;
     this.projectService.deleteProject(project.project.id)
       .then(() => {
+        this.waiting = false;
+        this.deletingProject = false;
         const index = this.projects.indexOf(project, 0);
         if (this.projects.indexOf(project, 0) > -1) {
           this.projects.splice(index, 1);

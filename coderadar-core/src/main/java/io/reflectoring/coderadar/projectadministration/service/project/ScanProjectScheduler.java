@@ -102,7 +102,6 @@ public class ScanProjectScheduler {
                           try {
                             currentProject = getProjectPort.get(projectId);
                           } catch (ProjectNotFoundException e) {
-                            tasks.remove(projectId);
                             stopUpdateTask(projectId);
                             return;
                           }
@@ -120,17 +119,25 @@ public class ScanProjectScheduler {
                               }
                             }
                           }
-                          tasks.remove(projectId);
+                          removeTask(projectId);
                         })),
             coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000L));
   }
 
-  private void stopUpdateTask(long projectId) {
+  public void stopUpdateTask(long projectId) {
     ScheduledFuture<?> f = scheduledTasks.get(projectId);
     if (f != null) {
       f.cancel(false);
     }
     scheduledTasks.remove(projectId);
+    removeTask(projectId);
+  }
+
+  private void removeTask(long projectId) {
+    tasks.remove(projectId);
+    synchronized (tasks) {
+      tasks.notifyAll();
+    }
   }
 
   public List<String> checkForNewCommits(Project project) {
@@ -178,13 +185,15 @@ public class ScanProjectScheduler {
     return Collections.emptyList();
   }
 
-  public synchronized void onShutdown() throws InterruptedException {
+  public void onShutdown() throws InterruptedException {
     mainTask.cancel(true);
     for (var task : scheduledTasks.values()) {
       task.cancel(true);
     }
     while (!tasks.isEmpty()) {
-      Thread.sleep(1);
+      synchronized (tasks) {
+        tasks.wait();
+      }
     }
   }
 }
