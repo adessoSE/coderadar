@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '../../model/project';
 import {ProjectService} from '../../service/project.service';
 import {Router} from '@angular/router';
@@ -14,15 +14,18 @@ import {TeamService} from '../../service/team.service';
 import {HttpResponse} from '@angular/common/http';
 import {DeleteProjectDialogComponent} from '../../components/delete-project-dialog/delete-project-dialog.component';
 import {AddProjectToTeamDialogComponent} from '../../components/add-project-to-team-dialog/add-project-to-team-dialog.component';
+import {Subscription, timer} from 'rxjs';
 
 @Component({
   selector: 'app-main-dashboard',
   templateUrl: './main-dashboard.component.html',
   styleUrls: ['./main-dashboard.component.scss']
 })
-export class MainDashboardComponent implements OnInit {
+export class MainDashboardComponent implements OnInit, OnDestroy {
 
   projects: ProjectWithRoles[] = [];
+  analysisStatuses = new Map();
+
   teams: Team[] = [];
   teamDialogRef: MatDialogRef<AddProjectToTeamDialogComponent>;
   dialogRef: MatDialogRef<DeleteProjectDialogComponent>;
@@ -30,6 +33,7 @@ export class MainDashboardComponent implements OnInit {
   waiting = false;
   selectedTeam: Team;
   deletingProject = false;
+  updateStatusesTimer: Subscription;
 
   constructor(private snackBar: MatSnackBar, private titleService: Title, private userService: UserService,
               private router: Router, private projectService: ProjectService, private dialog: MatDialog,
@@ -64,6 +68,8 @@ export class MainDashboardComponent implements OnInit {
           this.userService.refresh(() => this.deleteProject(project));
         } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
           this.openSnackBar('Cannot delete project! Try again later!', '🞩');
+          this.waiting = false;
+          this.deletingProject = false;
         }
       });
   }
@@ -131,8 +137,12 @@ export class MainDashboardComponent implements OnInit {
           projectWithRoles.project = newProject;
           projectWithRoles.roles = project.roles;
           this.projects.push(projectWithRoles);
+          this.getAnalyzingStatus(project.project.id);
         });
         this.waiting = false;
+        this.updateStatusesTimer = timer(4000, 8000).subscribe(() => {
+          this.projects.forEach(value => this.getAnalyzingStatus(value.project.id));
+        });
         }
       )
       .catch(e => {
@@ -155,6 +165,7 @@ export class MainDashboardComponent implements OnInit {
   startAnalysis(id: number) {
     this.projectService.startAnalyzingJob(id).then(() => {
       this.openSnackBar('Analysis started!', '🞩');
+      this.analysisStatuses.set(id, true);
     }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
         this.userService.refresh(() => this.projectService.startAnalyzingJob(id));
@@ -191,6 +202,7 @@ export class MainDashboardComponent implements OnInit {
   stopAnalysis(id: number) {
     this.projectService.stopAnalyzingJob(id).then(() => {
       this.openSnackBar('Analysis stopped!', '🞩');
+      this.analysisStatuses.set(id, false);
     }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
         this.userService.refresh(() => this.projectService.stopAnalyzingJob(id));
@@ -198,5 +210,19 @@ export class MainDashboardComponent implements OnInit {
         this.openSnackBar('Analysis stopped!', '🞩');
       }
     });
+  }
+
+  private getAnalyzingStatus(id: number) {
+    this.projectService.getAnalyzingStatus(id).then(value => {
+      this.analysisStatuses.set(id, value.body.status);
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh(() => this.getAnalyzingStatus(id));
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.updateStatusesTimer.unsubscribe();
   }
 }

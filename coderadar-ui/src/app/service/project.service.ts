@@ -169,12 +169,12 @@ export class ProjectService {
   }
 
   /**
-   * Gets the running analyzing job for a project.
-   * Sends a GET request to /projects/{id}/analyzingJob
+   * Gets the running analysis status for a project.
+   * Sends a GET request to /projects/{id}/analyzingStatus
    * @param id The project id.
    */
-  public getAnalyzingJob(id: number): Promise<HttpResponse<any>> {
-    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/analyzingJob', {observe: 'response'}).toPromise();
+  public getAnalyzingStatus(id: number): Promise<HttpResponse<any>> {
+    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/analyzingStatus', {observe: 'response'}).toPromise();
   }
 
   /**

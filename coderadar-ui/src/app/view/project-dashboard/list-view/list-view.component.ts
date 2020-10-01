@@ -33,6 +33,7 @@ export class ListViewComponent implements OnInit, OnChanges {
   @Input() roles: string[] = [];
   @Input() waiting: boolean;
   @Input() contributors: Contributor[];
+  @Input() analysisStatus = false;
   selectedBranch: string;
   @Output() selectedBranchOutput = new EventEmitter<string>();
   @Output() contributorOutput = new EventEmitter();
@@ -55,8 +56,8 @@ export class ListViewComponent implements OnInit, OnChanges {
   prevSelectedCommit2: Commit;
 
   pageSize = 15;
-  public startDate: string = null;
-  public endDate: string = null;
+  startDate: string = null;
+  endDate: string = null;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private store: Store<fromRoot.AppState>,

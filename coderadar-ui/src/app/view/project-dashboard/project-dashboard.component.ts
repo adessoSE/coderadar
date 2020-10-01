@@ -39,6 +39,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   waiting = false;
   updateCommitsTimer: Subscription;
   roles: string[] = [];
+  analysisStatus = false;
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private cityEffects: AppEffects,
@@ -76,6 +77,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
    * Gets all commits for this project from the service and saves them in this.commits.
    */
   public getCommits(displayLoadingIndicator: boolean): void {
+    this.projectService.getAnalyzingStatus(this.projectId).then(value => this.analysisStatus = value.body.status);
     this.waiting = displayLoadingIndicator;
     this.projectService.getCommitsForContributor(this.projectId, this.selectedBranch, this.selectedContributor.emailAddresses[0])
       .then(response => {

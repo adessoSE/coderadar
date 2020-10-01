@@ -44,6 +44,9 @@
                 <button *ngIf="p.roles.includes('ADMIN')" title="Delete analysis results" (click)="resetAnalysis(p.project.id)" style="float:right" mat-icon-button>
                   <mat-icon>clear</mat-icon>
                 </button>
+                <button disabled mat-icon-button style="float:right; margin-left: 10px">
+                  <mat-spinner [diameter]="22" *ngIf="analysisStatuses.get(p.project.id)" ></mat-spinner>
+                </button>
                 <button *ngIf="p.roles.includes('ADMIN')" [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>
                   <mat-icon>more_vert</mat-icon>
                 </button>

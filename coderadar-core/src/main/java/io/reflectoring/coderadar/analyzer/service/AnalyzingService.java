@@ -212,11 +212,11 @@ public class AnalyzingService
   }
 
   public void stop(long projectId) {
-    activeAnalysis.put(projectId, false);
+    activeAnalysis.remove(projectId);
   }
 
   public boolean getStatus(long projectId) {
-    return activeAnalysis.containsKey(projectId);
+    return activeAnalysis.getOrDefault(projectId, false);
   }
 
   public void onShutdown() {

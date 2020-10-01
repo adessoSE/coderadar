@@ -69,8 +69,12 @@
   float: left;
   background-color: ghostwhite;
   width: 17%;
-  margin-left: 12%;
+  margin-left: 15%;
   margin-bottom: 30px;
+}
+
+.analysisButtons > button {
+  float: right;
 }
 
 .compare-button {
