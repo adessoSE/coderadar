@@ -84,6 +84,7 @@
                 <button (click)="submitModule()" mat-button type="button">+</button>
               </div>
               <mat-error *ngIf="moduleExists">A module with this name already exists!</mat-error>
+              <mat-error *ngIf="invalidModulePath">Invalid module path!</mat-error>
             </div>
                 </mat-card-content>
             <!--Project contributors-->

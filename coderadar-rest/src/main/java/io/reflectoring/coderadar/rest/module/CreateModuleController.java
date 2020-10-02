@@ -37,8 +37,7 @@ public class CreateModuleController implements AbstractBaseController {
       return new ResponseEntity<>(
           new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);
     } catch (ModulePathInvalidException e) {
-      return new ResponseEntity<>(
-          new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }
 }

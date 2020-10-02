@@ -4,7 +4,7 @@ import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {AnalyzerConfiguration} from '../../model/analyzer-configuration';
 import {FilePattern} from '../../model/file-pattern';
-import {CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
+import {BAD_REQUEST, CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Module} from '../../model/module';
 import {Title} from '@angular/platform-browser';
 import {MatDialog,  MatSnackBar} from '@angular/material';
@@ -36,6 +36,7 @@ export class ConfigureProjectComponent implements OnInit {
 
   projectId: any;
   moduleExists = false;
+  invalidModulePath = false;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private contributorService: ContributorService,
@@ -181,6 +182,7 @@ export class ConfigureProjectComponent implements OnInit {
    */
   public submitModule(): void {
     this.moduleExists = false;
+    this.invalidModulePath = false;
 
     const module: Module = new Module(null, this.modulesInput);
     this.processing = true;
@@ -196,6 +198,10 @@ export class ConfigureProjectComponent implements OnInit {
         }
         if (error.status && error.status === CONFLICT) {
           this.moduleExists = true;
+          this.processing = false;
+        }
+        if (error.status && error.status === BAD_REQUEST) {
+          this.invalidModulePath = true;
           this.processing = false;
         }
         if (error.status && error.status === UNPROCESSABLE_ENTITY) {
