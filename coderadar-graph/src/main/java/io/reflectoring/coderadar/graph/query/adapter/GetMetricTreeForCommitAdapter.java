@@ -11,10 +11,7 @@ import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricTreeForCommitPort;
 import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitCommand;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +25,23 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
   MetricTree get(ProjectEntity project, String commitHash, List<String> metrics) {
     List<Map<String, Object>> result =
         metricQueryRepository.getMetricTreeForCommit(project.getId(), commitHash, metrics);
-    List<ModuleEntity> moduleEntities = project.getModules();
+    List<ModuleEntity> moduleEntities = getAllModulesInProject(project.getModules());
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);
     MetricTree rootModule = processRootModule(result);
     rootModule.getChildren().addAll(findChildModules(project.getModules(), moduleChildren));
     rootModule.setMetrics(aggregateChildMetrics(rootModule.getChildren()));
     return rootModule;
+  }
+
+  private List<ModuleEntity> getAllModulesInProject(List<ModuleEntity> modules) {
+    if (modules == null) {
+      return Collections.emptyList();
+    }
+    List<ModuleEntity> result = new ArrayList<>(modules);
+    for (ModuleEntity entity : modules) {
+      result.addAll(getAllModulesInProject(entity.getChildModules()));
+    }
+    return result;
   }
 
   @Override
@@ -58,6 +66,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
   private List<MetricTree> processModules(
       List<ModuleEntity> moduleEntities, List<Map<String, Object>> metricValues) {
     List<MetricTree> moduleChildren = new ArrayList<>();
+    Collections.reverse(moduleEntities);
     for (ModuleEntity moduleEntity : moduleEntities) {
       MetricTree metricTree = new MetricTree();
       metricTree.setType(MetricTreeNodeType.MODULE);

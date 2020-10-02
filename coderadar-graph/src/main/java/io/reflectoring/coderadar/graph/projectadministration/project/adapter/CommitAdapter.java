@@ -166,7 +166,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
    */
   private void saveFileToCommitRelationships(
       Collection<CommitEntity> commitEntities, List<long[]> arrayBuffer) {
-    // Save the changed files (everything except deletes)
+    // Save the changed files (everything except deletes - CHANGED_IN)
     int i = 0;
     int saveChunk = arrayBuffer.size();
     for (CommitEntity commitEntity : commitEntities) {

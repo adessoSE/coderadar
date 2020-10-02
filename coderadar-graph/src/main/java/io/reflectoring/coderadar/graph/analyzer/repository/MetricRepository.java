@@ -25,9 +25,9 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    * Creates [:MEASURED_BY] relationships between metric values and files and [:VALID_FOR]
    * relationships between metric values and commits.
    *
-   * @param commitAndFileRels A list of maps, each containing the id of an existing
-   *     MetricValueEntity ("metricId"), an existing FileEntity ("fileId") and an existing
-   *     CommitEntity ("commitId").
+   * @param saveData A list of Objects, where each objects contains a list with the id of an
+   *     existing FileEntity ("fileId") and an existing CommitEntity ("commitId"), the name of the
+   *     metric to save, its value and its findings.
    */
   @Query(
       "UNWIND {0} as x "
