@@ -80,4 +80,9 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
 
   @Query("MATCH (t:TeamEntity) WHERE t.name = {0} RETURN t")
   TeamEntity findByName(String name);
+
+  @Query(
+      "MATCH (t:TeamEntity)<-[:IS_IN]-(u:UserEntity) WHERE ID(u) = {0} "
+          + "AND SIZE ((t)<-[:IS_IN]-()) = 1 DETACH DELETE t")
+  void deleteIfOnlyUserWithIdRemains(long userId);
 }

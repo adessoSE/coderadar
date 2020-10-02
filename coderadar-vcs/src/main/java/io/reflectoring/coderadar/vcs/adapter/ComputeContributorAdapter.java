@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
+import com.google.common.collect.Sets;
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
 import io.reflectoring.coderadar.query.domain.DateRange;
@@ -34,7 +35,7 @@ public class ComputeContributorAdapter implements ComputeContributorsPort {
 
   private List<Contributor> mergeExistingContributors(
       List<Contributor> existingContributors, Map<String, Set<String>> newContributors) {
-    Set<Contributor> contributors = new HashSet<>();
+    Set<Contributor> contributors = Sets.newHashSetWithExpectedSize(newContributors.size());
     for (Map.Entry<String, Set<String>> entry : newContributors.entrySet()) {
       boolean alreadyAdded = false;
       for (Contributor c : existingContributors) {
