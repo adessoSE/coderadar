@@ -29,12 +29,13 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   private final ForceUpdateChecker forceUpdateChecker;
 
   private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
-  private final FileBaseDataMapper fileBaseDataMapper = new FileBaseDataMapper();
+
+  private static final int FILE_BULK_SAVE_CHUNK = 50000;
 
   @Override
   public void saveCommits(List<Commit> commits, List<Branch> branches, long projectId) {
     if (!commits.isEmpty()) {
-      IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>(commits.size() * 2);
+      IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>(commits.size() * 5);
       Collection<CommitEntity> commitEntities = mapCommitTree(commits, walkedFiles);
       saveCommitAndFileEntities(projectId, commitEntities, walkedFiles.values(), branches);
     }
@@ -51,12 +52,12 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     }
   }
 
-  private void saveFilesWithDepthZero(Collection<FileEntity> fileEntities, int fileBulkSaveChunk) {
+  private void saveFilesWithDepthZero(Collection<FileEntity> fileEntities) {
     List<FileEntity> tempFileList =
-        new ArrayList<>(Math.min(fileBulkSaveChunk, fileEntities.size()));
+        new ArrayList<>(Math.min(FILE_BULK_SAVE_CHUNK, fileEntities.size()));
     for (FileEntity fileEntity : fileEntities) {
       tempFileList.add(fileEntity);
-      if (tempFileList.size() == fileBulkSaveChunk) {
+      if (tempFileList.size() == FILE_BULK_SAVE_CHUNK) {
         fileRepository.save(tempFileList, 0);
         tempFileList.clear();
       }
@@ -70,21 +71,17 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
    *
    * @param commitEntities All of the (already saved) commit entities.
    * @param fileEntities All of the (already saved) file entities.
-   * @param commitBulkSaveChunk The amount of commits to save at once.
-   * @param fileBulkSaveChunk The amount of files to save at once.
    */
   private void attachCommitsAndFilesToProject(
       long projectId,
       Collection<CommitEntity> commitEntities,
-      Collection<FileEntity> fileEntities,
-      int commitBulkSaveChunk,
-      int fileBulkSaveChunk) {
+      Collection<FileEntity> fileEntities) {
     List<Long> ids =
         new ArrayList<>(
-            Math.min(Math.max(commitEntities.size(), fileEntities.size()), fileBulkSaveChunk));
+            Math.min(Math.max(commitEntities.size(), fileEntities.size()), FILE_BULK_SAVE_CHUNK));
     for (FileEntity fileEntity : fileEntities) {
       ids.add(fileEntity.getId());
-      if (ids.size() == fileBulkSaveChunk) {
+      if (ids.size() == FILE_BULK_SAVE_CHUNK) {
         projectRepository.attachFilesWithIds(projectId, ids);
         ids.clear();
       }
@@ -94,10 +91,6 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     ids.clear();
     for (CommitEntity commitEntity : commitEntities) {
       ids.add(commitEntity.getId());
-      if (ids.size() == commitBulkSaveChunk) {
-        projectRepository.attachCommitsWithIds(projectId, ids);
-        ids.clear();
-      }
     }
     projectRepository.attachCommitsWithIds(projectId, ids);
   }
@@ -110,29 +103,19 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
    */
   private void saveCommitParentsRelationships(
       Collection<CommitEntity> commitEntities, int saveChunk) {
-
     List<Long[]> parentRels = new ArrayList<>(saveChunk);
-
-    // Instead of creating lots of arrays in the loops below, we just
-    // fill the list now and reuse the arrays later.
-    for (int i = 0; i < saveChunk; i++) {
-      parentRels.add(new Long[] {0L, 0L, 0L});
-    }
-
-    int i = 0;
     for (CommitEntity commitEntity : commitEntities) {
-      long j = 0;
+      long i = 0;
       for (CommitEntity parent : commitEntity.getParents()) {
-        parentRels.get(i)[0] = commitEntity.getId();
-        parentRels.get(i)[1] = parent.getId();
-        parentRels.get(i++)[2] = commitEntity.getParents().size() == 1 ? null : j++;
-        if (i == saveChunk) {
-          commitRepository.createParentRelationships(parentRels);
-          i = 0;
-        }
+        parentRels.add(
+            new Long[] {
+              commitEntity.getId(),
+              parent.getId(),
+              commitEntity.getParents().size() == 1 ? null : i++
+            });
       }
     }
-    commitRepository.createParentRelationships(parentRels.subList(0, i));
+    commitRepository.createParentRelationships(parentRels);
   }
 
   /**
@@ -240,11 +223,11 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
           walkedFiles.computeIfAbsent(
               file,
               f -> {
-                var entity = fileBaseDataMapper.mapDomainObject(f);
                 List<FileEntity> oldFiles = new ArrayList<>(f.getOldFiles().size());
                 for (File oldFile : f.getOldFiles()) {
                   oldFiles.add(walkedFiles.get(oldFile));
                 }
+                var entity = new FileEntity(f.getPath());
                 entity.setOldFiles(oldFiles);
                 return entity;
               });
@@ -284,7 +267,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
               walkedFiles.computeIfAbsent(
                   file.getPath(),
                   s -> {
-                    var entity = fileBaseDataMapper.mapDomainObject(file);
+                    var entity = new FileEntity(file.getPath());
                     entity.setOldFiles(new ArrayList<>(file.getOldFiles().size()));
                     for (File oldFile : file.getOldFiles()) {
                       FileEntity oldFileEntity =
@@ -304,8 +287,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
         FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, file.getPath());
         if (fileEntity == null) {
           fileEntity =
-              walkedFiles.computeIfAbsent(
-                  file.getPath(), s -> fileBaseDataMapper.mapDomainObject(file));
+              walkedFiles.computeIfAbsent(file.getPath(), s -> new FileEntity(file.getPath()));
         }
         deletedFiles.add(fileEntity);
       }
@@ -321,26 +303,20 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       Collection<CommitEntity> commitEntities,
       Collection<FileEntity> fileEntities,
       List<Branch> branches) {
-    int commitBulkSaveChunk = 5000;
-    if (commitEntities.size() < 5000) {
-      commitBulkSaveChunk = commitEntities.size();
-    }
-
-    int fileBulkSaveChunk = 5000;
 
     commitRepository.save(commitEntities, 0);
-    saveFilesWithDepthZero(fileEntities, fileBulkSaveChunk);
-    attachCommitsAndFilesToProject(
-        projectId, commitEntities, fileEntities, commitBulkSaveChunk, fileBulkSaveChunk);
+    saveFilesWithDepthZero(fileEntities);
+    attachCommitsAndFilesToProject(projectId, commitEntities, fileEntities);
     setBranchPointers(projectId, branches);
 
     // Parent rels = amount of commits * 1.5
-    saveCommitParentsRelationships(commitEntities, commitBulkSaveChunk / 2 + commitBulkSaveChunk);
+    saveCommitParentsRelationships(commitEntities, (int) (commitEntities.size() * 1.5));
 
     // Instead of creating lots of arrays in the loops below, we just
     // fill the list now and reuse the arrays later.
-    List<long[]> arrayBuffer = new ArrayList<>(fileBulkSaveChunk);
-    for (int i = 0; i < fileBulkSaveChunk; i++) {
+    int capacity = Math.min(FILE_BULK_SAVE_CHUNK, fileEntities.size());
+    List<long[]> arrayBuffer = new ArrayList<>(capacity);
+    for (int i = 0; i < capacity; i++) {
       arrayBuffer.add(new long[] {0L, 0L});
     }
 

@@ -25,7 +25,7 @@ public class RevCommitHelper {
       Collections.reverse(revCommits);
       return revCommits;
     } catch (NoHeadException e) {
-      return new ArrayList<>(0);
+      return Collections.emptyList();
     } catch (Exception e) {
       throw new IllegalStateException(
           String.format("Error accessing git repository at %s", repositoryRoot), e);

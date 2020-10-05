@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
+import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.CoderadarConstants;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
@@ -42,6 +43,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   private List<Commit> getCommits(List<RevCommit> revCommits) {
     int revCommitsSize = revCommits.size();
     IdentityHashMap<RevCommit, Commit> map = new IdentityHashMap<>(revCommitsSize);
+    ArrayList<Commit> result =
+        new ArrayList<>(revCommitsSize); // List needed to return commits in same order
     for (RevCommit rc : revCommits) {
       Commit commit = map.computeIfAbsent(rc, this::mapRevCommitToCommit);
       List<Commit> parents = new ArrayList<>(rc.getParentCount());
@@ -52,8 +55,9 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         }
       }
       commit.setParents(parents);
+      result.add(commit);
     }
-    return new ArrayList<>(map.values());
+    return result;
   }
 
   private Commit mapRevCommitToCommit(RevCommit rc) {
@@ -105,9 +109,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    */
   private void setCommitsFiles(
       Repository repository, List<Commit> commits, List<RevCommit> revCommits) throws IOException {
-    commits.sort(Comparator.comparingLong(Commit::getTimestamp));
     int commitsSize = commits.size();
-    HashMap<String, List<File>> files = new HashMap<>();
+    HashMap<String, List<File>> files = Maps.newHashMapWithExpectedSize(revCommits.size() * 3);
     setFirstCommitFiles(repository, commits.get(0), revCommits.get(0), files);
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
     diffFormatter.setRepository(repository);
@@ -120,7 +123,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       if (parentCount == 0) {
         continue;
       }
-
       List<DiffEntry> diffs =
           new ArrayList<>(diffFormatter.scan(gitCommit.getParent(0), gitCommit));
 
@@ -202,7 +204,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         files.put(file.getPath(), existingFilesWithPath);
       } else {
         filesToSave =
-            Collections.singletonList(existingFilesWithPath.get(existingFilesWithPath.size() - 1));
+            existingFilesWithPath.subList(
+                existingFilesWithPath.size() - 1, existingFilesWithPath.size());
       }
     }
     return filesToSave;
