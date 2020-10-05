@@ -22,6 +22,7 @@ export class EditProjectComponent implements OnInit {
   incorrectURL = false;
   projectExists = false;
   nameEmpty = false;
+  defaultBranchEmpty = false;
   projectId: number;
   waiting = false;
 
@@ -29,6 +30,7 @@ export class EditProjectComponent implements OnInit {
               private projectService: ProjectService, private route: ActivatedRoute) {
     this.project = new Project();
     this.projectName = '';
+    this.project.defaultBranch = '';
   }
 
 
@@ -109,10 +111,11 @@ export class EditProjectComponent implements OnInit {
   private validateInput(): boolean {
     this.incorrectURL = this.project.vcsUrl.trim().length === 0;
     this.nameEmpty = this.project.name.trim().length === 0;
+    this.defaultBranchEmpty = this.project.defaultBranch.trim().length === 0;
 
     if (this.project.startDate === 'first commit') {
       this.project.startDate = null;
     }
-    return this.nameEmpty || this.incorrectURL;
+    return this.nameEmpty || this.incorrectURL || this.defaultBranchEmpty;
   }
 }

@@ -41,7 +41,7 @@
                 <mat-label>Projects:</mat-label>
                 <a mat-button disabled style="color:black" *ngIf="listProjectsForTeam(team.id).length === 0">none</a>
                 <span *ngFor="let project of listProjectsForTeam(team.id)">
-                  <a mat-button routerLink="/project/{{project.id}}/master">{{project.name}}</a>
+                  <a mat-button routerLink="/project/{{project.id}}/{{project.defaultBranch}}">{{project.name}}</a>
                 </span>
               </mat-card-content>
             </mat-card>

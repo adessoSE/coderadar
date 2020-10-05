@@ -25,7 +25,7 @@ class UpdateProjectControllerTest extends UnitTestTemplate {
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "new name", "username", "password", "http://valid.url", true, new Date());
+            "new name", "username", "password", "http://valid.url", true, new Date(), "master");
     ResponseEntity<HttpStatus> responseEntity = testSubject.updateProject(command, 1L);
 
     Mockito.verify(updateProjectUseCase, Mockito.times(1)).update(command, 1L);

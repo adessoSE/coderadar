@@ -18,4 +18,5 @@ public class UpdateProjectCommand {
   @NotNull @URL private String vcsUrl;
   private boolean vcsOnline;
   private Date startDate;
+  @NotBlank private String defaultBranch;
 }

@@ -66,6 +66,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     }
 
     project.setName(command.getName());
+    project.setDefaultBranch(command.getDefaultBranch());
     project.setVcsUsername(command.getVcsUsername());
     if (command.getVcsPassword() != null && !command.getVcsPassword().isEmpty()) {
       project.setVcsPassword(PasswordUtil.encrypt(command.getVcsPassword()));

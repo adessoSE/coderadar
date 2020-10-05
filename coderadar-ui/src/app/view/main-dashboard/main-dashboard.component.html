@@ -34,7 +34,7 @@
           <mat-card class="dashboard-card">
             <mat-card-header>
               <mat-card-title>
-                <a mat-button routerLink="/project/{{p.project.id}}/master">{{appComponent.trimProjectName(p.project.name)}}</a>
+                <a mat-button routerLink="/project/{{p.project.id}}/{{p.project.defaultBranch}}">{{appComponent.trimProjectName(p.project.name)}}</a>
                 <button title="Start analysis" (click)="startAnalysis(p.project.id)" style="float:right" mat-icon-button>
                   <mat-icon>play_arrow</mat-icon>
                 </button>

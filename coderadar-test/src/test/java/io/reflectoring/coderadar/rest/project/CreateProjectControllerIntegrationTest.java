@@ -33,7 +33,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "project", "username", "password", testRepoURL.toString(), false, null);
+            "project", "username", "password", testRepoURL.toString(), false, null, "master");
     mvc()
         .perform(
             post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
@@ -47,6 +47,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
               Assertions.assertEquals("username", project.getVcsUsername());
               Assertions.assertNotEquals("password", new String(project.getVcsPassword()));
               Assertions.assertEquals(testRepoURL.toString(), project.getVcsUrl());
+              Assertions.assertEquals("master", project.getDefaultBranch());
               List<CommitEntity> commits =
                   commitRepository.findByProjectIdAndBranchName(id, "master");
               Assertions.assertEquals(14, commits.size());
@@ -59,7 +60,8 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void createProjectReturnsErrorOnInvalidData() throws Exception {
     CreateProjectCommand command =
-        new CreateProjectCommand("project", "username", "password", "invalid", true, new Date());
+        new CreateProjectCommand(
+            "project", "username", "password", "invalid", true, new Date(), "master");
     mvc()
         .perform(
             post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
@@ -89,6 +91,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
                 .withPath("vcsOnline")
                 .description(
                     "Set to false if you want no interaction with a remote repository for this project. True by default."),
+            fields.withPath("defaultBranch").description("The default branch for the project."),
             fields
                 .withPath("startDate")
                 .type("Date")

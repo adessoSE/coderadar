@@ -15,7 +15,8 @@ public class GetProjectResponseMapper {
         project.getVcsUsername(),
         null,
         project.getVcsUrl(),
-        project.getVcsStart());
+        project.getVcsStart(),
+        project.getDefaultBranch());
   }
 
   public static List<GetProjectResponse> mapProjects(List<Project> projects) {

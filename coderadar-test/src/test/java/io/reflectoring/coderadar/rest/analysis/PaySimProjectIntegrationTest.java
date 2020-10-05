@@ -171,7 +171,8 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             "password",
             testRepoURL.toString(),
             true,
-            new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2019"));
+            new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2019"),
+            "master");
     mvc()
         .perform(
             post("/api/projects/" + projectId)
@@ -427,7 +428,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     URL testRepoURL = new File("coderadar-workdir/PaySim").toURI().toURL();
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "PaySim", "username", "password", testRepoURL.toString(), false, null);
+            "PaySim", "username", "password", testRepoURL.toString(), false, null, "master");
 
     mvc()
         .perform(

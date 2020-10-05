@@ -16,6 +16,7 @@ public class ProjectMapper implements Mapper<Project, ProjectEntity> {
     project.setVcsPassword(nodeEntity.getVcsPassword());
     project.setVcsUrl(nodeEntity.getVcsUrl());
     project.setWorkdirName(nodeEntity.getWorkdirName());
+    project.setDefaultBranch(nodeEntity.getDefaultBranch());
     return project;
   }
 
@@ -28,6 +29,7 @@ public class ProjectMapper implements Mapper<Project, ProjectEntity> {
     project.setVcsPassword(domainObject.getVcsPassword());
     project.setVcsUrl(domainObject.getVcsUrl());
     project.setWorkdirName(domainObject.getWorkdirName());
+    project.setDefaultBranch(domainObject.getDefaultBranch());
     project.setBeingDeleted(false);
     return project;
   }

@@ -34,7 +34,7 @@ class DeleteBranchTest extends ControllerTestTemplate {
     projectId =
         createProjectService.createProject(
             new CreateProjectCommand(
-                "testProject", null, null, testRepoURL.toString(), false, null));
+                "testProject", null, null, testRepoURL.toString(), false, null, "master"));
   }
 
   @Test

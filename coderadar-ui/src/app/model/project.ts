@@ -5,6 +5,7 @@ export class Project {
   public vcsUsername: string;
   public vcsPassword: string;
   public startDate: string;
+  public defaultBranch: string;
 
   /**
    * Construct a new project from the object delivered by the server.
@@ -17,6 +18,7 @@ export class Project {
       this.name = project.name;
       this.vcsUrl = project.vcsUrl;
       this.vcsUsername = project.vcsUsername;
+      this.defaultBranch = project.defaultBranch;
       this.vcsPassword = '';
 
       if (project.startDate !== null) {

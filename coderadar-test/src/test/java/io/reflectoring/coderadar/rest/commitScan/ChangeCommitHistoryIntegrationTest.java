@@ -46,7 +46,8 @@ class ChangeCommitHistoryIntegrationTest extends ControllerTestTemplate {
     FileUtils.copyDirectory(new File(testRepoURL.toURI()), temp);
 
     CreateProjectCommand command =
-        new CreateProjectCommand("testProject", null, null, temp.toURI().toString(), false, null);
+        new CreateProjectCommand(
+            "testProject", null, null, temp.toURI().toString(), false, null, "master");
     project = getProjectPort.get(createProjectService.createProject(command));
   }
 

@@ -15,4 +15,5 @@ public class GetProjectResponse {
   private String vcsPassword;
   private String vcsUrl;
   private Date startDate;
+  private String defaultBranch;
 }

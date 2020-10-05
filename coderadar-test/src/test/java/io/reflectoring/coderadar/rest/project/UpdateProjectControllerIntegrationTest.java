@@ -27,13 +27,20 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setName("project");
     testProject.setVcsStart(new Date());
     testProject.setVcsUsername("testUser");
+    testProject.setDefaultBranch("master");
     testProject.setWorkdirName(UUID.randomUUID().toString());
     testProject = projectRepository.save(testProject);
     final Long id = testProject.getId();
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "new-project-name", "username", "password", "http://valid.url", true, new Date());
+            "new-project-name",
+            "username",
+            "password",
+            "http://valid.url",
+            true,
+            new Date(),
+            "dev");
     mvc()
         .perform(
             post("/api/projects/" + testProject.getId())
@@ -47,6 +54,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
               Assertions.assertEquals("username", project.getVcsUsername());
               Assertions.assertNotEquals("password", new String(project.getVcsPassword()));
               Assertions.assertEquals("http://valid.url", project.getVcsUrl());
+              Assertions.assertEquals("dev", project.getDefaultBranch());
             })
         .andDo(document("projects/update"));
   }
@@ -55,7 +63,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   void updateProjectReturnsErrorWhenProjectDoesNotExist() throws Exception {
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "name", "username", "password", "http://valid.url", true, new Date());
+            "name", "username", "password", "http://valid.url", true, new Date(), "dev");
     mvc()
         .perform(
             post("/api/projects/1")
@@ -69,7 +77,8 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void updateProjectReturnsErrorWhenRequestIsInvalid() throws Exception {
     UpdateProjectCommand command =
-        new UpdateProjectCommand("", "username", "password", "http://valid.url", true, new Date());
+        new UpdateProjectCommand(
+            "", "username", "password", "http://valid.url", true, new Date(), "dev");
     mvc()
         .perform(
             post("/api/projects/0")
