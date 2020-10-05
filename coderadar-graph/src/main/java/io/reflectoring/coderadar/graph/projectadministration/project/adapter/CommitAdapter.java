@@ -314,7 +314,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
     // Instead of creating lots of arrays in the loops below, we just
     // fill the list now and reuse the arrays later.
-    int capacity = Math.min(FILE_BULK_SAVE_CHUNK, fileEntities.size());
+    int capacity = Math.min(FILE_BULK_SAVE_CHUNK, Math.max(fileEntities.size(), 10));
     List<long[]> arrayBuffer = new ArrayList<>(capacity);
     for (int i = 0; i < capacity; i++) {
       arrayBuffer.add(new long[] {0L, 0L});
