@@ -69,7 +69,6 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
           this.getCommits(true);
         }
       });
-      this.cityEffects.currentProjectId  = this.projectId;
     });
   }
 
@@ -125,6 +124,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         this.project = new Project(response.body.project);
         this.titleService.setTitle('Coderadar - ' + AppComponent.trimProjectName(this.project.name));
         this.roles = response.body.roles;
+        this.cityEffects.currentProject  = this.project;
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {

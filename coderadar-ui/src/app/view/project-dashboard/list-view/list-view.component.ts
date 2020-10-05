@@ -76,7 +76,7 @@ export class ListViewComponent implements OnInit, OnChanges {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
       this.selectedBranch = params.branch;
-      this.cityEffects.currentProjectId  = this.projectId;
+      this.cityEffects.currentProject  = this.project;
       this.showCommitsInRange();
     });
   }

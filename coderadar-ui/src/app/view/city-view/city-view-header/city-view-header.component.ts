@@ -24,27 +24,8 @@ export class CityViewHeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.projectId = this.appEffects.currentProjectId;
-    this.getProject();
+    this.project = this.appEffects.currentProject;
   }
-
-  /**
-   * Gets the project from the service and saves it in this.project
-   */
-  private getProject(): void {
-    this.projectService.getProject(this.projectId)
-      .then(response => {
-        this.project = new Project(response.body);
-      })
-      .catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh(() => this.getProject());
-        } else if (error.status && error.status === NOT_FOUND) {
-          this.router.navigate(['/dashboard']);
-        }
-      });
-  }
-
 
   logout(): void {
     this.userService.logout();

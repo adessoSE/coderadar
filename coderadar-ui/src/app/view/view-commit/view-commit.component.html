@@ -1,5 +1,5 @@
 <app-header [title]="
-[{location: '/dashboard', name: 'Dashboard'}, {location: '/project/' + project.id + '/master',
+[{location: '/dashboard', name: 'Dashboard'}, {location: '/project/' + project.id + '/' + project.defaultBranch,
 name: appComponent.trimProjectName(project.name)}, {location: '/project/' + project.id + '/commit/' + commit.hash, name: commit.hash.substring(0, 7)}]">
 </app-header>
 
