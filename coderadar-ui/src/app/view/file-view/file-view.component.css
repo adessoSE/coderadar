@@ -2,13 +2,6 @@
   display: none;
 }
 
-.tree ul,
-.tree li {
-  margin-top: 0;
-  margin-bottom: 0;
-  list-style-type: none;
-}
-
 .file-content {
   width: 100%;
   height: 100%;
@@ -24,6 +17,8 @@
   margin-left: 1%;
 }
 
+.mat-tree-node { min-height: 5px }
+
 .filepath {
   font-weight: bold;
   margin-left: 2%;
@@ -31,7 +26,7 @@
 
 .authors {
   float: right;
-  margin-right: 20px
+  width: 10%;
 }
 
 .fileTree {

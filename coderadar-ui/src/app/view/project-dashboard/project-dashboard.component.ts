@@ -142,7 +142,8 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   handleBranchChange($event: any) {
     this.location.go(this.location.path(false).replace(this.selectedBranch, $event));
     this.selectedBranch = $event;
-    this.getCommits(false);
+    this.commits = [];
+    this.getCommits(true);
   }
 
   private getCommitTree() {

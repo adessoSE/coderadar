@@ -1,6 +1,6 @@
 import {AfterViewChecked, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
-import {MatTooltip, MatTreeNestedDataSource} from '@angular/material';
-import {NestedTreeControl} from '@angular/cdk/tree';
+import {MatTooltip, MatTreeFlatDataSource, MatTreeFlattener, MatTreeNestedDataSource} from '@angular/material';
+import {FlatTreeControl, NestedTreeControl} from '@angular/cdk/tree';
 import {FileTreeNode} from '../../model/file-tree-node';
 import {ProjectService} from '../../service/project.service';
 import {UserService} from '../../service/user.service';
@@ -31,6 +31,9 @@ import {ContributorService} from '../../service/contributor.service';
 import {Contributor} from '../../model/contributor';
 import {HttpResponse} from '@angular/common/http';
 import {FileContentWithMetrics} from '../../model/file-content-with-metrics';
+import {ArrayDataSource} from '@angular/cdk/collections';
+
+
 
 @Component({
   selector: 'app-file-view',
@@ -39,12 +42,29 @@ import {FileContentWithMetrics} from '../../model/file-content-with-metrics';
 })
 export class FileViewComponent implements OnInit, AfterViewChecked {
 
+  constructor(private projectService: ProjectService,
+              private contributorService: ContributorService,
+              private router: Router,
+              private userService: UserService,
+              private route: ActivatedRoute,
+              private titleService: Title) {
+  }
+
   @ViewChild('fileView', {read: ElementRef})fileView: ElementRef;
   @ViewChild('tooltip') tooltip: MatTooltip;
   tooltipMessage = '';
 
-  treeControl = new NestedTreeControl<FileTreeNode>(node => node.children);
-  dataSource = new MatTreeNestedDataSource<FileTreeNode>();
+  treeControl = new FlatTreeControl<FileTreeNode>(
+    node => node.level, node => node.expandable);
+
+  treeFlattener = new MatTreeFlattener(
+    (node: FileTreeNode, level: number) => {
+      node.level = level;
+      node.expandable = !!node.children && node.children.length > 0;
+      return node; }, node => node.level, node => node.expandable, node => node.children);
+
+  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+
   public projectId: number;
   public commitHash: string;
   public commitHashAbbrev: string;
@@ -59,14 +79,6 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   public showOnlyChangedFiles = false;
   public showDiff = false;
   public fileAuthors: Contributor[] = [];
-
-  constructor(private projectService: ProjectService,
-              private contributorService: ContributorService,
-              private router: Router,
-              private userService: UserService,
-              private route: ActivatedRoute,
-              private titleService: Title) {
-  }
 
   ngOnInit() {
     this.project.name = '';
@@ -96,7 +108,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
     this.projectService.getFileTree(this.projectId, this.commitHash, this.showOnlyChangedFiles).then(result => {
       this.prevTree = this.tree;
       this.tree = result.body;
-      this.dataSource.data = result.body.children;
+      this.dataSource.data = this.tree.children;
     }).catch(err => {
       if (err.status && err.status === FORBIDDEN) {
         this.userService.refresh(() => this.getFileTree());
@@ -106,18 +118,19 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  public updateSelectedFile(node: any, path: string): void {
+  public updateSelectedFile(node: FileTreeNode, path: string): void {
     this.highlighted = false;
     this.currentFileContent = '';
     if (node === null && path === null) {
       return;
     }
     if (path === null) {
-      this.currentSelectedFilepath = this.getFullPath(this.tree.children, node, '');
+      this.currentSelectedFilepath = this.getFullPath(this.treeControl.dataNodes, node, '');
       this.currentSelectedFilepath = this.currentSelectedFilepath.substr(1, this.currentSelectedFilepath.length);
     } else {
       this.currentSelectedFilepath = path;
     }
+
     if (this.currentSelectedFilepath === '') {
       return;
     }
@@ -172,7 +185,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
         return path + '/' + value.path;
       } else {
         const newPath = this.getFullPath(value.children, node, path + '/' + value.path);
-        if (newPath !== '') {
+        if (newPath.length > 0) {
           return newPath;
         }
       }
@@ -214,7 +227,6 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
     const lineStart = +range.value.split('-')[0];
     let findings = '';
     this.currentFileMetrics.forEach(value => {
-      const found = false;
       for (const finding of value.findings) {
         if (finding.lineStart === lineStart) {
           findings += finding.message + '\n';

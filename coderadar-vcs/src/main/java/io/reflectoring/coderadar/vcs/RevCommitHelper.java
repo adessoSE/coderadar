@@ -19,8 +19,8 @@ public class RevCommitHelper {
 
   public static List<RevCommit> getRevCommits(String repositoryRoot) {
     try (Git git = Git.open(new File(repositoryRoot))) {
-      // Most projects have >100 commits.
-      List<RevCommit> revCommits = new ArrayList<>(100);
+      // Most projects have >500 commits.
+      List<RevCommit> revCommits = new ArrayList<>(500);
       git.log().all().call().forEach(revCommits::add);
       Collections.reverse(revCommits);
       return revCommits;
