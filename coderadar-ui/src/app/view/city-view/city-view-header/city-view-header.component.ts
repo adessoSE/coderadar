@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../../service/user.service';
 import {AppEffects} from '../../../city-map/shared/effects';
 import {Project} from '../../../model/project';
-import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {ProjectService} from '../../../service/project.service';
 import {Router} from '@angular/router';
 import {AppComponent} from '../../../app.component';

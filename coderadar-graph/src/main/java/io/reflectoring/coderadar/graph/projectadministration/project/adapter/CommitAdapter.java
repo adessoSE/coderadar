@@ -15,6 +15,7 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import java.util.*;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -255,41 +256,45 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       List<CommitEntity> parents = new ArrayList<>(commit.getParents().size());
       commit.getParents().forEach(parent -> parents.add(walkedCommits.get(parent.getHash())));
       commitEntity.setParents(parents);
+      commit.setChangedFiles(
+          commit.getChangedFiles().stream().distinct().collect(Collectors.toList()));
+      commit.setDeletedFiles(
+          commit.getDeletedFiles().stream().distinct().collect(Collectors.toList()));
+
       walkedCommits.put(commitEntity.getHash(), commitEntity);
 
       List<FileEntity> changedFiles = new ArrayList<>(commit.getChangedFiles().size());
       List<FileEntity> deletedFiles = new ArrayList<>(commit.getDeletedFiles().size());
 
       for (File file : commit.getChangedFiles()) {
-        FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, file.getPath());
-        if (fileEntity == null) {
-          fileEntity =
-              walkedFiles.computeIfAbsent(
-                  file.getPath(),
-                  s -> {
-                    var entity = new FileEntity(file.getPath());
-                    entity.setOldFiles(new ArrayList<>(file.getOldFiles().size()));
-                    for (File oldFile : file.getOldFiles()) {
-                      FileEntity oldFileEntity =
-                          fileRepository.getFileInProjectByPath(projectId, oldFile.getPath());
-                      if (oldFileEntity == null) {
-                        oldFileEntity = walkedFiles.get(oldFile.getPath());
-                      }
-                      entity.getOldFiles().add(oldFileEntity);
+        FileEntity fileEntity =
+            walkedFiles.computeIfAbsent(
+                file.getPath(),
+                s -> {
+                  var entity = new FileEntity(file.getPath());
+                  if (!file.getOldFiles().isEmpty()) {
+                    List<FileEntity> oldFiles =
+                        fileRepository.getFilesInProjectByPath(
+                            projectId, file.getOldFiles().get(0).getPath());
+                    if (oldFiles.isEmpty()) {
+                      oldFiles =
+                          Collections.singletonList(
+                              walkedFiles.get(file.getOldFiles().get(0).getPath()));
                     }
-                    return entity;
-                  });
-        }
+                    entity.setOldFiles(oldFiles);
+                  }
+                  return entity;
+                });
         changedFiles.add(fileEntity);
       }
 
       for (File file : commit.getDeletedFiles()) {
-        FileEntity fileEntity = fileRepository.getFileInProjectByPath(projectId, file.getPath());
-        if (fileEntity == null) {
-          fileEntity =
-              walkedFiles.computeIfAbsent(file.getPath(), s -> new FileEntity(file.getPath()));
+        List<FileEntity> fileEntities =
+            fileRepository.getFilesInProjectByPath(projectId, file.getPath());
+        if (fileEntities.isEmpty()) {
+          fileEntities = Collections.singletonList(walkedFiles.get(file.getPath()));
         }
-        deletedFiles.add(fileEntity);
+        deletedFiles.addAll(fileEntities);
       }
       commitEntity.setDeletedFiles(deletedFiles);
       commitEntity.setChangedFiles(changedFiles);

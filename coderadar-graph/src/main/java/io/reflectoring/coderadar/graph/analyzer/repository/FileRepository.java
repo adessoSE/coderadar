@@ -30,14 +30,6 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "CREATE (f1)-[:RENAMED_FROM]->(f2)")
   void createRenameRelationships(@NonNull List<long[]> renameRels);
 
-  /**
-   * @param projectId The project id.
-   * @return The file with the given sequence id or null if it does not exist.
-   */
-  @Query(
-      "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.path = {1} RETURN f LIMIT 1 ")
-  FileEntity getFileInProjectByPath(long projectId, @NonNull String path);
-
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND "
           + "c.hash = {1} WITH c LIMIT 1 "
@@ -68,7 +60,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @return True if any file with the given path exists.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {0} AND f.path = {1} WITH f LIMIT 1 RETURN COUNT(f) > 0 ")
+      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {0} AND f.path = {1} WITH f LIMIT 1 RETURN COUNT(f) > 0")
   boolean fileWithPathExists(long projectId, @NonNull String path);
 
   /**
@@ -77,6 +69,13 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @return True if any file falls under the given path, false otherwise.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} WITH f LIMIT 1 RETURN COUNT(f) > 0 ")
+      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} WITH f LIMIT 1 RETURN COUNT(f) > 0")
   boolean fileInPathExists(@NonNull String path, long projectOrModuleId);
+
+  /**
+   * @param projectId The project id.
+   * @return All files with the given path or null if it does not exist.
+   */
+  @Query("MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.path = {1} RETURN f")
+  List<FileEntity> getFilesInProjectByPath(long projectId, String path);
 }

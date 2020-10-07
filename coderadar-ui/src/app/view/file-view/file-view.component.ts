@@ -1,6 +1,6 @@
 import {AfterViewChecked, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
-import {MatTooltip, MatTreeFlatDataSource, MatTreeFlattener, MatTreeNestedDataSource} from '@angular/material';
-import {FlatTreeControl, NestedTreeControl} from '@angular/cdk/tree';
+import {MatTooltip, MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
+import {FlatTreeControl} from '@angular/cdk/tree';
 import {FileTreeNode} from '../../model/file-tree-node';
 import {ProjectService} from '../../service/project.service';
 import {UserService} from '../../service/user.service';
@@ -31,8 +31,6 @@ import {ContributorService} from '../../service/contributor.service';
 import {Contributor} from '../../model/contributor';
 import {HttpResponse} from '@angular/common/http';
 import {FileContentWithMetrics} from '../../model/file-content-with-metrics';
-import {ArrayDataSource} from '@angular/cdk/collections';
-
 
 
 @Component({

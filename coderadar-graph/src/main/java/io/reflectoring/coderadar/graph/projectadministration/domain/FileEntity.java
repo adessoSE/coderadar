@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
+import java.util.Collections;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +21,7 @@ public class FileEntity {
   @EqualsAndHashCode.Exclude
   @Relationship(type = "RENAMED_FROM")
   @ToString.Exclude
-  private List<FileEntity> oldFiles;
+  private List<FileEntity> oldFiles = Collections.emptyList();
 
   public FileEntity(String path) {
     this.path = path;
