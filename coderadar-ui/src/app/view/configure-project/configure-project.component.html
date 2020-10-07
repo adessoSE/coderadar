@@ -3,7 +3,7 @@
   <mat-spinner *ngIf="processing" style="position: absolute;  margin-top: 15%; margin-left: 46%; z-index: 5" [diameter]="100"></mat-spinner>
 </div>
 
-<main class="mat-card-form ">
+<main class="mat-card-form">
   <div class="grid-container" id="cardContainer">
     <div fxLayoutAlign="center center">
       <form>
@@ -14,8 +14,8 @@
               <span>Configure {{(projectName)}}</span>
             </mat-card-title>
           </mat-card-header>
-                <mat-card-content>
-                <!--Analyzers-->
+          <mat-card-content>
+            <!--Analyzers-->
             <div class="list">
               <div class="list-title">
                 <mat-label>Select analyzers:</mat-label>
@@ -86,37 +86,53 @@
               <mat-error *ngIf="moduleExists">A module with this name already exists!</mat-error>
               <mat-error *ngIf="invalidModulePath">Invalid module path!</mat-error>
             </div>
-                </mat-card-content>
+          </mat-card-content>
+
             <!--Project contributors-->
             <div class="list" *ngIf="contributors.length > 0">
               <div class="list-title">
                 <mat-label>Project contributors:</mat-label>
               </div>
-              <div *ngFor="let c of contributors">
-                <mat-checkbox (change)="updateSelectedContributors(c)" name="{{c.displayName}}">
-                  <app-contributor-card [contributor]="c" [noAvatar]="true"></app-contributor-card>
-                </mat-checkbox>
-              </div>
+              <mat-grid-list cols="2" rowHeight="30px">
+                <div *ngFor="let c of contributors">
+                  <mat-grid-tile [colspan]="1" [rowspan]="1" class="contributor">
+                    <mat-checkbox (change)="updateSelectedContributors(c)" name="{{c.displayName}}" fxFlex fxLayoutAlign="start center">
+                      <app-contributor-card [contributor]="c" [noAvatar]="true"></app-contributor-card>
+                    </mat-checkbox>
+                  </mat-grid-tile>
+                </div>
+              </mat-grid-list>
               <button *ngIf="selectedContributors.length > 1" mat-raised-button style="margin: 10px" (click)="openDialog()">Merge</button>
             </div>
+
             <!--Project branches-->
             <div class="list" *ngIf="branches.length > 0">
               <div class="list-title">
                 <mat-label>Branches:</mat-label>
               </div>
-              <div *ngFor="let branch of branches">
-                <span *ngIf="!branch.isTag"><strong>{{branch.name}}</strong></span>
-              </div>
+              <mat-grid-list cols="2" rowHeight="30px">
+                <div *ngFor="let branch of branches">
+                  <mat-grid-tile *ngIf="!branch.isTag" [colspan]="1" [rowspan]="1">
+                    <a mat-button routerLink="/project/{{projectId}}/{{branch.name}}" fxFlex fxLayoutAlign="start center"
+                       style="margin-top: 0">{{branch.name}}</a>
+                  </mat-grid-tile>
+                </div>
+              </mat-grid-list>
             </div>
 
           <!--Project tags-->
-          <div class="list" *ngIf="hasTags()">
+          <div class="list" *ngIf="branches.length > 0">
             <div class="list-title">
               <mat-label>Tags:</mat-label>
             </div>
-            <div *ngFor="let branch of branches">
-              <span *ngIf="branch.isTag"><strong>{{branch.name}}</strong></span>
-            </div>
+            <mat-grid-list cols="2" rowHeight="30px">
+              <div *ngFor="let branch of branches">
+                <mat-grid-tile *ngIf="branch.isTag" [colspan]="1" [rowspan]="1">
+                  <a mat-button routerLink="/project/{{projectId}}/{{branch.name}}"  fxFlex fxLayoutAlign="start center"
+                     style="margin-top: 0">{{branch.name}}</a>
+                </mat-grid-tile>
+              </div>
+            </mat-grid-list>
           </div>
 
           <!--Cancel and submit buttons-->
