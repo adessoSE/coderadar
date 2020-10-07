@@ -23,8 +23,9 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
      * @see ProjectRepository#deleteProjectMetrics(Long)
      */
     while (projectRepository.deleteProjectMetrics(projectId) > 0) ;
-    while (projectRepository.deleteProjectFilesAndModules(projectId) > 0) ;
+    while (projectRepository.deleteProjectFiles(projectId) > 0) ;
 
+    projectRepository.deleteProjectModules(projectId);
     projectRepository.deleteProjectBranches(projectId);
     projectRepository.deleteProjectCommits(projectId);
     projectRepository.deleteProjectConfiguration(projectId);
@@ -35,7 +36,8 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
 
   @Override
   public void deleteBranchesFilesAndCommits(long projectId) {
-    while (projectRepository.deleteProjectFilesAndModules(projectId) > 0) ;
+    while (projectRepository.deleteProjectFiles(projectId) > 0) ;
+    projectRepository.deleteProjectModules(projectId);
     projectRepository.deleteProjectBranches(projectId);
     projectRepository.deleteProjectCommits(projectId);
   }

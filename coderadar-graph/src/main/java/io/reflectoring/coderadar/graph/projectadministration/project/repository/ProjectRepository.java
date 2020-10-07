@@ -22,18 +22,26 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} "
           + "WITH mv LIMIT 10000 DETACH DELETE mv RETURN COUNT(mv)")
-  long deleteProjectMetrics(long projectId);
+  int deleteProjectMetrics(long projectId);
 
   /**
-   * Deletes a maximum of 10000 metrics in a project. This value can be adjusted as required by your
+   * Deletes a maximum of 10000 files in a project. This value can be adjusted as required by your
    * Neo4j installation in order to prevent out of memory errors.
    *
    * @param projectId The id of the project.
-   * @return The number of deleted metrics, a maximum of 10000 at a time.
+   * @return The number of deleted files, a maximum of 10000 at a time.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS*]->(f) WHERE ID(p) = {0} WITH f LIMIT 10000 DETACH DELETE f RETURN COUNT(f)")
-  long deleteProjectFilesAndModules(long projectId);
+      "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} WITH f LIMIT 10000 DETACH DELETE f RETURN COUNT(f)")
+  int deleteProjectFiles(long projectId);
+
+  /**
+   * Deletes all module entities in a project.
+   *
+   * @param projectId The id of the project.
+   */
+  @Query("MATCH (p)-[:CONTAINS*]->(m:ModuleEntity) WHERE ID(p) = {0} WITH m DETACH DELETE m")
+  void deleteProjectModules(long projectId);
 
   /**
    * Deletes all of the commits in a project.
