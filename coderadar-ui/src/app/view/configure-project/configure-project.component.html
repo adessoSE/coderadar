@@ -27,6 +27,7 @@
               </div>
             </div>
 
+            <mat-error *ngIf="filePatternExists">An identical file pattern already exists!</mat-error>
             <!--Included file patterns-->
             <div class="list">
               <div class="list-title">

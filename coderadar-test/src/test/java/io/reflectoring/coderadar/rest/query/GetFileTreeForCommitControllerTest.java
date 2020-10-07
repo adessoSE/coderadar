@@ -4,10 +4,7 @@ import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
-import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.FileTree;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
@@ -50,16 +47,6 @@ class GetFileTreeForCommitControllerTest extends ControllerTestTemplate {
 
   @Test
   void testGetFileTree() throws Exception {
-    CreateFilePatternCommand command =
-        new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
-    mvc()
-        .perform(
-            post("/api/projects/" + projectId + "/filePatterns")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(command)))
-        .andExpect(status().isCreated())
-        .andReturn();
-
     MvcResult result =
         mvc()
             .perform(
@@ -92,16 +79,6 @@ class GetFileTreeForCommitControllerTest extends ControllerTestTemplate {
 
   @Test
   void testGetOnlyFilesChangedInCommit() throws Exception {
-    CreateFilePatternCommand command =
-        new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
-    mvc()
-        .perform(
-            post("/api/projects/" + projectId + "/filePatterns")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(command)))
-        .andExpect(status().isCreated())
-        .andReturn();
-
     MvcResult result =
         mvc()
             .perform(

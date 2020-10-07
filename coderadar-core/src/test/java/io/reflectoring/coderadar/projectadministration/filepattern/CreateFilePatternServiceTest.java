@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.CreateFilePatternPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.CreateFilePatternService;
@@ -21,12 +22,15 @@ class CreateFilePatternServiceTest {
 
   @Mock private CreateFilePatternPort createFilePatternPort;
   @Mock private GetProjectPort getProjectPort;
+  @Mock private ListFilePatternsOfProjectPort listFilePatternsOfProjectPort;
 
   private CreateFilePatternService testSubject;
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new CreateFilePatternService(createFilePatternPort, getProjectPort);
+    this.testSubject =
+        new CreateFilePatternService(
+            createFilePatternPort, listFilePatternsOfProjectPort, getProjectPort);
   }
 
   @Test

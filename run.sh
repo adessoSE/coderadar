@@ -12,7 +12,7 @@ exit_func() {
     exit
 }
 
-docker pull neo4j:3.5.20
+docker pull neo4j:3.5.21
 
 docker run -t --publish=7687:7687 \
             --publish=7474:7474 --name neo4j \
