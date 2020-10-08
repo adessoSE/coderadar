@@ -1,4 +1,4 @@
-<main class="card-list">
+<main class="card-list" style="min-height: 50vh">
   <p>{{getTitleText()}}
     <br>
     <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commitsFiltered.length}} commits</mat-label>
@@ -61,7 +61,7 @@
     </button>
   </div>
   <div *ngIf="commitsFiltered.length === 0 && !waiting " class="waitingIndicator" style="font-size: xx-large">No commits</div>
-  <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
+  <mat-paginator *ngIf="commitsFiltered.length > 0" #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
                  [pageSize]="pageSize"
                  [pageSizeOptions]="pageSizeOptions"
                  (page)="syncPaginators($event)">
@@ -115,7 +115,7 @@
   </mat-grid-list>
 </main>
 
-<mat-paginator #paginator2 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
+<mat-paginator *ngIf="commitsFiltered.length > 0" #paginator2 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
                [pageSize]="pageSize"
                [pageSizeOptions]="pageSizeOptions"
                (page)="syncPaginators($event)">

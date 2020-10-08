@@ -181,6 +181,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     } else {
       this.selectedContributor = $event;
     }
-    this.getCommits(false);
+    this.commits = [];
+    this.getCommits(true);
   }
 }
