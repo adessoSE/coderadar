@@ -4,27 +4,25 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ProcessProjectService {
 
   private final AsyncListenableTaskExecutor taskExecutor;
   private final ProjectStatusPort projectStatusPort;
   private final GetProjectPort getProjectPort;
   private static final Logger logger = LoggerFactory.getLogger(ProcessProjectService.class);
-
-  public ProcessProjectService(
-      AsyncListenableTaskExecutor taskExecutor,
-      ProjectStatusPort projectStatusPort,
-      GetProjectPort getProjectPort) {
-    this.taskExecutor = taskExecutor;
-    this.projectStatusPort = projectStatusPort;
-    this.getProjectPort = getProjectPort;
-  }
+  private final Map<Long, Future<?>> tasks = new ConcurrentHashMap<>();
 
   /**
    * Executes a task for a given project. The project is locked while this operation is performed
@@ -49,9 +47,28 @@ public class ProcessProjectService {
               logger.error(String.format("Project ID:%d, %s", projectId, e.getMessage()));
             } finally { // No matter what happens, reset the flag
               projectStatusPort.setBeingProcessed(projectId, false);
+              tasks.remove(projectId);
+              synchronized (tasks) {
+                tasks.notifyAll();
+              }
             }
           };
-      taskExecutor.submitListenable(task);
+      tasks.put(projectId, taskExecutor.submit(task));
+    }
+  }
+
+  public void onShutdown() throws InterruptedException {
+    while (!tasks.isEmpty()) {
+      synchronized (tasks) {
+        tasks.wait();
+      }
+    }
+  }
+
+  @SneakyThrows
+  public void waitForProjectTasks(long id) {
+    if (tasks.containsKey(id)) {
+      tasks.get(id).get();
     }
   }
 }

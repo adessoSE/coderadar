@@ -39,8 +39,6 @@ class ListProjectsServiceTest {
             .setName("project 1")
             .setVcsUrl("http://github.com")
             .setVcsUsername("username1")
-            .setVcsPassword("password1")
-            .setVcsOnline(true)
             .setVcsStart(startDate);
 
     Project expectedResponse2 =
@@ -49,8 +47,6 @@ class ListProjectsServiceTest {
             .setName("project 2")
             .setVcsUrl("http://bitbucket.org")
             .setVcsUsername("username2")
-            .setVcsPassword("password2")
-            .setVcsOnline(false)
             .setVcsStart(startDate);
 
     Mockito.when(listProjectsPort.getProjects())

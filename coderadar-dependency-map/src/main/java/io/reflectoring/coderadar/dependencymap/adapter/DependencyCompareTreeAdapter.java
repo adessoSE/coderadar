@@ -18,10 +18,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class DependencyCompareTreeAdapter implements GetCompareTreePort {
 
   private CompareNode root;
@@ -35,18 +36,6 @@ public class DependencyCompareTreeAdapter implements GetCompareTreePort {
   private final WalkCommitTreePort walkCommitTreePort;
   private final GetDiffEntriesForCommitsPort getDiffEntriesForCommitsPort;
   private final GetRawCommitContentPort rawCommitContentPort;
-
-  @Autowired
-  public DependencyCompareTreeAdapter(
-      JavaAnalyzer javaAnalyzer,
-      WalkCommitTreePort walkCommitTreePort,
-      GetDiffEntriesForCommitsPort getDiffEntriesForCommitsPort,
-      GetRawCommitContentPort rawCommitContentPort) {
-    this.javaAnalyzer = javaAnalyzer;
-    this.walkCommitTreePort = walkCommitTreePort;
-    this.getDiffEntriesForCommitsPort = getDiffEntriesForCommitsPort;
-    this.rawCommitContentPort = rawCommitContentPort;
-  }
 
   private void createTree() {
     try {

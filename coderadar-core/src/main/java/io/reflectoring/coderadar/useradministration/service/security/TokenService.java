@@ -10,22 +10,19 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import java.util.Date;
+import lombok.RequiredArgsConstructor;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 /** Service for generation and verification of authentication tokens. */
 @Service
+@RequiredArgsConstructor
 public class TokenService {
 
   private final CoderadarConfigurationProperties configuration;
-
   private final SecretKeyService secretKeyService;
 
-  public TokenService(
-      CoderadarConfigurationProperties configuration, SecretKeyService secretKeyService) {
-    this.configuration = configuration;
-    this.secretKeyService = secretKeyService;
-  }
+  private boolean shuttingDown = false;
 
   /**
    * This method generates a JSON Web Token for access to resources. The token contains the
@@ -63,6 +60,9 @@ public class TokenService {
    * @return decoded Token
    */
   public DecodedJWT verify(String token) {
+    if (shuttingDown) {
+      return null;
+    }
     byte[] secret = secretKeyService.getSecretKey().getEncoded();
     JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret)).withIssuer("coderadar").build();
     try {
@@ -124,5 +124,9 @@ public class TokenService {
     JWT jwt = JWT.decode(refreshToken);
     Claim claim = jwt.getClaim("username");
     return claim.asString();
+  }
+
+  public void setShuttingDown(boolean shuttingDown) {
+    this.shuttingDown = shuttingDown;
   }
 }

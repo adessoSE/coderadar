@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.useradministration.permissions;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.ProjectRoleJsonWrapper;
 import io.reflectoring.coderadar.useradministration.port.driver.permissions.SetUserRoleForProjectUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
+@RequiredArgsConstructor
 public class SetUserRoleForProjectController implements AbstractBaseController {
   private final SetUserRoleForProjectUseCase setUserRoleForProjectUseCase;
-
-  public SetUserRoleForProjectController(
-      SetUserRoleForProjectUseCase setUserRoleForProjectUseCase) {
-    this.setUserRoleForProjectUseCase = setUserRoleForProjectUseCase;
-  }
 
   @PostMapping(
       path = "/projects/{projectId}/users/{userId}",

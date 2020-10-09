@@ -17,8 +17,9 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+  <mat-error *ngIf="!roleSelected">Please select a role</mat-error>
 </div>
 <mat-dialog-actions >
   <button mat-button style="width: 48%" (click)="onNoClick()">Cancel</button>
-  <button mat-raised-button style="width: 48%" color="primary" (click)="onAddClick()" [mat-dialog-close]="data">Add</button>
+  <button mat-raised-button style="width: 48%" color="primary" (click)="onAddClick()">Save</button>
 </mat-dialog-actions>

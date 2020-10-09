@@ -5,16 +5,14 @@ import io.reflectoring.coderadar.graph.projectadministration.module.repository.M
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.ListModulesOfProjectPort;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListModulesOfProjectAdapter implements ListModulesOfProjectPort {
   private final ModuleRepository moduleRepository;
   private final ModuleMapper moduleMapper = new ModuleMapper();
-
-  public ListModulesOfProjectAdapter(ModuleRepository moduleRepository) {
-    this.moduleRepository = moduleRepository;
-  }
 
   @Override
   public List<Module> listModules(long projectId) {

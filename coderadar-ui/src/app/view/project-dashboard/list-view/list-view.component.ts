@@ -30,9 +30,12 @@ export class ListViewComponent implements OnInit, OnChanges {
   commitsFiltered: Commit[];
   commitsAnalyzed;
   @Input() branches: Branch[];
+  @Input() roles: string[] = [];
   @Input() waiting: boolean;
   @Input() contributors: Contributor[];
-  @Output() branchOutput = new EventEmitter();
+  @Input() analysisStatus = false;
+  selectedBranch: string;
+  @Output() selectedBranchOutput = new EventEmitter<string>();
   @Output() contributorOutput = new EventEmitter();
 
   appComponent = AppComponent;
@@ -46,7 +49,6 @@ export class ListViewComponent implements OnInit, OnChanges {
 
   selectedCommit1: Commit;
   selectedCommit2: Commit;
-  selectedBranch = 'master';
   selectedContributor: Contributor = null;
 
   // These are needed for the deselection css to work
@@ -54,8 +56,8 @@ export class ListViewComponent implements OnInit, OnChanges {
   prevSelectedCommit2: Commit;
 
   pageSize = 15;
-  public startDate: string = null;
-  public endDate: string = null;
+  startDate: string = null;
+  endDate: string = null;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private store: Store<fromRoot.AppState>,
@@ -73,7 +75,8 @@ export class ListViewComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
-      this.cityEffects.currentProjectId  = this.projectId;
+      this.selectedBranch = params.branch;
+      this.cityEffects.currentProject  = this.project;
       this.showCommitsInRange();
     });
   }

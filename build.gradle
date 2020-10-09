@@ -20,8 +20,8 @@ apply plugin: "java"
 apply plugin: "org.sonarqube"
 
 ext {
-    majorVersion = '0'
-    minorVersion = '5'
+    majorVersion = '1'
+    minorVersion = '0'
     patchVersion = '0'
     baseVersion = "${majorVersion}.${minorVersion}.${patchVersion}"
 }

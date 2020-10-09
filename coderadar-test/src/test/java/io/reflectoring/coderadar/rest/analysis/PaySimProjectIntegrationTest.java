@@ -171,7 +171,8 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             "password",
             testRepoURL.toString(),
             true,
-            new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2019"));
+            new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2019"),
+            "master");
     mvc()
         .perform(
             post("/api/projects/" + projectId)
@@ -212,9 +213,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             .andReturn();
 
     List<MetricValueForCommit> metricValuesForCommit =
-        fromJson(
-            new TypeReference<List<MetricValueForCommit>>() {},
-            result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     metricValuesForCommit.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
 
@@ -376,6 +375,8 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
   }
 
   private void testSavingAnalyzerConfiguration(Long projectId) throws Exception {
+    analyzerConfigurationRepository.deleteAll();
+
     // Add analyzer configuration
     CreateAnalyzerConfigurationCommand analyzerConfigurationCommand =
         new CreateAnalyzerConfigurationCommand(
@@ -401,6 +402,8 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
   }
 
   private void testSavingFilePatterns(Long projectId) throws Exception {
+    filePatternRepository.deleteAll();
+
     // Add file patterns
     CreateFilePatternCommand filePatternCommand =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
@@ -425,7 +428,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     URL testRepoURL = new File("coderadar-workdir/PaySim").toURI().toURL();
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "PaySim", "username", "password", testRepoURL.toString(), false, null);
+            "PaySim", "username", "password", testRepoURL.toString(), false, null, "master");
 
     mvc()
         .perform(

@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,10 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class ListContributorsController implements AbstractBaseController {
   private final ListContributorsUseCase listContributorsUseCase;
   private final AuthenticationService authenticationService;
-
-  public ListContributorsController(
-      ListContributorsUseCase listContributorsUseCase,
-      AuthenticationService authenticationService) {
-    this.listContributorsUseCase = listContributorsUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @GetMapping(
       path = "/projects/{projectId}/contributors",

@@ -6,9 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
@@ -19,12 +18,15 @@ import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate {
 
   private Long projectId;
+
+  @Autowired private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
   @BeforeEach
   void setUp() throws Exception {
@@ -36,7 +38,8 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null);
+            null,
+            "master");
     MvcResult result =
         mvc()
             .perform(
@@ -46,14 +49,7 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-
-    CreateFilePatternCommand command2 =
-        new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
-    mvc()
-        .perform(
-            post("/api/projects/" + projectId + "/filePatterns")
-                .content(toJson(command2))
-                .contentType(MediaType.APPLICATION_JSON));
+    analyzerConfigurationRepository.deleteAll();
   }
 
   @Test

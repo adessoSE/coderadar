@@ -12,6 +12,7 @@ import io.reflectoring.coderadar.rest.domain.FileAndCommitsForTimePeriodResponse
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +22,10 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class GetCriticalFilesController implements AbstractBaseController {
   private final GetCriticalFilesUseCase getCriticalFilesUseCase;
   private final AuthenticationService authenticationService;
-
-  public GetCriticalFilesController(
-      GetCriticalFilesUseCase getCriticalFilesUseCase,
-      AuthenticationService authenticationService) {
-    this.getCriticalFilesUseCase = getCriticalFilesUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @RequestMapping(
       method = {RequestMethod.POST, RequestMethod.GET},
@@ -60,10 +55,7 @@ public class GetCriticalFilesController implements AbstractBaseController {
       List<FileAndCommitsForTimePeriod> files) {
     List<FileAndCommitsForTimePeriodResponse> result = new ArrayList<>(files.size());
     for (FileAndCommitsForTimePeriod f : files) {
-      FileAndCommitsForTimePeriodResponse resultItem = new FileAndCommitsForTimePeriodResponse();
-      resultItem.setPath(f.getPath());
-      resultItem.setCommits(mapCommits(f.getCommits()));
-      result.add(resultItem);
+      result.add(new FileAndCommitsForTimePeriodResponse(f.getPath(), mapCommits(f.getCommits())));
     }
     return result;
   }

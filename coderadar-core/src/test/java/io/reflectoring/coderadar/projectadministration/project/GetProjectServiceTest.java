@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.service.project.GetProjectService;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,11 +19,13 @@ class GetProjectServiceTest {
 
   @Mock private GetProjectPort getProjectPortMock;
 
+  @Mock private GetUserPort getUserPort;
+
   private GetProjectService testSubject;
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new GetProjectService(getProjectPortMock);
+    this.testSubject = new GetProjectService(getProjectPortMock, getUserPort);
   }
 
   @Test
@@ -42,8 +45,6 @@ class GetProjectServiceTest {
             .setName(projectName)
             .setVcsUrl(vcsUrl)
             .setVcsUsername(vcsUsername)
-            .setVcsPassword(vcsPassword)
-            .setVcsOnline(true)
             .setVcsStart(startDate);
 
     when(getProjectPortMock.get(projectId)).thenReturn(expectedResponse);

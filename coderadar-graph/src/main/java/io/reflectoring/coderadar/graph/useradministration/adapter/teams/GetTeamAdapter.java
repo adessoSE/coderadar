@@ -4,21 +4,24 @@ import io.reflectoring.coderadar.graph.useradministration.TeamMapper;
 import io.reflectoring.coderadar.graph.useradministration.repository.TeamRepository;
 import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetTeamAdapter implements GetTeamPort {
 
   private final TeamRepository teamRepository;
   private final TeamMapper teamMapper = new TeamMapper();
 
-  public GetTeamAdapter(TeamRepository teamRepository) {
-    this.teamRepository = teamRepository;
-  }
-
   @Override
   public Team get(long teamId) {
     return teamMapper.mapGraphObject(teamRepository.findByIdWithMembers(teamId));
+  }
+
+  @Override
+  public Team getByName(String name) {
+    return teamMapper.mapGraphObject(teamRepository.findByName(name));
   }
 
   @Override

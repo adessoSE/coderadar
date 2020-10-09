@@ -26,16 +26,21 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsStart(new Date());
-    testProject.setVcsOnline(true);
-    testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
+    testProject.setDefaultBranch("master");
     testProject.setWorkdirName(UUID.randomUUID().toString());
     testProject = projectRepository.save(testProject);
     final Long id = testProject.getId();
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "new-project-name", "username", "password", "http://valid.url", true, new Date());
+            "new-project-name",
+            "username",
+            "password",
+            "http://valid.url",
+            true,
+            new Date(),
+            "dev");
     mvc()
         .perform(
             post("/api/projects/" + testProject.getId())
@@ -47,9 +52,9 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
               ProjectEntity project = projectRepository.findById(id).get();
               Assertions.assertEquals("new-project-name", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());
-              Assertions.assertEquals("password", project.getVcsPassword());
+              Assertions.assertNotEquals("password", new String(project.getVcsPassword()));
               Assertions.assertEquals("http://valid.url", project.getVcsUrl());
-              Assertions.assertTrue(project.isVcsOnline());
+              Assertions.assertEquals("dev", project.getDefaultBranch());
             })
         .andDo(document("projects/update"));
   }
@@ -58,7 +63,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   void updateProjectReturnsErrorWhenProjectDoesNotExist() throws Exception {
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "name", "username", "password", "http://valid.url", true, new Date());
+            "name", "username", "password", "http://valid.url", true, new Date(), "dev");
     mvc()
         .perform(
             post("/api/projects/1")
@@ -72,7 +77,8 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void updateProjectReturnsErrorWhenRequestIsInvalid() throws Exception {
     UpdateProjectCommand command =
-        new UpdateProjectCommand("", "username", "password", "http://valid.url", true, new Date());
+        new UpdateProjectCommand(
+            "", "username", "password", "http://valid.url", true, new Date(), "dev");
     mvc()
         .perform(
             post("/api/projects/0")

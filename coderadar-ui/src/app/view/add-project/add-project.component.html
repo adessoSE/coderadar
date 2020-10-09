@@ -32,12 +32,17 @@
                      type="password">
             </mat-form-field>
             <mat-form-field>
+              <input [(ngModel)]="project.defaultBranch" matInput maxlength="100" name="defaultBranch" required placeholder="Default branch"
+                     type="text">
+            </mat-form-field>
+            <mat-form-field>
               <input [(ngModel)]="project.startDate" matInput name="startDate"
                      placeholder="Start date - leave empty to start with first commit" type="date">
             </mat-form-field>
 
             <!--Possible errors-->
             <mat-error *ngIf="nameEmpty">The project name must not be empty!</mat-error>
+            <mat-error *ngIf="defaultBranchEmpty">The project must have a default branch!</mat-error>
             <mat-error *ngIf="projectExists">A project with this name already exists! Please choose another name.
             </mat-error>
             <mat-error *ngIf="incorrectURL">The VCS URL is invalid!</mat-error>
@@ -45,7 +50,7 @@
             <!--Cancel and submit buttons-->
             <div id="cardButtons">
               <button mat-stroked-button routerLink="/dashboard" type="button">Cancel</button>
-              <button color="primary" mat-raised-button type="submit">Next</button>
+              <button color="primary" mat-raised-button type="submit">Add</button>
             </div>
 
           </mat-card-content>

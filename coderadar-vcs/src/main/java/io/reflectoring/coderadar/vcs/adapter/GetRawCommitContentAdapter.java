@@ -1,17 +1,16 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
+import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.*;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
@@ -39,16 +38,15 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   @Override
   public List<Pair<String, String>> getRenamesBetweenCommits(
       String parentHash, String commitHash, String projectRoot) {
-    ObjectId commitId = ObjectId.fromString(commitHash);
-    ObjectId parentId = ObjectId.fromString(parentHash);
+
     RevCommit commit;
     RevCommit parent;
 
     List<Pair<String, String>> result = new ArrayList<>();
     try (Git git = Git.open(new java.io.File(projectRoot))) {
       try (RevWalk revWalk = new RevWalk(git.getRepository())) {
-        commit = revWalk.parseCommit(commitId);
-        parent = revWalk.parseCommit(parentId);
+        commit = revWalk.parseCommit(git.getRepository().resolve(commitHash));
+        parent = revWalk.parseCommit(git.getRepository().resolve(parentHash));
       }
 
       RenameDetector renameDetector = new RenameDetector(git.getRepository());
@@ -76,11 +74,9 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
       return new byte[0];
     }
     try (Git git = Git.open(new java.io.File(projectRoot))) {
-
-      ObjectId commitId = ObjectId.fromString(commitHash);
       RevCommit commit;
       try (RevWalk revWalk = new RevWalk(git.getRepository())) {
-        commit = revWalk.parseCommit(commitId);
+        commit = revWalk.parseCommit(git.getRepository().resolve(commitHash));
       }
       byte[] fpRawContent;
       if (commit.getParentCount() > 0) {
@@ -90,11 +86,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
       }
 
       RawText rt1;
-      if (fpRawContent != null) {
-        rt1 = new RawText(fpRawContent);
-      } else {
-        rt1 = new RawText(new byte[0]);
-      }
+      rt1 = new RawText(Objects.requireNonNullElseGet(fpRawContent, () -> new byte[0]));
       byte[] rawContent = BlobUtils.getRawContent(git.getRepository(), commit, filepath);
       RawText rt2;
       if (rawContent != null && rawContent.length != 0) {
@@ -115,10 +107,11 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   public HashMap<String, byte[]> getCommitContentBulk(
       String projectRoot, List<String> filepaths, String commitHash) {
     try (Git git = Git.open(new java.io.File(projectRoot))) {
-      ObjectId commitId = git.getRepository().resolve(commitHash);
-      HashMap<String, byte[]> bulkContent = new LinkedHashMap<>();
+      Repository repository = git.getRepository();
+      ObjectId commitId = repository.resolve(commitHash);
+      HashMap<String, byte[]> bulkContent = Maps.newLinkedHashMapWithExpectedSize(filepaths.size());
       for (String filepath : filepaths) {
-        bulkContent.put(filepath, BlobUtils.getRawContent(git.getRepository(), commitId, filepath));
+        bulkContent.put(filepath, BlobUtils.getRawContent(repository, commitId, filepath));
       }
       return bulkContent;
     } catch (IOException e) {
@@ -133,7 +126,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
       String commitHash) {
     try (Git git = Git.open(new java.io.File(projectRoot))) {
       ObjectId commitId = git.getRepository().resolve(commitHash);
-      HashMap<File, byte[]> bulkContent = new LinkedHashMap<>();
+      HashMap<File, byte[]> bulkContent = Maps.newLinkedHashMapWithExpectedSize(files.size());
       for (File file : files) {
         bulkContent.put(
             file, BlobUtils.getRawContent(git.getRepository(), commitId, file.getPath()));

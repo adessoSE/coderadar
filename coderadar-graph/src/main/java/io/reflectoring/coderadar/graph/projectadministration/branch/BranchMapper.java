@@ -7,11 +7,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Branch;
 public class BranchMapper implements Mapper<Branch, BranchEntity> {
   @Override
   public Branch mapGraphObject(BranchEntity nodeEntity) {
-    Branch branch = new Branch();
-    branch.setName(nodeEntity.getName());
-    branch.setCommitHash(nodeEntity.getCommitHash());
-    branch.setTag(nodeEntity.isTag());
-    return branch;
+    return new Branch(nodeEntity.getName(), nodeEntity.getCommitHash(), nodeEntity.isTag());
   }
 
   @Override

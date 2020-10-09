@@ -8,9 +8,13 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListUsersForProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RemoveUserFromProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driver.permissions.RemoveUserFromProjectUseCase;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RemoveUserFromProjectService implements RemoveUserFromProjectUseCase {
 
   private final GetProjectPort getProjectPort;
@@ -18,16 +22,7 @@ public class RemoveUserFromProjectService implements RemoveUserFromProjectUseCas
   private final RemoveUserFromProjectPort removeUserFromProjectPort;
   private final ListUsersForProjectPort listUsersForProjectPort;
 
-  public RemoveUserFromProjectService(
-      GetProjectPort getProjectPort,
-      GetUserPort getUserPort,
-      RemoveUserFromProjectPort removeUserFromProjectPort,
-      ListUsersForProjectPort listUsersForProjectPort) {
-    this.getProjectPort = getProjectPort;
-    this.getUserPort = getUserPort;
-    this.removeUserFromProjectPort = removeUserFromProjectPort;
-    this.listUsersForProjectPort = listUsersForProjectPort;
-  }
+  private static final Logger logger = LoggerFactory.getLogger(RemoveUserFromProjectService.class);
 
   @Override
   public void removeUserFromProject(long projectId, long userId) {
@@ -40,6 +35,7 @@ public class RemoveUserFromProjectService implements RemoveUserFromProjectUseCas
     if (listUsersForProjectPort.listUsers(projectId).stream()
         .anyMatch(user -> user.getId() == userId)) {
       removeUserFromProjectPort.removeUserFromProject(projectId, userId);
+      logger.info("Removed user with id: {} from project with id: {}", userId, projectId);
     } else {
       throw new UserNotAssignedException(projectId, userId);
     }

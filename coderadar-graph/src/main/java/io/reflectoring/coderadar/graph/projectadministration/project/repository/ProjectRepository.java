@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.graph.projectadministration.project.repository
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -21,18 +22,26 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} "
           + "WITH mv LIMIT 10000 DETACH DELETE mv RETURN COUNT(mv)")
-  long deleteProjectMetrics(long projectId);
+  int deleteProjectMetrics(long projectId);
 
   /**
-   * Deletes a maximum of 10000 metrics in a project. This value can be adjusted as required by your
+   * Deletes a maximum of 10000 files in a project. This value can be adjusted as required by your
    * Neo4j installation in order to prevent out of memory errors.
    *
    * @param projectId The id of the project.
-   * @return The number of deleted metrics, a maximum of 10000 at a time.
+   * @return The number of deleted files, a maximum of 10000 at a time.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS*]->(f) WHERE ID(p) = {0} WITH f LIMIT 10000 DETACH DELETE f RETURN COUNT(f)")
-  long deleteProjectFilesAndModules(long projectId);
+      "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} WITH f LIMIT 10000 DETACH DELETE f RETURN COUNT(f)")
+  int deleteProjectFiles(long projectId);
+
+  /**
+   * Deletes all module entities in a project.
+   *
+   * @param projectId The id of the project.
+   */
+  @Query("MATCH (p)-[:CONTAINS*]->(m:ModuleEntity) WHERE ID(p) = {0} WITH m DETACH DELETE m")
+  void deleteProjectModules(long projectId);
 
   /**
    * Deletes all of the commits in a project.
@@ -59,7 +68,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   void deleteProjectBranches(long projectId);
 
   /** @return All projects that are not currently being deleted. */
-  @Query("MATCH (p:ProjectEntity) WHERE p.isBeingDeleted = FALSE RETURN p ORDER BY p.name")
+  @Query("MATCH (p:ProjectEntity) WHERE p.isBeingDeleted = FALSE RETURN p ORDER BY toLower(p.name)")
   @NonNull
   List<ProjectEntity> findAll();
 
@@ -107,7 +116,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param value The status.
    */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingProcessed = {1}")
-  void setBeingProcessed(long id, @NonNull Boolean value);
+  void setBeingProcessed(long id, boolean value);
 
   /**
    * @param id The project id.
@@ -169,16 +178,22 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    */
   @Query(
       "MATCH (u:UserEntity) WHERE ID(u) = {0} WITH u "
-          + "OPTIONAL MATCH (u)-[:ASSIGNED_TO*0..1]->(p1:ProjectEntity) WHERE p1.isBeingDeleted = FALSE "
-          + "WITH p1, u "
-          + "MATCH (p2:ProjectEntity)<-[:ASSIGNED_TO*0..1]-(t)<-[:IS_IN*0..1]-(u)  WHERE p2.isBeingDeleted = FALSE WITH collect(p1) + collect(p2) as list "
-          + "UNWIND list AS p RETURN DISTINCT p ORDER BY p.name")
-  List<ProjectEntity> findProjectsByUserId(long userId);
+          + "OPTIONAL MATCH (u)-[r1:ASSIGNED_TO]->(p1:ProjectEntity) WHERE p1.isBeingDeleted = FALSE "
+          + "WITH p1, u, r1 "
+          + "MATCH (p2:ProjectEntity)<-[r2:ASSIGNED_TO]-(t)<-[:IS_IN*0..1]-(u)  WHERE p2.isBeingDeleted = FALSE WITH p1, r1, p2, r2 "
+          + "WITH collect({roles: r1.role, project: p1}) + collect({roles: r2.role, project: p2}) as list "
+          + "UNWIND list AS p RETURN DISTINCT p.project as project, collect(DISTINCT p.roles) as roles ORDER BY toLower(project.name)")
+  List<Map<String, Object>> findProjectsByUsedId(long userId);
 
   /**
    * @param teamId The team id.
    * @return All projects a team is assigned to.
    */
-  @Query("MATCH (t)-[:ASSIGNED_TO]->(p) WHERE ID(t) = {0} AND p.isBeingDeleted = FALSE RETURN p")
+  @Query(
+      "MATCH (t)-[:ASSIGNED_TO]->(p) WHERE ID(t) = {0} AND p.isBeingDeleted = FALSE RETURN p ORDER BY toLower(p.name)")
   List<ProjectEntity> listProjectsByTeamId(long teamId);
+
+  @Query(
+      "MATCH (u)-[:ASSIGNED_TO {creator: true, role: \"admin\"}]->(p) WHERE ID(u) = {0} RETURN p")
+  List<ProjectEntity> findProjectsCreatedByUser(long userId);
 }

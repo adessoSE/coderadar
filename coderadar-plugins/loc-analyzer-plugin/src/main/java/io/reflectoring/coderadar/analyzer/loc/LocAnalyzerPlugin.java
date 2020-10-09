@@ -30,14 +30,10 @@ public class LocAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
   private FileMetrics toFileMetrics(LinesOfCode loc, String fileEnding) {
     String sanitizedFileEnding = fileEnding.replaceAll("\\.", "");
     FileMetrics metrics = new FileMetrics();
-    metrics.setMetricCount(
-        new Metric("coderadar:size:loc:" + sanitizedFileEnding), (long) loc.getLoc());
-    metrics.setMetricCount(
-        new Metric("coderadar:size:cloc:" + sanitizedFileEnding), (long) loc.getCloc());
-    metrics.setMetricCount(
-        new Metric("coderadar:size:sloc:" + sanitizedFileEnding), (long) loc.getSloc());
-    metrics.setMetricCount(
-        new Metric("coderadar:size:eloc:" + sanitizedFileEnding), (long) loc.getEloc());
+    metrics.setMetricCount(new Metric("coderadar:size:loc:" + sanitizedFileEnding), loc.getLoc());
+    metrics.setMetricCount(new Metric("coderadar:size:cloc:" + sanitizedFileEnding), loc.getCloc());
+    metrics.setMetricCount(new Metric("coderadar:size:sloc:" + sanitizedFileEnding), loc.getSloc());
+    metrics.setMetricCount(new Metric("coderadar:size:eloc:" + sanitizedFileEnding), loc.getEloc());
     return metrics;
   }
 }

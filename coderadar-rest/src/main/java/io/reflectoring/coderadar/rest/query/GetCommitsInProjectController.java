@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.rest.GetCommitResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class GetCommitsInProjectController implements AbstractBaseController {
   private final GetCommitsInProjectUseCase getCommitsInProjectUseCase;
   private final AuthenticationService authenticationService;
-
-  public GetCommitsInProjectController(
-      GetCommitsInProjectUseCase getCommitsInProjectUseCase,
-      AuthenticationService authenticationService) {
-    this.getCommitsInProjectUseCase = getCommitsInProjectUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @GetMapping(
       path = "/projects/{projectId}/{branchName}/commits",

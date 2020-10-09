@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class ListAnalyzerConfigurationsFromProjectController implements AbstractBaseController {
   private final ListAnalyzerConfigurationsUseCase listAnalyzerConfigurationsUseCase;
   private final AuthenticationService authenticationService;
-
-  public ListAnalyzerConfigurationsFromProjectController(
-      ListAnalyzerConfigurationsUseCase listAnalyzerConfigurationsUseCase,
-      AuthenticationService authenticationService) {
-    this.listAnalyzerConfigurationsUseCase = listAnalyzerConfigurationsUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @GetMapping(path = "/projects/{projectId}/analyzers", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetAnalyzerConfigurationResponse>>

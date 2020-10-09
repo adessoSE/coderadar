@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FilePattern {
-  private Long id;
+  private long id;
   private String pattern;
   private InclusionType inclusionType;
 }

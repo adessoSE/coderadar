@@ -1,40 +1,28 @@
 package io.reflectoring.coderadar.analyzer.service;
 
+import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.domain.Finding;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
-import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /** Performs analysis on a commit. */
 @Service
-public class AnalyzeCommitService implements AnalyzeCommitUseCase {
+@RequiredArgsConstructor
+public class AnalyzeCommitService {
 
   private final AnalyzeFileService analyzeFileService;
   private final GetRawCommitContentPort getRawCommitContentPort;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-
-  public AnalyzeCommitService(
-      AnalyzeFileService analyzeFileService,
-      GetRawCommitContentPort getRawCommitContentPort,
-      CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.analyzeFileService = analyzeFileService;
-    this.getRawCommitContentPort = getRawCommitContentPort;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-  }
 
   /**
    * Analyzes a single commit.
@@ -44,19 +32,13 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
    * @param analyzers The analyzers to use.
    * @return A list of metric values for the given commit.
    */
-  @Override
   public List<MetricValue> analyzeCommit(
       Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
     List<MetricValue> metricValues = new ArrayList<>();
-    List<File> files = new ArrayList<>(commit.getTouchedFiles().size());
-    for (FileToCommitRelationship ftr : commit.getTouchedFiles()) {
-      files.add(ftr.getFile());
-    }
-
-    analyzeBulk(commit.getHash(), files, analyzers, project)
+    analyzeBulk(commit.getHash(), commit.getChangedFiles(), analyzers, project)
         .forEach(
-            (file, fileMetrics) ->
-                metricValues.addAll(getMetrics(fileMetrics, commit.getId(), file.getId())));
+            (fileId, fileMetrics) ->
+                metricValues.addAll(getMetrics(fileMetrics, commit.getId(), fileId)));
     return metricValues;
   }
 
@@ -69,12 +51,12 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
    * @param project The project the commit is in.
    * @return A map of File and corresponding FileMetrics
    */
-  private HashMap<File, FileMetrics> analyzeBulk(
+  private Map<Long, FileMetrics> analyzeBulk(
       String commitHash,
       List<File> files,
       List<SourceCodeFileAnalyzerPlugin> analyzers,
       Project project) {
-    HashMap<File, FileMetrics> fileMetricsMap = new LinkedHashMap<>();
+    Map<Long, FileMetrics> fileMetricsMap = Maps.newLinkedHashMapWithExpectedSize(files.size());
     try {
       HashMap<File, byte[]> fileContents =
           getRawCommitContentPort.getCommitContentBulkWithFiles(
@@ -84,9 +66,10 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
               files,
               commitHash);
       fileContents.forEach(
-          (key, value) ->
+          (file, content) ->
               fileMetricsMap.put(
-                  key, analyzeFileService.analyzeFile(analyzers, key.getPath(), value)));
+                  file.getId(),
+                  analyzeFileService.analyzeFile(analyzers, file.getPath(), content)));
     } catch (UnableToGetCommitContentException e) {
       e.printStackTrace();
     }
@@ -102,21 +85,15 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
    * @return A list of MetricValues.
    */
   private List<MetricValue> getMetrics(FileMetrics fileMetrics, Long commitId, Long fileId) {
-    List<MetricValue> metricValues = new ArrayList<>();
+    List<MetricValue> metricValues = new ArrayList<>(fileMetrics.getMetrics().size());
     for (Metric metric : fileMetrics.getMetrics()) {
-      List<Finding> findings = new ArrayList<>();
-      for (io.reflectoring.coderadar.plugin.api.Finding finding : fileMetrics.getFindings(metric)) {
-        findings.add(
-            new Finding(
-                finding.getLineStart(),
-                finding.getLineEnd(),
-                finding.getCharStart(),
-                finding.getCharEnd(),
-                finding.getMessage()));
-      }
       metricValues.add(
           new MetricValue(
-              metric.getId(), fileMetrics.getMetricCount(metric), commitId, fileId, findings));
+              metric.getId(),
+              fileMetrics.getMetricCount(metric),
+              commitId,
+              fileId,
+              fileMetrics.getFindings(metric)));
     }
     return metricValues;
   }

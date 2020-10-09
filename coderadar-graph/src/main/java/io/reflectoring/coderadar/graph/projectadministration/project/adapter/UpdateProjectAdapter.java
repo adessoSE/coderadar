@@ -4,15 +4,13 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UpdateProjectAdapter implements UpdateProjectPort {
   private final ProjectRepository projectRepository;
-
-  public UpdateProjectAdapter(ProjectRepository projectRepository) {
-    this.projectRepository = projectRepository;
-  }
 
   @Override
   public void update(Project project) {
@@ -22,10 +20,10 @@ public class UpdateProjectAdapter implements UpdateProjectPort {
             .orElseThrow(() -> new ProjectNotFoundException(project.getId()))
             .setName(project.getName())
             .setVcsStart(project.getVcsStart())
-            .setVcsOnline(project.isVcsOnline())
             .setVcsUsername(project.getVcsUsername())
             .setVcsPassword(project.getVcsPassword())
             .setVcsUrl(project.getVcsUrl())
+            .setDefaultBranch(project.getDefaultBranch())
             .setWorkdirName(project.getWorkdirName()));
   }
 }

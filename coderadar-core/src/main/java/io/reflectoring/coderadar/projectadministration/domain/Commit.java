@@ -1,21 +1,27 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /** Metadata about a commit to a Git repository. */
 @Data
 public class Commit {
   private long id;
-  private String hash;
   private long timestamp;
+  private boolean analyzed;
+  private String hash;
   private String comment;
   private String author;
   private String authorEmail;
-  private boolean analyzed;
 
-  @ToString.Exclude private List<Commit> parents;
+  @ToString.Exclude @EqualsAndHashCode.Exclude
+  private List<Commit> parents = Collections.emptyList();
 
-  @ToString.Exclude private List<FileToCommitRelationship> touchedFiles;
+  @ToString.Exclude @EqualsAndHashCode.Exclude private List<File> changedFiles = new ArrayList<>();
+
+  @ToString.Exclude @EqualsAndHashCode.Exclude private List<File> deletedFiles = new ArrayList<>();
 }

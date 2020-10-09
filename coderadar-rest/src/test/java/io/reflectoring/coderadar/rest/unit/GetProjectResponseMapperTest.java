@@ -17,21 +17,21 @@ class GetProjectResponseMapperTest {
     projects.add(
         new Project()
             .setName("testProject1")
-            .setVcsOnline(true)
             .setVcsUsername("testUsername1")
-            .setVcsPassword("testPassword1")
+            .setVcsPassword(new byte[] {1, 2, 3})
             .setId(1L)
             .setVcsStart(new Date(123L))
+            .setDefaultBranch("master")
             .setVcsUrl("testUrl1"));
 
     projects.add(
         new Project()
             .setName("testProject2")
-            .setVcsOnline(false)
             .setVcsUsername("testUsername2")
-            .setVcsPassword("testPassword2")
+            .setVcsPassword(new byte[] {1, 2, 3})
             .setId(2L)
             .setVcsStart(new Date(345L))
+            .setDefaultBranch("master")
             .setVcsUrl("testUrl2"));
 
     List<GetProjectResponse> responses = GetProjectResponseMapper.mapProjects(projects);
@@ -42,7 +42,7 @@ class GetProjectResponseMapperTest {
     Assertions.assertEquals(new Date(123L), responses.get(0).getStartDate());
     Assertions.assertEquals("testUsername1", responses.get(0).getVcsUsername());
     Assertions.assertNull(responses.get(0).getVcsPassword());
-    Assertions.assertTrue(responses.get(0).isVcsOnline());
+    Assertions.assertEquals("master", responses.get(0).getDefaultBranch());
     Assertions.assertEquals("testUrl1", responses.get(0).getVcsUrl());
 
     Assertions.assertEquals("testProject2", responses.get(1).getName());
@@ -50,7 +50,7 @@ class GetProjectResponseMapperTest {
     Assertions.assertEquals(new Date(345L), responses.get(1).getStartDate());
     Assertions.assertEquals("testUsername2", responses.get(1).getVcsUsername());
     Assertions.assertNull(responses.get(1).getVcsPassword());
-    Assertions.assertFalse(responses.get(1).isVcsOnline());
+    Assertions.assertEquals("master", responses.get(0).getDefaultBranch());
     Assertions.assertEquals("testUrl2", responses.get(1).getVcsUrl());
   }
 
@@ -59,11 +59,11 @@ class GetProjectResponseMapperTest {
     Project testProject =
         new Project()
             .setName("testProject1")
-            .setVcsOnline(true)
             .setVcsUsername("testUsername1")
-            .setVcsPassword("testPassword1")
+            .setVcsPassword(new byte[] {1, 2, 3})
             .setId(1L)
             .setVcsStart(new Date(123L))
+            .setDefaultBranch("master")
             .setVcsUrl("testUrl1");
 
     GetProjectResponse response = GetProjectResponseMapper.mapProject(testProject);
@@ -73,7 +73,7 @@ class GetProjectResponseMapperTest {
     Assertions.assertEquals(new Date(123L), response.getStartDate());
     Assertions.assertEquals("testUsername1", response.getVcsUsername());
     Assertions.assertNull(response.getVcsPassword());
-    Assertions.assertTrue(response.isVcsOnline());
+    Assertions.assertEquals("master", response.getDefaultBranch());
     Assertions.assertEquals("testUrl1", response.getVcsUrl());
   }
 }

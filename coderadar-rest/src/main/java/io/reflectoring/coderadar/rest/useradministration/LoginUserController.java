@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class LoginUserController implements AbstractBaseController {
   private final LoginUserUseCase loginUserUseCase;
-
-  public LoginUserController(LoginUserUseCase loginUserUseCase) {
-    this.loginUserUseCase = loginUserUseCase;
-  }
 
   @PostMapping(
       path = "/user/auth",

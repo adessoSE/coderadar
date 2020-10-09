@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.project;
 
 import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
 
 public interface GetProjectPort {
 
@@ -15,6 +16,14 @@ public interface GetProjectPort {
    * @return The project with the supplied name.
    */
   Project get(String name);
+
+  /**
+   * @param projectId The project id.
+   * @param userId The user id.
+   * @return The project with the given id and all roles the user (with the given id) has for this
+   *     project.
+   */
+  ProjectWithRoles getWithRoles(long projectId, long userId);
 
   /**
    * @param name Name to check

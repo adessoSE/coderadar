@@ -40,7 +40,8 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null);
+            null,
+            "master");
     MvcResult result =
         mvc()
             .perform(
@@ -198,9 +199,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
             .andReturn();
 
     List<MetricValueForCommit> metricValuesForCommit =
-        fromJson(
-            new TypeReference<List<MetricValueForCommit>>() {},
-            result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     Assertions.assertEquals(3L, metricValuesForCommit.size());
     Assertions.assertEquals(15L, metricValuesForCommit.get(0).getValue());

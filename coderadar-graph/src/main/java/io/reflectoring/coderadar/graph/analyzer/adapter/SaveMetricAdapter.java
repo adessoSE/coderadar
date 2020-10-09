@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.analyzer.adapter;
 
+import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.graph.analyzer.FindingsMapper;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileIdAndMetricQueryResult;
@@ -7,50 +8,41 @@ import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import java.util.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SaveMetricAdapter implements SaveMetricPort {
 
   private final MetricRepository metricRepository;
   private final FindingsMapper findingsMapper = new FindingsMapper();
 
-  public SaveMetricAdapter(MetricRepository metricRepository) {
-    this.metricRepository = metricRepository;
-  }
-
   @Override
   public void saveMetricValues(List<MetricValue> metricValues) {
-    int metricValuesSize = metricValues.size();
-    List<MetricValueEntity> metricValueEntities = new ArrayList<>(metricValuesSize);
+    List<Object> saveData = new ArrayList<>(metricValues.size());
     for (MetricValue metricValue : metricValues) {
-      MetricValueEntity metricValueEntity = new MetricValueEntity();
-      metricValueEntity.setValue(metricValue.getValue());
-      metricValueEntity.setName(metricValue.getName());
-      metricValueEntity.setFindings(findingsMapper.mapDomainObjects(metricValue.getFindings()));
-      metricValueEntities.add(metricValueEntity);
+      saveData.add(
+          new Object[] {
+            metricValue.getValue(),
+            metricValue.getName(),
+            findingsMapper.mapDomainObjects(metricValue.getFindings()),
+            metricValue.getFileId(),
+            metricValue.getCommitId()
+          });
     }
-    metricRepository.save(metricValueEntities, 0);
-    List<HashMap<String, Object>> commitAndFileRels = new ArrayList<>(metricValuesSize);
-    for (int i = 0; i < metricValuesSize; i++) {
-      HashMap<String, Object> commitAndFileRel = new HashMap<>(6);
-      commitAndFileRel.put("metricId", metricValueEntities.get(i).getId());
-      commitAndFileRel.put("commitId", metricValues.get(i).getCommitId());
-      commitAndFileRel.put("fileId", metricValues.get(i).getFileId());
-      commitAndFileRels.add(commitAndFileRel);
-    }
-    metricRepository.createFileAndCommitRelationships(commitAndFileRels);
+    metricRepository.saveMetrics(saveData);
   }
 
   @Override
   public Map<Long, List<MetricValue>> getMetricsForFiles(long projectId, String branch) {
     List<FileIdAndMetricQueryResult> metrics =
         metricRepository.getLastMetricsForFiles(projectId, branch);
-    Map<Long, List<MetricValue>> filesMetrics = new HashMap<>();
+    Map<Long, List<MetricValue>> filesMetrics = Maps.newHashMapWithExpectedSize(metrics.size());
     for (var i : metrics) {
       long fileId = i.getId();
       List<MetricValueEntity> fileMetrics = i.getMetrics();
-      List<MetricValue> mapped = new ArrayList<>();
+      List<MetricValue> mapped = new ArrayList<>(fileMetrics.size());
       for (MetricValueEntity entity : fileMetrics) {
         mapped.add(
             new MetricValue(

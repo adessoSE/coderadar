@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -13,10 +14,12 @@ import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommitsPort {
 
   private final GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter;
@@ -25,44 +28,32 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private final GetRawCommitContentPort getRawCommitContentPort;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
-  public GetDeltaTreeForTwoCommitsAdapter(
-      GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter,
-      ProjectRepository projectRepository,
-      CommitRepository commitRepository,
-      GetRawCommitContentPort getRawCommitContentPort,
-      CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.getMetricsForAllFilesInCommitAdapter = getMetricsForAllFilesInCommitAdapter;
-    this.projectRepository = projectRepository;
-    this.commitRepository = commitRepository;
-    this.getRawCommitContentPort = getRawCommitContentPort;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-  }
-
   @Override
   public DeltaTree get(GetDeltaTreeForTwoCommitsCommand command, long projectId) {
     ProjectEntity projectEntity =
         projectRepository
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
+    String commit1 = ValidationUtils.validateAndTrimCommitHash(command.getCommit1());
+    String commit2 = ValidationUtils.validateAndTrimCommitHash(command.getCommit2());
 
-    if (commitRepository.commitIsNewer(command.getCommit1(), command.getCommit2())) {
-      String temp = command.getCommit1();
-      command.setCommit1(command.getCommit2());
-      command.setCommit2(temp);
+    // Swap the commits if commit1 was made after commit 2
+    if (commitRepository.commitIsNewer(commit1, commit2)) {
+      String temp = commit1;
+      commit1 = commit2;
+      commit2 = temp;
     }
 
     MetricTree commit1Tree =
-        getMetricsForAllFilesInCommitAdapter.get(
-            projectEntity, command.getCommit1(), command.getMetrics());
+        getMetricsForAllFilesInCommitAdapter.get(projectEntity, commit1, command.getMetrics());
     MetricTree commit2Tree =
-        getMetricsForAllFilesInCommitAdapter.get(
-            projectEntity, command.getCommit2(), command.getMetrics());
+        getMetricsForAllFilesInCommitAdapter.get(projectEntity, commit2, command.getMetrics());
 
     DeltaTree deltaTree = createDeltaTree(commit1Tree, commit2Tree);
     List<Pair<String, String>> renamedFiles =
         getRawCommitContentPort.getRenamesBetweenCommits(
-            command.getCommit1(),
-            command.getCommit2(),
+            commit1,
+            commit2,
             coderadarConfigurationProperties.getWorkdir()
                 + "/projects/"
                 + projectEntity.getWorkdirName());

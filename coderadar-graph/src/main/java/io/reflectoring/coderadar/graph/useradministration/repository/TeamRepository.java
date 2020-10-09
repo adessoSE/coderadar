@@ -13,7 +13,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
    */
   @Query(
       "MATCH (u)-[:IS_IN]->(t) WHERE ID(u) = {0} WITH t "
-          + "OPTIONAL MATCH (t)<-[r:IS_IN]-(u) RETURN t, r, u")
+          + "OPTIONAL MATCH (t)<-[r:IS_IN]-(u) RETURN t, r, u ORDER BY toLower(t.name)")
   List<TeamEntity> listTeamsByUserId(long userId);
 
   /**
@@ -51,7 +51,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
   @Query("MATCH (u)-[r:IS_IN*0..1]->(t) WHERE ID(t) = {0} RETURN t, r, u")
   TeamEntity findByIdWithMembers(long teamId);
 
-  @Query("MATCH (t) WHERE ID(t) = {0} RETURN COUNT(t) > 0")
+  @Query("MATCH (t:TeamEntity) WHERE ID(t) = {0} RETURN COUNT(t) > 0")
   boolean existsById(long teamId);
 
   @Query("MATCH (t:TeamEntity) WHERE t.name = {0} RETURN COUNT(t) > 0")
@@ -61,7 +61,8 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
    * @param projectId The project id.
    * @return All teams assigned to the project along with their members.
    */
-  @Query("MATCH (p)<-[:ASSIGNED_TO]-(t)<-[r:IS_IN*0..1]-(u) WHERE ID(p) = {0} RETURN t, r, u")
+  @Query(
+      "MATCH (p)<-[:ASSIGNED_TO]-(t)<-[r:IS_IN*0..1]-(u) WHERE ID(p) = {0} RETURN t, r, u ORDER BY toLower(t.name)")
   List<TeamEntity> listTeamsByProjectIdWithMembers(long projectId);
 
   /**
@@ -74,6 +75,14 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
   void removeTeamFromProject(long projectId, long teamId);
 
   /** @return All teams in the database along with their members. */
-  @Query("MATCH (t:TeamEntity)<-[r:IS_IN*0..1]-(u) RETURN t, r, u")
+  @Query("MATCH (t:TeamEntity)<-[r:IS_IN*0..1]-(u) RETURN t, r, u ORDER BY toLower(t.name)")
   List<TeamEntity> findAllWithMembers();
+
+  @Query("MATCH (t:TeamEntity) WHERE t.name = {0} RETURN t")
+  TeamEntity findByName(String name);
+
+  @Query(
+      "MATCH (t:TeamEntity)<-[:IS_IN]-(u:UserEntity) WHERE ID(u) = {0} "
+          + "AND SIZE ((t)<-[:IS_IN]-()) = 1 DETACH DELETE t")
+  void deleteIfOnlyUserWithIdRemains(long userId);
 }

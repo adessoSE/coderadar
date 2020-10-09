@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
 import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListTeamsUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
+@RequiredArgsConstructor
 public class ListTeamsController implements AbstractBaseController {
   private final ListTeamsUseCase listTeamsUseCase;
-
-  public ListTeamsController(ListTeamsUseCase listTeamsUseCase) {
-    this.listTeamsUseCase = listTeamsUseCase;
-  }
 
   @GetMapping(path = "/teams", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetTeamResponse>> listTeams() {

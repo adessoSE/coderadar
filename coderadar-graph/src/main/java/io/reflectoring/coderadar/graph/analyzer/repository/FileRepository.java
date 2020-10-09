@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.query.domain.FileAndCommitsForTimePeriodQueryResult;
-import java.util.HashMap;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -26,25 +25,17 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    */
   @Query(
       "UNWIND {0} as x "
-          + "MATCH (f1) WHERE ID(f1) = x.fileId1 "
-          + "MATCH (f2) WHERE ID(f2) = x.fileId2 "
+          + "MATCH (f1) WHERE ID(f1) = x[0] "
+          + "MATCH (f2) WHERE ID(f2) = x[1] "
           + "CREATE (f1)-[:RENAMED_FROM]->(f2)")
-  void createRenameRelationships(@NonNull List<HashMap<String, Object>> renameRels);
-
-  /**
-   * @param projectId The project id.
-   * @return The file with the given sequence id or null if it does not exist.
-   */
-  @Query(
-      "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.sequenceId = {1} RETURN f LIMIT 1 ")
-  FileEntity getFileInProjectBySequenceId(long projectId, long sequenceId);
+  void createRenameRelationships(@NonNull List<long[]> renameRels);
 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND "
           + "c.hash = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
           + "WHERE c.timestamp >= {2} WITH c ORDER BY c.timestamp DESC WITH collect(c) as commits "
-          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c) RETURN collect(f) as deletes', {commits: commits}) "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:DELETED_IN]->(c) RETURN collect(f) as deletes', {commits: commits}) "
           + "YIELD value WITH commits, value.deletes as deletes "
           + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN]-(f) WHERE NOT(f IN {deletes}) "
           + "AND any(x IN includes WHERE f.path =~ x) AND none(x IN excludes WHERE f.path =~ x) "
@@ -57,7 +48,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "WHERE size(commits) >= {3} RETURN f.path AS path, commits ORDER BY f.path")
   List<FileAndCommitsForTimePeriodQueryResult> getFrequentlyChangedFiles(
       long projectId,
-      String commitHash,
+      @NonNull String commitHash,
       long dateTime,
       int frequency,
       @NonNull List<String> includes,
@@ -69,7 +60,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @return True if any file with the given path exists.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {0} AND f.path = {1} WITH f LIMIT 1 RETURN COUNT(f) > 0 ")
+      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {0} AND f.path = {1} WITH f LIMIT 1 RETURN COUNT(f) > 0")
   boolean fileWithPathExists(long projectId, @NonNull String path);
 
   /**
@@ -78,6 +69,13 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @return True if any file falls under the given path, false otherwise.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} WITH f LIMIT 1 RETURN COUNT(f) > 0 ")
+      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} WITH f LIMIT 1 RETURN COUNT(f) > 0")
   boolean fileInPathExists(@NonNull String path, long projectOrModuleId);
+
+  /**
+   * @param projectId The project id.
+   * @return All files with the given path or null if it does not exist.
+   */
+  @Query("MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.path = {1} RETURN f")
+  List<FileEntity> getFilesInProjectByPath(long projectId, String path);
 }

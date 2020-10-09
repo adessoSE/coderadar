@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.query.service;
 
+import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
@@ -12,22 +13,15 @@ import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetCriticalFile
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFilesWithContributorsCommand;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFrequentlyChangedFilesCommand;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetCriticalFilesService implements GetCriticalFilesUseCase {
   private final GetCriticalFilesPort getCriticalFilesPort;
   private final GetProjectPort getProjectPort;
   private final ListFilePatternsOfProjectPort listFilePatternsOfProjectPort;
-
-  public GetCriticalFilesService(
-      GetCriticalFilesPort getCriticalFilesPort,
-      GetProjectPort getProjectPort,
-      ListFilePatternsOfProjectPort listFilePatternsOfProjectPort) {
-    this.getCriticalFilesPort = getCriticalFilesPort;
-    this.getProjectPort = getProjectPort;
-    this.listFilePatternsOfProjectPort = listFilePatternsOfProjectPort;
-  }
 
   @Override
   public List<ContributorsForFile> getFilesWithContributors(
@@ -35,7 +29,10 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     checkProjectExists(projectId);
     List<FilePattern> filePatterns = getFilePatternsForProject(projectId);
     return getCriticalFilesPort.getFilesWithContributors(
-        projectId, command.getNumberOfContributors(), command.getCommitHash(), filePatterns);
+        projectId,
+        command.getNumberOfContributors(),
+        ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()),
+        filePatterns);
   }
 
   @Override
@@ -45,7 +42,7 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     List<FilePattern> filePatterns = getFilePatternsForProject(projectId);
     return getCriticalFilesPort.getFrequentlyChangedFiles(
         projectId,
-        command.getCommitHash(),
+        ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()),
         command.getStartDate(),
         command.getFrequency(),
         filePatterns);

@@ -22,7 +22,6 @@ export class CityViewComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.cityEffects.currentProjectId = params.id;
       this.setTitle(params.id);
     });
   }
@@ -31,6 +30,7 @@ export class CityViewComponent implements OnInit {
     this.projectService.getProject(id)
       .then(response => {
         this.titleService.setTitle('Coderadar - ' + AppComponent.trimProjectName(response.body.name) + ' - 3D view');
+        this.cityEffects.currentProject = new Project(response.body);
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {

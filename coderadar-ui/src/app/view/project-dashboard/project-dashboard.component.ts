@@ -16,6 +16,7 @@ import {loadAvailableMetrics} from '../../city-map/visualization/visualization.a
 import {CommitLog} from '../../model/commit-log';
 import {Contributor} from '../../model/contributor';
 import {ContributorService} from '../../service/contributor.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-project-dashboard',
@@ -33,14 +34,16 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   contributors: Contributor[];
   commitsAnalyzed = 0;
   project: Project;
-  selectedBranch = 'master';
+  selectedBranch;
   selectedContributor: Contributor = new Contributor();
   waiting = false;
   updateCommitsTimer: Subscription;
+  roles: string[] = [];
+  analysisStatus = false;
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private cityEffects: AppEffects,
-              private store: Store<fromRoot.AppState>, private contributorService: ContributorService) {
+              private store: Store<fromRoot.AppState>, private contributorService: ContributorService, private location: Location) {
     this.project = new Project();
     this.commits = [];
     this.selectedContributor.emailAddresses = [''];
@@ -49,6 +52,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
+      this.selectedBranch = params.branch;
       this.getCommitTree();
       this.getCommits(true);
       if (this.commits.length === 0) {
@@ -65,7 +69,6 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
           this.getCommits(true);
         }
       });
-      this.cityEffects.currentProjectId  = this.projectId;
     });
   }
 
@@ -73,6 +76,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
    * Gets all commits for this project from the service and saves them in this.commits.
    */
   public getCommits(displayLoadingIndicator: boolean): void {
+    this.projectService.getAnalyzingStatus(this.projectId).then(value => this.analysisStatus = value.body.status);
     this.waiting = displayLoadingIndicator;
     this.projectService.getCommitsForContributor(this.projectId, this.selectedBranch, this.selectedContributor.emailAddresses[0])
       .then(response => {
@@ -102,7 +106,6 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
           this.branches = [];
         } else {
           this.branches = response.body;
-          this.selectedBranch = this.branches[0].name === undefined ? this.branches[0].name  : 'master';
         }
       })
       .catch(error => {
@@ -116,10 +119,12 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
    * Gets the project from the service and saves it in this.project
    */
   private getProject(): void {
-    this.projectService.getProject(this.projectId)
+    this.projectService.getProjectWithRolesForUser(this.projectId, UserService.getLoggedInUser().userId)
       .then(response => {
-        this.project = new Project(response.body);
+        this.project = new Project(response.body.project);
         this.titleService.setTitle('Coderadar - ' + AppComponent.trimProjectName(this.project.name));
+        this.roles = response.body.roles;
+        this.cityEffects.currentProject  = this.project;
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
@@ -135,8 +140,10 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   }
 
   handleBranchChange($event: any) {
+    this.location.go(this.location.path(false).replace(this.selectedBranch, $event));
     this.selectedBranch = $event;
-    this.getCommits(false);
+    this.commits = [];
+    this.getCommits(true);
   }
 
   private getCommitTree() {
@@ -174,6 +181,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     } else {
       this.selectedContributor = $event;
     }
-    this.getCommits(false);
+    this.commits = [];
+    this.getCommits(true);
   }
 }

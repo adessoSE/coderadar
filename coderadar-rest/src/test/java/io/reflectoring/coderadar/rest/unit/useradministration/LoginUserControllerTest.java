@@ -22,7 +22,8 @@ class LoginUserControllerTest extends UnitTestTemplate {
     LoginUserController testSubject = new LoginUserController(loginUserUseCase);
 
     LoginUserCommand command = new LoginUserCommand("username", "password");
-    LoginUserResponse loginUserResponse = new LoginUserResponse("accessToken", "refreshToken", 1L);
+    LoginUserResponse loginUserResponse =
+        new LoginUserResponse("accessToken", "refreshToken", 1L, false);
 
     Mockito.when(loginUserUseCase.login(command)).thenReturn(loginUserResponse);
 

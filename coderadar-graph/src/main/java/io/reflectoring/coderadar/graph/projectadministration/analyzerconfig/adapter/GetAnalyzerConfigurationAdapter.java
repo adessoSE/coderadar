@@ -5,18 +5,15 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.Anal
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class GetAnalyzerConfigurationAdapter implements GetAnalyzerConfigurationPort {
   private final AnalyzerConfigurationRepository analyzerConfigurationRepository;
   private final AnalyzerConfigurationMapper analyzerConfigurationMapper =
       new AnalyzerConfigurationMapper();
-
-  public GetAnalyzerConfigurationAdapter(
-      AnalyzerConfigurationRepository analyzerConfigurationRepository) {
-    this.analyzerConfigurationRepository = analyzerConfigurationRepository;
-  }
 
   @Override
   public AnalyzerConfiguration getAnalyzerConfiguration(long id) {
@@ -24,5 +21,10 @@ public class GetAnalyzerConfigurationAdapter implements GetAnalyzerConfiguration
         analyzerConfigurationRepository
             .findById(id, 0)
             .orElseThrow(() -> new AnalyzerConfigurationNotFoundException(id)));
+  }
+
+  @Override
+  public boolean existsById(long configurationId) {
+    return analyzerConfigurationRepository.existsById(configurationId);
   }
 }

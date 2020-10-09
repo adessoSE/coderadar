@@ -5,26 +5,20 @@ import io.reflectoring.coderadar.projectadministration.port.driven.module.Delete
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.delete.DeleteModuleUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class DeleteModuleService implements DeleteModuleUseCase {
 
   private final DeleteModulePort deleteModulePort;
   private final ProcessProjectService processProjectService;
   private final GetModulePort getModulePort;
-  private static final Logger logger = LoggerFactory.getLogger(DeleteModuleService.class);
 
-  public DeleteModuleService(
-      DeleteModulePort deleteModulePort,
-      ProcessProjectService processProjectService,
-      GetModulePort getModulePort) {
-    this.deleteModulePort = deleteModulePort;
-    this.processProjectService = processProjectService;
-    this.getModulePort = getModulePort;
-  }
+  private static final Logger logger = LoggerFactory.getLogger(DeleteModuleService.class);
 
   @Override
   public void delete(long id, long projectId) {

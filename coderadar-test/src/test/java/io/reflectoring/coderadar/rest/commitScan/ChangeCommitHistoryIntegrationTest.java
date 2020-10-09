@@ -46,7 +46,8 @@ class ChangeCommitHistoryIntegrationTest extends ControllerTestTemplate {
     FileUtils.copyDirectory(new File(testRepoURL.toURI()), temp);
 
     CreateProjectCommand command =
-        new CreateProjectCommand("testProject", null, null, temp.toURI().toString(), false, null);
+        new CreateProjectCommand(
+            "testProject", null, null, temp.toURI().toString(), false, null, "master");
     project = getProjectPort.get(createProjectService.createProject(command));
   }
 
@@ -65,7 +66,7 @@ class ChangeCommitHistoryIntegrationTest extends ControllerTestTemplate {
             .collect(Collectors.toList());
     editFileContent(fileToEdit.get(0));
 
-    git.add().addFilepattern("-A").call();
+    git.add().addFilepattern(".").call();
     git.commit().setMessage("testCommit").call();
     git.push().add("master").call();
 

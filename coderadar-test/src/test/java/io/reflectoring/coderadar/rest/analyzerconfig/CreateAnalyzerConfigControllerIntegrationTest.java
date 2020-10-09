@@ -87,11 +87,15 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Test
   void createAnalyzerConfigurationReturnsErrorWhenAnalyzerNotFound() throws Exception {
+    ProjectEntity testProject = new ProjectEntity();
+    testProject.setVcsUrl("https://valid.url");
+    testProject = projectRepository.save(testProject);
+
     CreateAnalyzerConfigurationCommand command =
         new CreateAnalyzerConfigurationCommand("analyzer", true);
     mvc()
         .perform(
-            post("/api/projects/1/analyzers")
+            post(String.format("/api/projects/%d/analyzers", testProject.getId()))
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())

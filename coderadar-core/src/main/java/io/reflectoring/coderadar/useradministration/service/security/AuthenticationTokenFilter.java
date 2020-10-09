@@ -9,7 +9,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,16 +25,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * not valid, other filters will try to authenticate the request. Note: the filter must be added or
  * inserted to the filter chain in the security configuration.
  */
+@RequiredArgsConstructor
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
   private static final String TOKEN_HEADER = "Authorization";
 
   private final TokenService tokenService;
-
-  @Autowired
-  AuthenticationTokenFilter(TokenService tokenService) {
-    this.tokenService = tokenService;
-  }
 
   @Override
   protected void doFilterInternal(

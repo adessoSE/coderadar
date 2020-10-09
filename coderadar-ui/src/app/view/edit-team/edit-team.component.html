@@ -1,0 +1,50 @@
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/edit-team/' + teamId, name: 'Edit ' + teamName}]"></app-header>
+<mat-sidenav-container class="sidenav">
+  <mat-sidenav mode="side" opened style="width: 15%">
+    <app-sidenav-content></app-sidenav-content>
+  </mat-sidenav>
+  <div>
+    <main class="mat-card-form">
+      <div class="grid-container" id="cardContainer">
+        <div fxLayoutAlign="center center" style="margin-top: 100px">
+          <form (ngSubmit)="submitForm()" style="width: 30%">
+            <mat-card>
+
+              <!--Card title-->
+              <mat-card-header>
+                <mat-card-title>
+                  <span>Edit {{teamName}}</span>
+                </mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content fxLayout="column">
+                <!--Form fields-->
+                <mat-form-field>
+                  <input [(ngModel)]="team.name" matInput maxlength="100" name="name" placeholder="Team name"
+                         required type="text">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Select users</mat-label>
+                  <mat-select multiple [formControl]="usersFormControl">
+                    <mat-option *ngFor="let user of users" [value]="user.id">{{user.username}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!--Possible errors-->
+                <mat-error *ngIf="nameEmpty">The team name must not be empty!</mat-error>
+                <mat-error *ngIf="noUsers">The team must have at least one user!</mat-error>
+                <mat-error *ngIf="teamNameTaken">A team with this name already exists!</mat-error>
+                <!--Cancel and submit buttons-->
+                <div id="cardButtons">
+                  <button mat-stroked-button routerLink="/teams" type="button">Cancel</button>
+                  <button color="primary" mat-raised-button type="submit">Save</button>
+                </div>
+
+              </mat-card-content>
+            </mat-card>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</mat-sidenav-container>
+<app-footer></app-footer>

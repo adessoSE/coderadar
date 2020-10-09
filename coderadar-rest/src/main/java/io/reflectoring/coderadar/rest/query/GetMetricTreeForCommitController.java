@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCo
 import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class GetMetricTreeForCommitController implements AbstractBaseController {
   private final GetMetricTreeForCommitUseCase getMetricTreeForCommitUseCase;
   private final AuthenticationService authenticationService;
-
-  public GetMetricTreeForCommitController(
-      GetMetricTreeForCommitUseCase getMetricTreeForCommitUseCase,
-      AuthenticationService authenticationService) {
-    this.getMetricTreeForCommitUseCase = getMetricTreeForCommitUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @GetMapping(
       path = "/projects/{projectId}/metricvalues/tree",

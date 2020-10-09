@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class UpdateAnalyzerConfigurationController implements AbstractBaseController {
   private final UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase;
   private final AuthenticationService authenticationService;
-
-  public UpdateAnalyzerConfigurationController(
-      UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase,
-      AuthenticationService authenticationService) {
-    this.updateAnalyzerConfigurationUseCase = updateAnalyzerConfigurationUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @PostMapping(
       path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}",

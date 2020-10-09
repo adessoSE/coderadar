@@ -1,5 +1,5 @@
 <app-header [title]="[{location: '/dashboard', name: 'Dashboard'}]"></app-header>
-<div *ngIf="waiting" style="height: 100%">
+<div *ngIf="waiting" style="height: 100%" [class.dark-overlay]="deletingProject">
   <mat-spinner class="waitingIndicator" [diameter]="100"></mat-spinner>
 </div>
 <mat-sidenav-container class="sidenav">
@@ -12,7 +12,7 @@
 
       <!--Message displayed if no projects are found-->
       <div *ngIf="projects.length == 0 && selectedTeam == undefined" class="noProjectsMessage">
-        Hello there, it looks like you haven't added any projects yet. <br>
+        It looks like you haven't added any projects yet. <br>
         Click on the plus button to add one.
       </div>
       <div *ngIf="projects.length == 0 && selectedTeam != undefined" class="noProjectsMessage">
@@ -30,34 +30,37 @@
       </mat-form-field>
 
       <mat-grid-list cols="2" rowHeight="170px">
-        <mat-grid-tile *ngFor="let project of projects" [colspan]="2" [rowspan]="1">
+        <mat-grid-tile *ngFor="let p of projects" [colspan]="2" [rowspan]="1">
           <mat-card class="dashboard-card">
             <mat-card-header>
               <mat-card-title>
-                <a mat-button routerLink="/project/{{project.id}}">{{appComponent.trimProjectName(project.name)}}</a>
-                <button title="Start analysis" (click)="startAnalysis(project.id)" style="float:right" mat-icon-button>
+                <a mat-button routerLink="/project/{{p.project.id}}/{{p.project.defaultBranch}}">{{appComponent.trimProjectName(p.project.name)}}</a>
+                <button title="Start analysis" (click)="startAnalysis(p.project.id)" style="float:right" mat-icon-button>
                   <mat-icon>play_arrow</mat-icon>
                 </button>
-                <button title="Stop analysis" (click)="stopAnalysis(project.id)" style="float:right" mat-icon-button>
+                <button title="Stop analysis" (click)="stopAnalysis(p.project.id)" style="float:right" mat-icon-button>
                   <mat-icon>stop</mat-icon>
                 </button>
-                <button title="Delete analysis results" (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
+                <button *ngIf="p.roles.includes('ADMIN')" title="Delete analysis results" (click)="resetAnalysis(p.project.id)" style="float:right" mat-icon-button>
                   <mat-icon>clear</mat-icon>
                 </button>
-                <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>
+                <button disabled mat-icon-button style="float:right; margin-left: 10px">
+                  <mat-spinner [diameter]="22" *ngIf="analysisStatuses.get(p.project.id)" ></mat-spinner>
+                </button>
+                <button *ngIf="p.roles.includes('ADMIN')" [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu" xPosition="before">
-                  <button mat-menu-item routerLink="/project-edit/{{project.id}}">Edit</button>
-                  <button mat-menu-item routerLink="/project-configure/{{project.id}}">Configure</button>
-                  <button mat-menu-item (click)="openAddToTeamDialog(project)">Add to team</button>
-                  <button (click)="openProjectDeletionDialog(project)" mat-menu-item>Remove</button>
+                  <button mat-menu-item routerLink="/project-edit/{{p.project.id}}">Edit</button>
+                  <button mat-menu-item routerLink="/project-configure/{{p.project.id}}">Configure</button>
+                  <button mat-menu-item (click)="openAddToTeamDialog(p.project)">Manage teams</button>
+                  <button (click)="openProjectDeletionDialog(p)" mat-menu-item>Remove</button>
                 </mat-menu>
               </mat-card-title>
             </mat-card-header>
             <mat-card-content class="mat-card-content">
-              <div style="padding-bottom: 0">Project URL: <a href="{{project.vcsUrl}}" target="_blank" mat-flat-button>{{project.vcsUrl}}</a></div>
-              <div>Project start date: <strong>&nbsp;&nbsp;{{project.startDate}}</strong></div>
+              <div style="padding-bottom: 0">Project URL: <a href="{{p.project.vcsUrl}}" target="_blank" mat-flat-button>{{p.project.vcsUrl}}</a></div>
+              <div>Project start date: <strong>&nbsp;&nbsp;{{p.project.startDate}}</strong></div>
             </mat-card-content>
           </mat-card>
         </mat-grid-tile>

@@ -4,7 +4,7 @@ import io.reflectoring.coderadar.EntityNotFoundException;
 
 public class ProjectNotFoundException extends EntityNotFoundException {
   public ProjectNotFoundException(long projectId) {
-    super("Project with id " + projectId + " not found.");
+    super(String.format("Project with id %d not found.", projectId));
   }
 
   public ProjectNotFoundException(String message) {

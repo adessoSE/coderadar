@@ -5,15 +5,13 @@ import io.reflectoring.coderadar.contributor.port.driven.UpdateContributorPort;
 import io.reflectoring.coderadar.contributor.port.driver.UpdateContributorCommand;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UpdateContributorAdapter implements UpdateContributorPort {
   private final ContributorRepository contributorRepository;
-
-  public UpdateContributorAdapter(ContributorRepository contributorRepository) {
-    this.contributorRepository = contributorRepository;
-  }
 
   @Override
   public void updateContributor(long id, UpdateContributorCommand command) {

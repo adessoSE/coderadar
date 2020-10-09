@@ -41,8 +41,6 @@ class AddTeamToProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsStart(new Date());
-    testProject.setVcsOnline(true);
-    testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
     projectRepository.save(testProject);
   }

@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
+import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
@@ -8,30 +9,27 @@ import io.reflectoring.coderadar.query.domain.CommitLog;
 import io.reflectoring.coderadar.query.domain.CommitLogAuthor;
 import io.reflectoring.coderadar.query.port.driven.GetCommitLogPort;
 import java.util.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetCommitLogAdapter implements GetCommitLogPort {
 
   private final CommitRepository commitRepository;
   private final BranchRepository branchRepository;
-
-  public GetCommitLogAdapter(CommitRepository commitRepository, BranchRepository branchRepository) {
-    this.commitRepository = commitRepository;
-    this.branchRepository = branchRepository;
-  }
 
   @Override
   public List<CommitLog> getCommitLog(long projectId) {
     List<BranchEntity> branches = branchRepository.getBranchesInProject(projectId);
     List<LinkedHashMap<String, Object>> commits =
         commitRepository.findByProjectIdWithParents(projectId);
-    List<CommitLog> log = new ArrayList<>();
 
-    Map<String, List<String>> commitToRefMap = new HashMap<>();
+    Map<String, List<String>> commitToRefMap = Maps.newHashMapWithExpectedSize(branches.size());
     for (BranchEntity ref : branches) {
-      String commitName = ref.getCommitHash();
-      List<String> refNames = commitToRefMap.computeIfAbsent(commitName, k -> new ArrayList<>());
+      // most commits will have at most 2 branches/tags on them
+      List<String> refNames =
+          commitToRefMap.computeIfAbsent(ref.getCommitHash(), k -> new ArrayList<>(2));
       if (!refNames.contains(ref.getName())) {
         if (ref.isTag()) {
           refNames.add("tag: " + ref.getName());
@@ -40,6 +38,8 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
         }
       }
     }
+
+    List<CommitLog> log = new ArrayList<>(commits.size());
     for (LinkedHashMap<String, Object> commitWithParents : commits) {
       CommitEntity commit = (CommitEntity) commitWithParents.get("commit");
       // author

@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class GetUserResponse {
   private long id;
   private String username;
+  private boolean platformAdmin = false;
 }

@@ -5,17 +5,15 @@ import io.reflectoring.coderadar.graph.useradministration.repository.UserReposit
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.ListUsersForProjectPort;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListUsersForProjectAdapter implements ListUsersForProjectPort {
 
   private final UserRepository userRepository;
   private final UserMapper userMapper = new UserMapper();
-
-  public ListUsersForProjectAdapter(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
 
   @Override
   public List<User> listUsers(long projectId) {

@@ -12,20 +12,16 @@ import io.reflectoring.coderadar.query.port.driven.GetCriticalFilesPort;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetCriticalFilesAdapter implements GetCriticalFilesPort {
   private final ContributorQueryRepository contributorQueryRepository;
   private final FileRepository fileRepository;
   private final CommitBaseDataMapper mapper = new CommitBaseDataMapper();
-
-  public GetCriticalFilesAdapter(
-      ContributorQueryRepository contributorQueryRepository, FileRepository fileRepository) {
-    this.contributorQueryRepository = contributorQueryRepository;
-    this.fileRepository = fileRepository;
-  }
 
   @Override
   public List<ContributorsForFile> getFilesWithContributors(

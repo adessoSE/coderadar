@@ -21,4 +21,7 @@ public interface AnalyzerConfigurationRepository
 
   @Query("MATCH (a:AnalyzerConfigurationEntity) WHERE ID(a) = {0} RETURN COUNT(a) > 0")
   boolean existsById(long id);
+
+  @Query("MATCH (p), (a) WHERE ID(p) = {0} AND ID(a) = {1} " + "CREATE (p)-[:HAS]->(a)")
+  void addConfigurationToProject(long projectId, long analyzerConfigurationId);
 }

@@ -5,18 +5,14 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListProjectsAdapter implements ListProjectsPort {
   private final ProjectRepository projectRepository;
   private final ProjectMapper projectMapper = new ProjectMapper();
-
-  @Autowired
-  public ListProjectsAdapter(ProjectRepository projectRepository) {
-    this.projectRepository = projectRepository;
-  }
 
   @Override
   public List<Project> getProjects() {

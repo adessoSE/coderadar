@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserC
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserUseCase;
 import io.reflectoring.coderadar.useradministration.service.security.TokenService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,23 +16,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class LoginUserService implements LoginUserUseCase {
 
   private final GetUserPort getUserPort;
   private final RefreshTokenPort refreshTokenPort;
   private final AuthenticationManager authenticationManager;
   private final TokenService tokenService;
-
-  public LoginUserService(
-      GetUserPort getUserPort,
-      RefreshTokenPort refreshTokenPort,
-      AuthenticationManager authenticationManager,
-      TokenService tokenService) {
-    this.getUserPort = getUserPort;
-    this.refreshTokenPort = refreshTokenPort;
-    this.authenticationManager = authenticationManager;
-    this.tokenService = tokenService;
-  }
 
   @Override
   public LoginUserResponse login(LoginUserCommand command) {
@@ -45,7 +36,7 @@ public class LoginUserService implements LoginUserUseCase {
     String accessToken = tokenService.generateAccessToken(user.getId(), user.getUsername());
     String refreshToken = tokenService.generateRefreshToken(user.getId(), user.getUsername());
     saveRefreshToken(user, refreshToken);
-    return new LoginUserResponse(accessToken, refreshToken, user.getId());
+    return new LoginUserResponse(accessToken, refreshToken, user.getId(), user.isPlatformAdmin());
   }
 
   /**

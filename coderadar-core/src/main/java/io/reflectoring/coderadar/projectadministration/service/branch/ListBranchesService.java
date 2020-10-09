@@ -6,18 +6,15 @@ import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBr
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.branch.list.ListBranchesUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListBranchesService implements ListBranchesUseCase {
 
   private final ListBranchesPort listBranchesPort;
   private final GetProjectPort getProjectPort;
-
-  public ListBranchesService(ListBranchesPort listBranchesPort, GetProjectPort getProjectPort) {
-    this.listBranchesPort = listBranchesPort;
-    this.getProjectPort = getProjectPort;
-  }
 
   @Override
   public List<Branch> listBranchesInProject(long projectId) {

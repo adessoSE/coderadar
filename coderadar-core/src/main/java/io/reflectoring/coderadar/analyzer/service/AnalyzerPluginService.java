@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AnalyzerPluginService {
-  private final Logger logger = LoggerFactory.getLogger(AnalyzerPluginService.class);
+  private static final Logger logger = LoggerFactory.getLogger(AnalyzerPluginService.class);
 
   private final Map<String, Class<? extends SourceCodeFileAnalyzerPlugin>>
       sourceCodeFileAnalyzerPlugins = new HashMap<>();

@@ -5,6 +5,7 @@ import {ProjectRole} from '../../model/project-role';
 export class AddProjectToTeamDialogData {
   project: Project;
   teams: Team[];
+  teamsForProject: Team[];
   role: ProjectRole;
 }
 

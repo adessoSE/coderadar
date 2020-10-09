@@ -71,7 +71,11 @@ import { SidenavContentComponent } from './view/sidenav-content/sidenav-content.
 import {ContributorMergeDialogComponent} from './components/contributor-merge-dialog/contributor-merge-dialog.component';
 import {DeleteProjectDialogComponent} from './components/delete-project-dialog/delete-project-dialog.component';
 import {AddProjectToTeamDialogComponent} from './components/add-project-to-team-dialog/add-project-to-team-dialog.component';
+import {DeleteTeamDialogComponent} from './components/delete-team-dialog/delete-team-dialog.component';
 import {ContributorDialogComponent} from './components/contributor-card/contributor-dialog.component';
+import {EditTeamComponent} from './view/edit-team/edit-team.component';
+import {ShutdownDialogComponent} from './components/shutdown-dialog/shutdown-dialog.component';
+import { ManageUsersComponent } from './view/manage-users/manage-users.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -79,13 +83,15 @@ const appRoutes: Routes = [
   {path: 'dashboard', component: MainDashboardComponent},
   {path: 'teams', component: TeamsDashboardComponent},
   {path: 'add-team', component: AddTeamComponent},
+  {path: 'edit-team/:id', component: EditTeamComponent},
   {path: 'user-settings', component: UserSettingsComponent},
   {path: 'add-project', component: AddProjectComponent},
+  {path: 'manage-users', component: ManageUsersComponent},
   {path: 'project-configure/:id', component: ConfigureProjectComponent},
   {path: 'city/:id', component: CityViewComponent},
   {path: 'project-edit/:id', component: EditProjectComponent},
-  {path: 'project/:id', component: ProjectDashboardComponent},
-  {path: 'project/:id/:name', component: ViewCommitComponent},
+  {path: 'project/:id/:branch', component: ProjectDashboardComponent},
+  {path: 'project/:id/commit/:name', component: ViewCommitComponent},
   {path: 'project/:projectId/:commitName/dependency-map', component: DependencyRootComponent},
   {path: 'project/:projectId/:commitName1/:commitName2/dependency-map', component: DependencyCompareComponent},
   {path: 'project/:projectId/:commitHash/files', component: FileViewComponent},
@@ -108,6 +114,7 @@ const appRoutes: Routes = [
     TeamsDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
+    EditTeamComponent,
     DependencyRootComponent,
     ContributorMergeDialogComponent,
     DependencyCompareComponent,
@@ -118,12 +125,15 @@ const appRoutes: Routes = [
     FileViewComponent,
     TeamsDashboardComponent,
     AddProjectToTeamDialogComponent,
+    ShutdownDialogComponent,
     AddTeamComponent,
     SidenavContentComponent,
-    ContributorDialogComponent,
     ContributorCardComponent,
+    ContributorDialogComponent,
     FileViewComponent,
-    DeleteProjectDialogComponent
+    DeleteProjectDialogComponent,
+    DeleteTeamDialogComponent,
+    ManageUsersComponent
   ],
   imports: [
     BrowserModule,
@@ -195,7 +205,9 @@ const appRoutes: Routes = [
     AddProjectToTeamDialogComponent,
     ContributorMergeDialogComponent,
     ContributorDialogComponent,
-    DeleteProjectDialogComponent
+    DeleteProjectDialogComponent,
+    DeleteTeamDialogComponent,
+    ShutdownDialogComponent
   ]
 })
 export class AppModule {

@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.query.domain.FileTree;
 import io.reflectoring.coderadar.query.port.driver.GetFileTreeForCommitUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class GetFileTreeForCommitController implements AbstractBaseController {
-
   private final GetFileTreeForCommitUseCase getFileTreeForCommitUseCase;
   private final AuthenticationService authenticationService;
-
-  public GetFileTreeForCommitController(
-      GetFileTreeForCommitUseCase getFileTreeForCommitUseCase,
-      AuthenticationService authenticationService) {
-    this.getFileTreeForCommitUseCase = getFileTreeForCommitUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @GetMapping(
       path = "/projects/{projectId}/files/tree/{commitHash}",

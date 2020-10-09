@@ -1,4 +1,4 @@
-<main class="card-list">
+<main class="card-list" style="min-height: 50vh">
   <p>{{getTitleText()}}
     <br>
     <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commitsFiltered.length}} commits</mat-label>
@@ -6,7 +6,7 @@
 
   <mat-form-field class="branchSelector">
     <mat-label>Branch</mat-label>
-    <mat-select (valueChange)="branchOutput.emit($event)" [(value)]="selectedBranch">
+    <mat-select (valueChange)="selectedBranchOutput.emit($event)" [(value)]="selectedBranch">
       <mat-optgroup label="Branches">
         <ng-container *ngFor="let branch of branches">
           <mat-option *ngIf="!branch.isTag"  [value]="branch.name">
@@ -46,18 +46,22 @@
   </span>
 
   <div class="analysisButtons">
-    <button title="Start analysis" (click)="startAnalysis(project.id)" style="float:right" mat-icon-button>
+    <button title="Start analysis" (click)="startAnalysis(project.id)" mat-icon-button>
       <mat-icon>play_arrow</mat-icon>
     </button>
-    <button title="Stop analysis" (click)="stopAnalysis(project.id)" style="float:right" mat-icon-button>
+    <button title="Stop analysis" (click)="stopAnalysis(project.id)" mat-icon-button>
       <mat-icon>stop</mat-icon>
     </button>
-    <button title="Delete analysis results for all branches" (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
+    <button title="Delete analysis results for all branches" (click)="resetAnalysis(project.id)" *ngIf="roles.includes('ADMIN')"
+           mat-icon-button>
       <mat-icon>clear</mat-icon>
+    </button>
+    <button disabled mat-icon-button>
+      <mat-spinner [diameter]="22" *ngIf="analysisStatus"></mat-spinner>
     </button>
   </div>
   <div *ngIf="commitsFiltered.length === 0 && !waiting " class="waitingIndicator" style="font-size: xx-large">No commits</div>
-  <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
+  <mat-paginator *ngIf="commitsFiltered.length > 0" #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
                  [pageSize]="pageSize"
                  [pageSizeOptions]="pageSizeOptions"
                  (page)="syncPaginators($event)">
@@ -88,7 +92,7 @@
           <mat-action-row>
             <button mat-button routerLink="/project/{{project.id}}/{{commit.hash}}/files">File tree</button><br>
             <button mat-button routerLink="/project/{{project.id}}/{{commit.hash}}/dependency-map/">Dependency Map</button>
-            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.hash}}">Raw metrics</button>
+            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/commit/{{commit.hash}}">Raw metrics</button>
           </mat-action-row>
         </mat-expansion-panel>
       </mat-grid-tile>
@@ -111,7 +115,7 @@
   </mat-grid-list>
 </main>
 
-<mat-paginator #paginator2 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
+<mat-paginator *ngIf="commitsFiltered.length > 0" #paginator2 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
                [pageSize]="pageSize"
                [pageSizeOptions]="pageSizeOptions"
                (page)="syncPaginators($event)">

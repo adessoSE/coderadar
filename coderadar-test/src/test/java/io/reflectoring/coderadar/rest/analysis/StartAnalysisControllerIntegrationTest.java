@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.rest.analysis;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -9,10 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
@@ -33,6 +33,7 @@ class StartAnalysisControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private CommitRepository commitRepository;
   @Autowired private MetricRepository metricRepository;
   @Autowired private Session session;
+  @Autowired private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
   private Long projectId;
 
@@ -46,7 +47,8 @@ class StartAnalysisControllerIntegrationTest extends ControllerTestTemplate {
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null);
+            null,
+            "master");
     MvcResult result =
         mvc()
             .perform(
@@ -56,14 +58,7 @@ class StartAnalysisControllerIntegrationTest extends ControllerTestTemplate {
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-
-    CreateFilePatternCommand createFilePatternCommand =
-        new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
-    mvc()
-        .perform(
-            post("/api/projects/" + projectId + "/filePatterns")
-                .content(toJson(createFilePatternCommand))
-                .contentType(MediaType.APPLICATION_JSON));
+    analyzerConfigurationRepository.deleteAll();
   }
 
   @Test

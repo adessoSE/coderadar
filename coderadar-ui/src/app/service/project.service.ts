@@ -13,6 +13,7 @@ import {Branch} from '../model/branch';
 import {CommitLog} from '../model/commit-log';
 import {FileTreeNode} from '../model/file-tree-node';
 import {FileContentWithMetrics} from '../model/file-content-with-metrics';
+import {ProjectWithRoles} from '../model/project-with-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,17 @@ export class ProjectService {
    */
   public getProject(id: number): Promise<HttpResponse<any>> {
     return this.httpClient.get<any>(this.apiURL + 'projects/' + id, {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * TODO
+   * Gets a project from the database.
+   * Sends a GET request to /projects/{id}
+   * @param projectId The id of the project.
+   */
+  public getProjectWithRolesForUser(projectId: number, userId: number): Promise<HttpResponse<any>> {
+    return this.httpClient.get<any>(this.apiURL + 'users/' + userId + '/projects/' + projectId,
+      {observe: 'response'}).toPromise();
   }
 
   /**
@@ -157,12 +169,12 @@ export class ProjectService {
   }
 
   /**
-   * Gets the running analyzing job for a project.
-   * Sends a GET request to /projects/{id}/analyzingJob
+   * Gets the running analysis status for a project.
+   * Sends a GET request to /projects/{id}/analyzingStatus
    * @param id The project id.
    */
-  public getAnalyzingJob(id: number): Promise<HttpResponse<any>> {
-    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/analyzingJob', {observe: 'response'}).toPromise();
+  public getAnalyzingStatus(id: number): Promise<HttpResponse<any>> {
+    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/analyzingStatus', {observe: 'response'}).toPromise();
   }
 
   /**
@@ -203,7 +215,8 @@ export class ProjectService {
    * @param branch The branch to use for getting the commits.
    */
   public getCommitsForContributor(id: number, branch: string, email: string): Promise<HttpResponse<Commit[]>> {
-    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits?email=' + email.replace('+', '%2B'),
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits?email=' +
+      encodeURIComponent(email),
       {observe: 'response'}).toPromise();
   }
 
@@ -268,8 +281,6 @@ export class ProjectService {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze/reset', {}, {observe: 'response'}).toPromise();
   }
 
-
-
   /**
    * Returns all of the branches for a project.
    * Sends a GET request to /projects/{id}/branches
@@ -317,8 +328,8 @@ export class ProjectService {
       {commitHash, filepath}, {observe: 'response'}).toPromise();
   }
 
-  public listProjectsForUser(userId: number): Promise<HttpResponse<Project[]>> {
-    return this.httpClient.get<Project[]>(this.apiURL + 'users/' + userId + '/projects',
+  public listProjectsForUser(userId: number): Promise<HttpResponse<ProjectWithRoles[]>> {
+    return this.httpClient.get<ProjectWithRoles[]>(this.apiURL + 'users/' + userId + '/projects',
       {observe: 'response'}).toPromise();
   }
 }

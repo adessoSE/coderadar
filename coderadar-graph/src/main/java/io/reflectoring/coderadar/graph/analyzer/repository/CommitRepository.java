@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,15 +25,15 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    *
    * @param projectId The id of the project.
    * @param includes The paths to include (regex)
-   * @param excludes The paths to exclude (regex)
-   * @return A list of commit entities with initialized FileToCommitRelationships.
+   * @param excludes The paths to exclude (regex)A
+   * @return A list of commit entities with initialized changedFiles except deletes.
    */
   @Query(
       "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c WHERE NOT c.analyzed "
-          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f) WHERE r.changeType <> \"DELETE\" AND any(x IN {2} WHERE f.path =~ x) "
-          + "AND none(x IN {3} WHERE f.path =~ x) RETURN c as commit, collect({path: f.path, id: ID(f)}) as files "
-          + "ORDER BY c.timestamp ASC")
+          + "OPTIONAL MATCH (c)<-[:CHANGED_IN]-(f) WHERE any(x IN {2} WHERE f.path =~ x) "
+          + "AND none(x IN {3} WHERE f.path =~ x) WITH c, collect({path: f.path, id: ID(f)}) as files ORDER BY c.timestamp ASC "
+          + "RETURN {id: ID(c), hash: c.hash} as commit, files")
   @NonNull
   List<Map<String, Object>> findByProjectIdNonAnalyzedWithFiles(
       long projectId,
@@ -53,10 +52,10 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
           + "RETURN node ORDER BY node.timestamp DESC")
-  List<CommitEntity> findByProjectIdAndBranchName(long projectId, String branch);
+  List<CommitEntity> findByProjectIdAndBranchName(long projectId, @NonNull String branch);
 
   /**
-   * Returns all commits in a project. (FileToCommitRelationships and parents are not initialized).
+   * Returns all commits in a project. (Files and parents are not initialized).
    *
    * @param projectId The project id.
    * @return A list of commits in the project.
@@ -96,23 +95,30 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    */
   @Query(
       "UNWIND {0} as c "
-          + "MATCH (c1) WHERE ID(c1) = c.id1 "
-          + "MATCH (c2) WHERE ID(c2) = c.id2 "
-          + "CREATE (c1)-[:IS_CHILD_OF {parentOrder: c.parentOrder}]->(c2)")
-  void createParentRelationships(List<HashMap<String, Object>> parentRels);
+          + "MATCH (c1) WHERE ID(c1) = c[0] "
+          + "MATCH (c2) WHERE ID(c2) = c[1] "
+          + "CREATE (c1)-[:IS_CHILD_OF {parentOrder: c[2]}]->(c2)")
+  void createParentRelationships(@NonNull List<Long[]> parentRels);
 
   /**
    * Creates [:CHANGED_IN] Relationships between files and commits.
    *
    * @param fileRels A list of maps, each containing the ids of the commit (commitId) and file
-   *     (fileId) as well as the change type (changeType) and old file path (oldPath).
+   *     (fileId) as well as the change type (changeType).
    */
   @Query(
       "UNWIND {0} as x "
-          + "MATCH (c) WHERE ID(c) = x.commitId "
-          + "MATCH (f) WHERE ID(f) = x.fileId "
-          + "CREATE (f)-[:CHANGED_IN {changeType: x.changeType, oldPath: x.oldPath}]->(c)")
-  void createFileRelationships(List<HashMap<String, Object>> fileRels);
+          + "MATCH (c) WHERE ID(c) = x[0] "
+          + "MATCH (f) WHERE ID(f) = x[1] "
+          + "CREATE (f)-[:CHANGED_IN]->(c)")
+  void createFileRelationships(@NonNull List<long[]> fileRels);
+
+  @Query(
+      "UNWIND {0} as x "
+          + "MATCH (c) WHERE ID(c) = x[0] "
+          + "MATCH (f) WHERE ID(f) = x[1] "
+          + "CREATE (f)-[:DELETED_IN]->(c)")
+  void createFileDeleteRelationships(@NonNull List<long[]> fileRels);
 
   /**
    * @param commit1 The full hash of the first commit.
@@ -134,7 +140,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query(
       "MATCH (c) WHERE ID(c) = {0} WITH c "
           + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->(c) "
-          + "WHERE r.changeType = \"ADD\" OR r.changeType = \"RENAME\" DETACH DELETE c, f")
+          + "WHERE NOT EXISTS((c)--(f)-[:CHANGED_IN]->()) DETACH DELETE c, f")
   void deleteCommitAndAddedOrRenamedFiles(long commitId);
 
   @Query(
@@ -144,5 +150,5 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "WHERE toLower(c.authorEmail) IN emails "
           + "RETURN c ORDER BY c.timestamp DESC")
   List<CommitEntity> findByProjectIdBranchNameAndContributor(
-      long projectId, String branchName, String email);
+      long projectId, @NonNull String branchName, @NonNull String email);
 }

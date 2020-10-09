@@ -16,7 +16,8 @@ import org.xml.sax.InputSource;
 public class CheckstyleSourceCodeFileAnalyzerPlugin
     implements SourceCodeFileAnalyzerPlugin, ConfigurableAnalyzerPlugin {
 
-  private Logger logger = LoggerFactory.getLogger(CheckstyleSourceCodeFileAnalyzerPlugin.class);
+  private static final Logger logger =
+      LoggerFactory.getLogger(CheckstyleSourceCodeFileAnalyzerPlugin.class);
 
   private Checker checker;
 

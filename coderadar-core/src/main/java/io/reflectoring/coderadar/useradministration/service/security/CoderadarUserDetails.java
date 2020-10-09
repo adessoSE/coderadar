@@ -8,11 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Value
 class CoderadarUserDetails implements UserDetails {
 
-  private final String username;
-  private final String password;
-  private final Collection<? extends GrantedAuthority> authorities;
-  private final boolean enabled;
-  private final boolean accountNonExpired;
-  private final boolean accountNonLocked;
-  private final boolean credentialsNonExpired;
+  String username;
+  String password;
+  Collection<? extends GrantedAuthority> authorities;
+  boolean enabled;
+  boolean accountNonExpired;
+  boolean accountNonLocked;
+  boolean credentialsNonExpired;
 }

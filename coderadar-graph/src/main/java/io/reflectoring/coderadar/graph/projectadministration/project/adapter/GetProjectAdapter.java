@@ -3,20 +3,27 @@ package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.ProjectMapper;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
+import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetProjectAdapter implements GetProjectPort {
   private final ProjectRepository projectRepository;
-  private final ProjectMapper projectMapper = new ProjectMapper();
+  private final UserRepository userRepository;
 
-  public GetProjectAdapter(ProjectRepository projectRepository) {
-    this.projectRepository = projectRepository;
-  }
+  private final ProjectMapper projectMapper = new ProjectMapper();
 
   @Override
   public Project get(long id) {
@@ -25,6 +32,24 @@ public class GetProjectAdapter implements GetProjectPort {
       return projectMapper.mapGraphObject(projectEntity.get());
     } else {
       throw new ProjectNotFoundException(id);
+    }
+  }
+
+  @Override
+  public ProjectWithRoles getWithRoles(long projectId, long userId) {
+    Optional<ProjectEntity> projectEntity = projectRepository.findById(projectId);
+    if (projectEntity.isPresent()) {
+      Set<String> roles =
+          new HashSet<>(userRepository.getUserRolesForProjectInTeams(projectId, userId));
+      roles.add(userRepository.getUserRoleForProject(projectId, userId));
+      roles.removeIf(Objects::isNull);
+      return new ProjectWithRoles(
+          projectMapper.mapGraphObject(projectEntity.get()),
+          roles.stream()
+              .map(s -> ProjectRole.valueOf(s.toUpperCase()))
+              .collect(Collectors.toList()));
+    } else {
+      throw new ProjectNotFoundException(projectId);
     }
   }
 

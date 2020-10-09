@@ -18,12 +18,14 @@ export class AddProjectComponent {
   incorrectURL = false;
   projectExists = false;
   nameEmpty = false;
+  defaultBranchEmpty = false;
 
   constructor(private router: Router, private userService: UserService, private projectService: ProjectService,
               private titleService: Title) {
     this.project = new Project();
     this.project.name = '';
     this.project.vcsUrl = '';
+    this.project.defaultBranch = 'master';
     titleService.setTitle('Coderadar - Add project');
   }
 
@@ -65,10 +67,12 @@ export class AddProjectComponent {
    */
   private validateInput(): boolean {
     this.projectExists = false;
+    this.defaultBranchEmpty = false;
 
     this.incorrectURL = this.project.vcsUrl.trim().length === 0;
     this.nameEmpty = this.project.name.trim().length === 0;
+    this.defaultBranchEmpty = this.project.defaultBranch.trim().length === 0;
 
-    return this.nameEmpty || this.incorrectURL;
+    return this.nameEmpty || this.incorrectURL || this.defaultBranchEmpty;
   }
 }

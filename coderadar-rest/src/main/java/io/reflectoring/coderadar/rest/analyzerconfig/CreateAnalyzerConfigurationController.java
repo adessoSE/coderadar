@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class CreateAnalyzerConfigurationController implements AbstractBaseController {
   private final CreateAnalyzerConfigurationUseCase createAnalyzerConfigurationUseCase;
   private final AuthenticationService authenticationService;
-
-  public CreateAnalyzerConfigurationController(
-      CreateAnalyzerConfigurationUseCase addAnalyzerConfigurationUseCase,
-      AuthenticationService authenticationService) {
-    this.createAnalyzerConfigurationUseCase = addAnalyzerConfigurationUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @PostMapping(
       path = "/projects/{projectId}/analyzers",

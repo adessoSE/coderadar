@@ -5,11 +5,11 @@ import java.util.regex.Pattern;
 
 public class XmlLocProfile implements LocProfile {
 
-  private Pattern multiLineCommentStart = Pattern.compile("<!--");
+  private final Pattern multiLineCommentStart = Pattern.compile("<!--");
 
-  private Pattern multiLineCommentEnd = Pattern.compile("-->");
+  private final Pattern multiLineCommentEnd = Pattern.compile("-->");
 
-  private Pattern stringDelimiter = Pattern.compile("\"");
+  private final Pattern stringDelimiter = Pattern.compile("\"");
 
   @Override
   public Pattern multiLineCommentStart() {

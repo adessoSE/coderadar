@@ -1,5 +1,5 @@
 <app-header [title]="[{location: '/dashboard', name: 'Dashboard'},
-{location: '/project/' + projectId, name: project.name},
+{location: '/project/' + projectId+'/' + project.defaultBranch, name: project.name},
 {location: '/project/'+projectId+'/'+commitHash+'/files',
 name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
 <main class="bgColor">
@@ -29,34 +29,23 @@ name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
     <div fxFlex="0 0 25%" fxLayout="row" class="fileTree">
       <mat-tree fxFlex="auto" [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
         <!-- This is the tree node template for leaf nodes -->
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-          <ul>
-            <li class="mat-tree-node">
-              <button mat-button class="fileNodeButton" (click)="updateSelectedFile(node, null)">
-                {{node.path}}
-              </button>
-            </li>
-          </ul>
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+          <button mat-button class="fileNodeButton" (click)="updateSelectedFile(node, null)">
+            {{node.path}}
+          </button>
         </mat-tree-node>
         <!-- This is the tree node template for expandable nodes -->
-        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-          <ul>
-            <li>
-              <div class="mat-tree-node">
-                <button mat-icon-button matTreeNodeToggle
-                        [attr.aria-label]="'toggle ' + node.path">
-                  <mat-icon class="mat-icon-rtl-mirror">
-                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-                  </mat-icon>
-                  {{node.path}}
-                </button>
-              </div>
-              <ul [class.tree-invisible]="!treeControl.isExpanded(node)">
-                <ng-container matTreeNodeOutlet></ng-container>
-              </ul>
-            </li>
-          </ul>
-        </mat-nested-tree-node>
+        <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+          <div class="mat-tree-node">
+            <button mat-icon-button matTreeNodeToggle
+                    [attr.aria-label]="'Toggle ' + node.path">
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+              </mat-icon>
+              {{node.path}}
+            </button>
+          </div>
+        </mat-tree-node>
       </mat-tree>
     </div>
     <div *ngIf="currentFileContent == '' && currentSelectedFilepath != ''" class="fileDeleted">

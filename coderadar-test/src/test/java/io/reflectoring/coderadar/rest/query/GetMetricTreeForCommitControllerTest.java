@@ -41,7 +41,8 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null);
+            null,
+            "master");
     MvcResult result =
         mvc()
             .perform(

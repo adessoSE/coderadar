@@ -8,9 +8,13 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListTeamsForProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RemoveTeamFromProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.RemoveTeamFromProjectUseCase;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RemoveTeamFromProjectService implements RemoveTeamFromProjectUseCase {
 
   private final GetTeamPort getTeamPort;
@@ -18,16 +22,7 @@ public class RemoveTeamFromProjectService implements RemoveTeamFromProjectUseCas
   private final RemoveTeamFromProjectPort removeTeamFromProjectPort;
   private final ListTeamsForProjectPort listTeamsForProjectPort;
 
-  public RemoveTeamFromProjectService(
-      GetTeamPort getTeamPort,
-      GetProjectPort getProjectPort,
-      RemoveTeamFromProjectPort removeTeamFromProjectPort,
-      ListTeamsForProjectPort listTeamsForProjectPort) {
-    this.getTeamPort = getTeamPort;
-    this.getProjectPort = getProjectPort;
-    this.removeTeamFromProjectPort = removeTeamFromProjectPort;
-    this.listTeamsForProjectPort = listTeamsForProjectPort;
-  }
+  private static final Logger logger = LoggerFactory.getLogger(RemoveTeamFromProjectService.class);
 
   @Override
   public void removeTeam(long projectId, long teamId) {
@@ -40,6 +35,7 @@ public class RemoveTeamFromProjectService implements RemoveTeamFromProjectUseCas
     if (listTeamsForProjectPort.listTeamsForProject(projectId).stream()
         .anyMatch(team -> team.getId() == teamId)) {
       removeTeamFromProjectPort.removeTeam(projectId, teamId);
+      logger.info("Removed team with id: {} from project with id: {}", teamId, projectId);
     } else {
       throw new TeamNotAssignedException(projectId, teamId);
     }

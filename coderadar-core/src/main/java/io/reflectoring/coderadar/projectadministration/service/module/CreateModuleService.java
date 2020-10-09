@@ -8,11 +8,13 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CreateModuleService implements CreateModuleUseCase {
 
   private final CreateModulePort createModulePort;
@@ -20,15 +22,6 @@ public class CreateModuleService implements CreateModuleUseCase {
   private final GetProjectPort getProjectPort;
 
   private static final Logger logger = LoggerFactory.getLogger(CreateModuleService.class);
-
-  public CreateModuleService(
-      CreateModulePort createModulePort,
-      ProjectStatusPort projectStatusPort,
-      GetProjectPort getProjectPort) {
-    this.createModulePort = createModulePort;
-    this.projectStatusPort = projectStatusPort;
-    this.getProjectPort = getProjectPort;
-  }
 
   @Override
   public Long createModule(CreateModuleCommand command, long projectId)

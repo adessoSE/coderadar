@@ -4,22 +4,18 @@ import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.DeleteFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.delete.DeleteFilePatternFromProjectUseCase;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class DeleteFilePatternService implements DeleteFilePatternFromProjectUseCase {
 
   private final DeleteFilePatternPort deleteFilePatternPort;
   private final GetFilePatternPort getFilePatternPort;
   private static final Logger logger = LoggerFactory.getLogger(DeleteFilePatternService.class);
-
-  public DeleteFilePatternService(
-      DeleteFilePatternPort deleteFilePatternPort, GetFilePatternPort getFilePatternPort) {
-    this.deleteFilePatternPort = deleteFilePatternPort;
-    this.getFilePatternPort = getFilePatternPort;
-  }
 
   @Override
   public void delete(long id, long projectId) {

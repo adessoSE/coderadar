@@ -20,9 +20,9 @@ public class ProjectEntity {
   private String workdirName;
   private String vcsUrl;
   private String vcsUsername;
-  private String vcsPassword;
-  private boolean vcsOnline;
+  private byte[] vcsPassword;
   private Date vcsStart;
+  private String defaultBranch;
 
   private boolean isBeingProcessed = false;
   private boolean isBeingDeleted = false;
@@ -36,13 +36,17 @@ public class ProjectEntity {
 
   @Relationship(type = "CONTAINS")
   @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<FileEntity> files = new ArrayList<>();
 
   @Relationship(type = "CONTAINS_COMMIT")
   @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<CommitEntity> commits = new ArrayList<>();
 
   @Relationship(type = "HAS")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<FilePatternEntity> filePatterns = new ArrayList<>();
 
   @Relationship(type = "HAS")
@@ -51,5 +55,7 @@ public class ProjectEntity {
   private List<AnalyzerConfigurationEntity> analyzerConfigurations = new ArrayList<>();
 
   @Relationship(type = "HAS_BRANCH")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<BranchEntity> branches = new ArrayList<>();
 }

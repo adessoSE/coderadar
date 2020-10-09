@@ -5,15 +5,15 @@ import java.util.regex.Pattern;
 
 public class JavaLocProfile implements LocProfile {
 
-  private Pattern multiLineCommentStart = Pattern.compile("/\\*");
+  private final Pattern multiLineCommentStart = Pattern.compile("/\\*");
 
-  private Pattern multiLineCommentEnd = Pattern.compile("\\*/");
+  private final Pattern multiLineCommentEnd = Pattern.compile("\\*/");
 
-  private Pattern singleLineCommentStart = Pattern.compile("//");
+  private final Pattern singleLineCommentStart = Pattern.compile("//");
 
-  private Pattern stringDelimiter = Pattern.compile("\"");
+  private final Pattern stringDelimiter = Pattern.compile("\"");
 
-  private Pattern headerOrFooterLine =
+  private final Pattern headerOrFooterLine =
       Pattern.compile("(^\\s*import.*$)|(^\\s*\\{\\s*$)|(^\\s*\\}\\s*$)");
 
   @Override

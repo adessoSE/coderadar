@@ -1,4 +1,6 @@
-<app-header id="header" [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)}, {location: '/project/' + project.id + '/' + commitName + '/dependency-map', name: 'Dependency Map for ' + commitName}]"></app-header>
+<app-header id="header" [title]="[{location: '/dashboard', name: 'Dashboard'},
+{location: '/project/' + project.id + '/' + project.defaultBranch, name: appComponent.trimProjectName(project.name)},
+{location: '/project/' + project.id + '/' + commitName + '/dependency-map', name: 'Dependency Map for ' + commitName}]"></app-header>
 
 <mat-checkbox class="margin-left margin-right" [checked]="checkUp" (change)="onShowUpwardChanged()">Show upward Dependencies</mat-checkbox>
 <mat-checkbox class="margin-left margin-right" [checked]="checkDown" (change)="onShowDownwardChanged()">Show downward Dependencies</mat-checkbox>

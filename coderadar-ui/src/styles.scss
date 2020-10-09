@@ -24,6 +24,7 @@ footer {
   grid-row: 2;
   position: absolute;
   width: 100%;
+  height: 80px;
 }
 
 /*
@@ -32,6 +33,7 @@ Styles for most forms in the app
 
 .mat-card-form #cardContainer {
   margin-top: 2%;
+  margin-bottom: 5%;
 }
 
 .mat-card-form mat-card {
@@ -214,4 +216,24 @@ Styles for the login and register forms
       }
     }
   }
+}
+
+.mat-progress-spinner-indeterminate-animation {
+  /* keep anim slow to avoid wobble from rounding errors */
+  animation-duration: 9s !important;
+}
+
+.mat-progress-spinner-indeterminate-animation circle {
+  animation-name: progress-spinner-stroke-rotate !important;
+  animation-timing-function: linear !important;
+  animation-duration: 4s !important;
+}
+
+@keyframes progress-spinner-stroke-rotate {
+  $start: 200%; /* approx 2/3 of circle circumference */
+  $end: 20%;
+  0%   { stroke-dashoffset: $start; }
+  50%  { stroke-dashoffset: $end; }
+  /* removing transform: rotate(720deg) causes wobble */
+  100% { stroke-dashoffset: $start; transform: rotate(720deg); }
 }

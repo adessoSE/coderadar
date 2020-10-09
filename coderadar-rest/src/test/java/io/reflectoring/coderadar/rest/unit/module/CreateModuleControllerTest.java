@@ -46,7 +46,7 @@ class CreateModuleControllerTest extends UnitTestTemplate {
 
     ResponseEntity<Object> responseEntity = testSubject.createModule(command, 5L);
 
-    Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
+    Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertTrue(responseEntity.getBody() instanceof ErrorMessageResponse);
     Assertions.assertEquals(

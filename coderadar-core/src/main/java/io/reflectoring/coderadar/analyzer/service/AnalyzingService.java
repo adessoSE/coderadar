@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.analyzer.service;
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.GetAnalyzingStatusUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StopAnalyzingUseCase;
@@ -21,15 +20,17 @@ import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AnalyzingService
     implements StartAnalyzingUseCase, StopAnalyzingUseCase, GetAnalyzingStatusUseCase {
   private final GetProjectPort getProjectPort;
-  private final AnalyzeCommitUseCase analyzeCommitUseCase;
+  private final AnalyzeCommitService analyzeCommitService;
   private final AnalyzerPluginService analyzerPluginService;
   private final ListAnalyzerConfigurationsPort listAnalyzerConfigurationsPort;
   private final ListFilePatternsOfProjectPort listFilePatternsOfProjectPort;
@@ -41,33 +42,7 @@ public class AnalyzingService
   private final ListBranchesPort listBranchesPort;
 
   private final Map<Long, Boolean> activeAnalysis = new ConcurrentHashMap<>();
-
   private static final Logger logger = LoggerFactory.getLogger(AnalyzingService.class);
-
-  public AnalyzingService(
-      GetProjectPort getProjectPort,
-      AnalyzeCommitUseCase analyzeCommitUseCase,
-      AnalyzerPluginService analyzerPluginService,
-      ListAnalyzerConfigurationsPort listAnalyzerConfigurationsPort,
-      ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
-      GetCommitsInProjectPort getCommitsInProjectPort,
-      SaveMetricPort saveMetricPort,
-      SaveCommitPort saveCommitPort,
-      ProcessProjectService processProjectService,
-      GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort,
-      ListBranchesPort listBranchesPort) {
-    this.getProjectPort = getProjectPort;
-    this.analyzeCommitUseCase = analyzeCommitUseCase;
-    this.analyzerPluginService = analyzerPluginService;
-    this.listAnalyzerConfigurationsPort = listAnalyzerConfigurationsPort;
-    this.listFilePatternsOfProjectPort = listFilePatternsOfProjectPort;
-    this.getCommitsInProjectPort = getCommitsInProjectPort;
-    this.saveMetricPort = saveMetricPort;
-    this.saveCommitPort = saveCommitPort;
-    this.processProjectService = processProjectService;
-    this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
-    this.listBranchesPort = listBranchesPort;
-  }
 
   public void start(long projectId) {
     start(
@@ -141,19 +116,21 @@ public class AnalyzingService
     List<Long> commitIds = new ArrayList<>();
     Map<Long, List<MetricValue>> fileMetrics =
         saveMetricPort.getMetricsForFiles(projectId, branchName);
-
-    for (int i = 0; i < commits.size() && activeAnalysis.get(projectId); i++) {
+    for (Commit commit : commits) {
+      if (!activeAnalysis.containsKey(projectId)
+          || Boolean.FALSE.equals(activeAnalysis.get(projectId))) {
+        break;
+      }
       List<MetricValue> metrics =
-          analyzeCommitUseCase.analyzeCommit(
-              commits.get(i), project, sourceCodeFileAnalyzerPlugins);
-      zeroOutMissingMetrics(commits.get(i), metrics, fileMetrics);
+          analyzeCommitService.analyzeCommit(commit, project, sourceCodeFileAnalyzerPlugins);
+      zeroOutMissingMetrics(commit, metrics, fileMetrics);
       if (!metrics.isEmpty()) {
         saveMetricPort.saveMetricValues(metrics);
         saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
         commitIds.clear();
       }
-      commitIds.add(commits.get(i).getId());
-      log(commits.get(i));
+      commitIds.add(commit.getId());
+      log(commit);
     }
     if (!getAvailableMetricsInProjectPort.get(projectId).isEmpty()) {
       saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
@@ -171,9 +148,8 @@ public class AnalyzingService
   private void zeroOutMissingMetrics(
       Commit commit, List<MetricValue> metrics, Map<Long, List<MetricValue>> fileMetrics) {
 
-    for (FileToCommitRelationship relationship : commit.getTouchedFiles()) {
-      List<MetricValue> values =
-          fileMetrics.getOrDefault(relationship.getFile().getId(), Collections.emptyList());
+    for (File file : commit.getChangedFiles()) {
+      List<MetricValue> values = fileMetrics.getOrDefault(file.getId(), Collections.emptyList());
 
       for (MetricValue value : values) {
         if (value.getValue() != 0
@@ -184,7 +160,7 @@ public class AnalyzingService
                             && metricValue.getFileId() == value.getFileId())) {
           metrics.add(
               new MetricValue(
-                  value.getName(), 0L, commit.getId(), value.getFileId(), Collections.emptyList()));
+                  value.getName(), 0, commit.getId(), value.getFileId(), Collections.emptyList()));
         }
       }
     }
@@ -194,7 +170,7 @@ public class AnalyzingService
     }
     metrics.sort(Comparator.comparingLong(MetricValue::getFileId));
     long fileId = metrics.get(0).getFileId();
-    List<MetricValue> metricsForFile = new ArrayList<>();
+    List<MetricValue> metricsForFile = new ArrayList<>(metrics.size());
     for (MetricValue metricValue : metrics) {
       if (metricValue.getValue() != 0) {
         if (metricValue.getFileId() != fileId) {
@@ -214,7 +190,7 @@ public class AnalyzingService
    * @param commit The commit that was analyzed.
    */
   private void log(Commit commit) {
-    logger.info("Analyzed commit: {} {}", commit.getComment(), commit.getHash());
+    logger.info("Analyzed commit {}", commit.getHash());
   }
 
   /**
@@ -226,7 +202,7 @@ public class AnalyzingService
    */
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(
       List<AnalyzerConfiguration> analyzerConfigurations) {
-    List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
+    List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>(analyzerConfigurations.size());
     for (AnalyzerConfiguration config : analyzerConfigurations) {
       if (config.isEnabled()) {
         analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));
@@ -236,10 +212,14 @@ public class AnalyzingService
   }
 
   public void stop(long projectId) {
-    activeAnalysis.put(projectId, false);
+    activeAnalysis.remove(projectId);
   }
 
   public boolean getStatus(long projectId) {
-    return activeAnalysis.containsKey(projectId);
+    return activeAnalysis.getOrDefault(projectId, false);
+  }
+
+  public void onShutdown() {
+    activeAnalysis.clear();
   }
 }

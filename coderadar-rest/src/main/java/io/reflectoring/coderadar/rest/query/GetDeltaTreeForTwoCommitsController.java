@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoC
 import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoCommitsUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,17 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class GetDeltaTreeForTwoCommitsController implements AbstractBaseController {
-
   private final GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase;
   private final AuthenticationService authenticationService;
-
-  public GetDeltaTreeForTwoCommitsController(
-      GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase,
-      AuthenticationService authenticationService) {
-    this.getDeltaTreeForTwoCommitsUseCase = getDeltaTreeForTwoCommitsUseCase;
-    this.authenticationService = authenticationService;
-  }
 
   @RequestMapping(
       method = {RequestMethod.POST, RequestMethod.GET},

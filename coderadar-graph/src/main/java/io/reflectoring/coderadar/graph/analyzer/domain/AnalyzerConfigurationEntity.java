@@ -15,7 +15,4 @@ public class AnalyzerConfigurationEntity {
 
   @Relationship(direction = Relationship.INCOMING, type = "HAS")
   private ProjectEntity project;
-
-  @Relationship("CONTENT_FROM")
-  private AnalyzerConfigurationFileEntity analyzerConfigurationFile;
 }

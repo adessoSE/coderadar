@@ -9,13 +9,14 @@ public class GetProjectResponseMapper {
   private GetProjectResponseMapper() {}
 
   public static GetProjectResponse mapProject(Project project) {
-    return new GetProjectResponse()
-        .setName(project.getName())
-        .setId(project.getId())
-        .setStartDate(project.getVcsStart())
-        .setVcsOnline(project.isVcsOnline())
-        .setVcsUrl(project.getVcsUrl())
-        .setVcsUsername(project.getVcsUsername());
+    return new GetProjectResponse(
+        project.getId(),
+        project.getName(),
+        project.getVcsUsername(),
+        null,
+        project.getVcsUrl(),
+        project.getVcsStart(),
+        project.getDefaultBranch());
   }
 
   public static List<GetProjectResponse> mapProjects(List<Project> projects) {

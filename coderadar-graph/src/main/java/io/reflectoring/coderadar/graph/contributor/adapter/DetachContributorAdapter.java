@@ -5,11 +5,11 @@ import io.reflectoring.coderadar.contributor.port.driven.DetachContributorPort;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DetachContributorAdapter implements DetachContributorPort {
 
   private final ContributorRepository contributorRepository;
@@ -21,7 +21,7 @@ public class DetachContributorAdapter implements DetachContributorPort {
 
   @Override
   public void detachContributorsFromProject(List<Contributor> contributors, long projectId) {
-    List<Long> ids = new ArrayList<>();
+    List<Long> ids = new ArrayList<>(contributors.size());
     contributors.forEach(contributor -> ids.add(contributor.getId()));
     contributorRepository.detachContributorsFromProject(ids, projectId);
   }

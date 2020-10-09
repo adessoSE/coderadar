@@ -4,6 +4,7 @@ import {AppComponent} from '../app.component';
 import {ProjectRole} from '../model/project-role';
 import {Team} from '../model/team';
 import {Project} from '../model/project';
+import {ProjectWithRoles} from '../model/project-with-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +59,11 @@ export class TeamService {
       {observe: 'response'}).toPromise();
   }
 
+  public listProjectsForTeamWithRolesForUser(teamId: number, userId: number): Promise<HttpResponse<ProjectWithRoles[]>> {
+    return this.httpClient.get<ProjectWithRoles[]>(this.apiURL + 'teams/' + teamId + '/' + userId + '/projects',
+      {observe: 'response'}).toPromise();
+  }
+
   public listTeamsForProject(projectId: number): Promise<HttpResponse<Team[]>> {
     return this.httpClient.get<Team[]>(this.apiURL + 'projects/' + projectId + '/teams',
       {observe: 'response'}).toPromise();
@@ -76,5 +82,10 @@ export class TeamService {
   public removeTeam(id: number) {
     return this.httpClient.delete<any>(this.apiURL + 'teams/' + id,
       {observe: 'response'}).toPromise();
+  }
+
+  editTeam(teamId: number, name: string, userIds: any) {
+    return this.httpClient.post<any>(this.apiURL + 'teams/' + teamId,
+      {name, userIds}, {observe: 'response'}).toPromise();
   }
 }

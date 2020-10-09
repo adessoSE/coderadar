@@ -1,12 +1,14 @@
 package io.reflectoring.coderadar.projectadministration.analyzerconfig;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.service.ListAnalyzersService;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.CreateAnalyzerConfigurationService;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsService;
@@ -28,13 +30,16 @@ class CreateAnalyzerConfigurationServiceTest {
 
   @Mock private ListAnalyzersService listAnalyzerServiceMock;
 
+  @Mock private GetProjectPort getProjectPort;
+
   @BeforeEach
   void setUp() {
     this.testSubject =
         new CreateAnalyzerConfigurationService(
             createConfigurationPortMock,
             listAnalyzerServiceMock,
-            listAnalyzerConfigurationsFromProjectServiceMock);
+            listAnalyzerConfigurationsFromProjectServiceMock,
+            getProjectPort);
   }
 
   @Test
@@ -53,6 +58,7 @@ class CreateAnalyzerConfigurationServiceTest {
     when(createConfigurationPortMock.create(expectedConfiguration, projectId)).thenReturn(1L);
     when(listAnalyzerServiceMock.listAvailableAnalyzers())
         .thenReturn(Collections.singletonList(analyzerName));
+    when(getProjectPort.existsById(anyLong())).thenReturn(true);
 
     // when
     Long analyzerConfigurationId = testSubject.create(command, 1L);

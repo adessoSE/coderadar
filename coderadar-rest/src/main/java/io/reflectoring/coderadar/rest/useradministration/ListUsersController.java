@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.rest.domain.GetUserResponse;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driver.get.ListUsersUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
+@RequiredArgsConstructor
 public class ListUsersController implements AbstractBaseController {
   private final ListUsersUseCase listUsersUseCase;
-
-  public ListUsersController(ListUsersUseCase listUsersUseCase) {
-    this.listUsersUseCase = listUsersUseCase;
-  }
 
   @GetMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetUserResponse>> listUsers() {

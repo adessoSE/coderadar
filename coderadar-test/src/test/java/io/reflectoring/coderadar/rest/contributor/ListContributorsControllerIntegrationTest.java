@@ -36,7 +36,8 @@ class ListContributorsControllerIntegrationTest extends ControllerTestTemplate {
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null);
+            null,
+            "master");
     MvcResult result =
         mvc()
             .perform(
@@ -114,9 +115,7 @@ class ListContributorsControllerIntegrationTest extends ControllerTestTemplate {
             .andReturn();
 
     List<GetContributorResponse> contributors =
-        fromJson(
-            new TypeReference<List<GetContributorResponse>>() {},
-            result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
     GetContributorResponse first = contributors.get(0);
     GetContributorResponse second = contributors.get(1);
 

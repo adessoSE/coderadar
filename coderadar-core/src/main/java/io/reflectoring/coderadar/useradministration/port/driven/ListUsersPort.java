@@ -7,4 +7,7 @@ public interface ListUsersPort {
 
   /** @return All users in the database. */
   List<User> listUsers();
+
+  /** @return True if there is at least one registered user. */
+  boolean usersExist();
 }

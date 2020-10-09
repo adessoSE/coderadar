@@ -11,22 +11,15 @@ import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CreateModuleAdapter implements CreateModulePort {
   private final ModuleRepository moduleRepository;
   private final ProjectRepository projectRepository;
   private final FileRepository fileRepository;
-
-  public CreateModuleAdapter(
-      ModuleRepository moduleRepository,
-      ProjectRepository projectRepository,
-      FileRepository fileRepository) {
-    this.moduleRepository = moduleRepository;
-    this.projectRepository = projectRepository;
-    this.fileRepository = fileRepository;
-  }
 
   /**
    * Adds a new module to the project.

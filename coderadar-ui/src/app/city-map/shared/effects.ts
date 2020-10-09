@@ -13,17 +13,18 @@ import {INode} from '../interfaces/INode';
 import {ICommitsGetErrorResponse} from '../interfaces/ICommitsGetErrorResponse';
 import {Store} from '@ngrx/store';
 import * as fromRoot from './reducers';
+import {Project} from '../../model/project';
 
 @Injectable()
 export class AppEffects {
 
-  public currentProjectId: number;
+  public currentProject: Project;
   isLoaded = false;
 
   @Effect()
   loadCommitsEffects$ = this.actions$.pipe(ofType(LOAD_COMMITS),
     switchMap(
-      () => from(this.projectService.getCommits(this.currentProjectId, 'master'))
+      () => from(this.projectService.getCommits(this.currentProject.id, this.currentProject.defaultBranch))
         .pipe(
           map((result: any) => {
             return actions.loadCommitsSuccess(result.body);
@@ -38,7 +39,7 @@ export class AppEffects {
 
   @Effect()
   loadAvailableMetricsEffects$ = this.actions$.pipe(ofType(LOAD_AVAILABLE_METRICS),
-    switchMap(() => from(this.projectService.getAvailableMetrics(this.currentProjectId))
+    switchMap(() => from(this.projectService.getAvailableMetrics(this.currentProject.id))
       .pipe(
         mergeMap((result: any) => {
           const availableMetrics = result.body.map(
@@ -74,7 +75,7 @@ export class AppEffects {
     map((action: IActionWithPayload<any>) => action.payload),
     switchMap(
       (payload) => from(this.projectService.getDeltaTree(payload.leftCommit, payload.rightCommit,
-        payload.metricMapping, this.currentProjectId))
+        payload.metricMapping, this.currentProject.id))
         .pipe(
           mergeMap((result: HttpResponse<INode>) => {
             return [

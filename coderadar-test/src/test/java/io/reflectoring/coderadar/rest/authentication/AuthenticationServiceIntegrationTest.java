@@ -51,8 +51,6 @@ class AuthenticationServiceIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsStart(new Date());
-    testProject.setVcsOnline(true);
-    testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
     projectId = projectRepository.save(testProject).getId();
 

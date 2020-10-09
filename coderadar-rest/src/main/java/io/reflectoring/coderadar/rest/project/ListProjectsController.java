@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.get.L
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class ListProjectsController implements AbstractBaseController {
   private final ListProjectsUseCase listProjectsUseCase;
-
-  public ListProjectsController(ListProjectsUseCase listProjectsUseCase) {
-    this.listProjectsUseCase = listProjectsUseCase;
-  }
 
   @GetMapping(path = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetProjectResponse>> listProjects() {

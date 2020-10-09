@@ -19,4 +19,5 @@ public class CreateProjectCommand {
   @NotNull @URL private String vcsUrl;
   private boolean vcsOnline;
   private @Past Date startDate;
+  @NotBlank private String defaultBranch;
 }

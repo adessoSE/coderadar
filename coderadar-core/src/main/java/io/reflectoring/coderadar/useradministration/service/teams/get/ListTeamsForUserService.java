@@ -6,19 +6,15 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListTeamsForUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListTeamsForUserUseCase;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ListTeamsForUserService implements ListTeamsForUserUseCase {
 
   private final GetUserPort getUserPort;
   private final ListTeamsForUserPort listTeamsForUserPort;
-
-  public ListTeamsForUserService(
-      GetUserPort getUserPort, ListTeamsForUserPort listTeamsForUserPort) {
-    this.getUserPort = getUserPort;
-    this.listTeamsForUserPort = listTeamsForUserPort;
-  }
 
   @Override
   public List<Team> listTeamsForUser(long userId) {

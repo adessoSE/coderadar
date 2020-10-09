@@ -12,13 +12,13 @@ public class GetCommitResponseMapper {
     List<GetCommitResponse> result = new ArrayList<>(commits.size());
     for (Commit commit : commits) {
       result.add(
-          new GetCommitResponse()
-              .setHash(commit.getHash())
-              .setAnalyzed(commit.isAnalyzed())
-              .setAuthor(commit.getAuthor())
-              .setAuthorEmail(commit.getAuthorEmail())
-              .setComment(commit.getComment())
-              .setTimestamp(commit.getTimestamp()));
+          new GetCommitResponse(
+              commit.getHash(),
+              commit.getAuthor(),
+              commit.getAuthorEmail(),
+              commit.getComment(),
+              commit.getTimestamp(),
+              commit.isAnalyzed()));
     }
     return result;
   }

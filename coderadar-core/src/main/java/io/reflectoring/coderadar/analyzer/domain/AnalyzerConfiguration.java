@@ -11,8 +11,6 @@ public class AnalyzerConfiguration {
   private String analyzerName;
   private boolean enabled;
 
-  private AnalyzerConfigurationFile analyzerConfigurationFile;
-
   public AnalyzerConfiguration(long id, String analyzerName, boolean enabled) {
     this.id = id;
     this.analyzerName = analyzerName;

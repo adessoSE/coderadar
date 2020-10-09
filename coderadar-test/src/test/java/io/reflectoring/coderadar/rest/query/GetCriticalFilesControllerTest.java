@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
@@ -24,12 +25,15 @@ import java.util.Objects;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultHandler;
 
 class GetCriticalFilesControllerTest extends ControllerTestTemplate {
   private long projectId;
+
+  @Autowired private FilePatternRepository filePatternRepository;
 
   @BeforeEach
   void setUp() throws Exception {
@@ -41,7 +45,8 @@ class GetCriticalFilesControllerTest extends ControllerTestTemplate {
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null);
+            null,
+            "master");
     MvcResult result =
         mvc()
             .perform(
@@ -51,10 +56,12 @@ class GetCriticalFilesControllerTest extends ControllerTestTemplate {
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
+    filePatternRepository.deleteAll();
   }
 
   @Test
   void throwsExceptionWhenNoFilePatternsAreDefined() throws Exception {
+
     GetFilesWithContributorsCommand command =
         new GetFilesWithContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 1);
     MvcResult result =
@@ -98,9 +105,7 @@ class GetCriticalFilesControllerTest extends ControllerTestTemplate {
             .andReturn();
 
     List<ContributorsForFile> response =
-        fromJson(
-            new TypeReference<List<ContributorsForFile>>() {},
-            result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     Assertions.assertThat(response.size()).isEqualTo(1);
     Assertions.assertThat(response.get(0).getContributors()).containsExactly("maximAtanasov");

@@ -8,20 +8,16 @@ import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundExceptio
 import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RefreshTokenAdapter implements RefreshTokenPort {
 
   private final RefreshTokenRepository refreshTokenRepository;
   private final UserRepository userRepository;
   private final RefreshTokenMapper refreshTokenMapper = new RefreshTokenMapper();
-
-  public RefreshTokenAdapter(
-      RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
-    this.refreshTokenRepository = refreshTokenRepository;
-    this.userRepository = userRepository;
-  }
 
   @Override
   public RefreshToken findByToken(String refreshToken) {

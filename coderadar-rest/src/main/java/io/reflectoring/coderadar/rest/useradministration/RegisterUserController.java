@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.useradministration.UsernameAlreadyInUseException;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
+@RequiredArgsConstructor
 public class RegisterUserController implements AbstractBaseController {
   private final RegisterUserUseCase registerUserUseCase;
-
-  public RegisterUserController(RegisterUserUseCase registerUserUseCase) {
-    this.registerUserUseCase = registerUserUseCase;
-  }
 
   @PostMapping(
       path = "/user/registration",

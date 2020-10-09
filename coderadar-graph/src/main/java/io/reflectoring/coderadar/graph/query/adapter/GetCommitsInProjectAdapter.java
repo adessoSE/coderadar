@@ -1,28 +1,25 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
-import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
+
   private final CommitRepository commitRepository;
   private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
-
-  public GetCommitsInProjectAdapter(CommitRepository commitRepository) {
-    this.commitRepository = commitRepository;
-  }
 
   @Override
   public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(
@@ -58,12 +55,16 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
    */
   private List<Commit> mapCommitEntitiesNoParents(List<Map<String, Object>> commitEntities) {
     List<Commit> commits = new ArrayList<>(commitEntities.size());
-    Map<Long, File> walkedFiles = new HashMap<>(commitEntities.size());
+    Map<Long, File> walkedFiles = new HashMap<>();
     for (Map<String, Object> result : commitEntities) {
-      var commitEntity = (CommitEntity) result.get("commit");
+      var commitEntity = (Map<String, Object>) result.get("commit");
       var files = (Object[]) result.get("files");
-      Commit commit = commitBaseDataMapper.mapGraphObject(commitEntity);
-      commit.setTouchedFiles(new ArrayList<>(files.length));
+      Commit commit =
+          new Commit()
+              .setId((long) commitEntity.get("id"))
+              .setHash((String) commitEntity.get("hash"));
+
+      commit.setChangedFiles(new ArrayList<>(files.length));
       for (var val : files) {
         var filePathAndId = (Map) val;
         var fileId = (Long) filePathAndId.get("id");
@@ -71,11 +72,8 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         if (fileId == null || filepath == null) {
           continue;
         }
-        FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-        File file =
-            walkedFiles.computeIfAbsent(fileId, id -> new File().setId(id).setPath(filepath));
-        fileToCommitRelationship.setFile(file);
-        commit.getTouchedFiles().add(fileToCommitRelationship);
+        File file = walkedFiles.computeIfAbsent(fileId, id -> new File(id, filepath));
+        commit.getChangedFiles().add(file);
       }
       commits.add(commit);
     }

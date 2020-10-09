@@ -7,26 +7,17 @@ import io.reflectoring.coderadar.useradministration.port.driver.password.ChangeP
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordUseCase;
 import io.reflectoring.coderadar.useradministration.service.refresh.RefreshTokenService;
 import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /** Service for changing the password of a user. */
 @Service
+@RequiredArgsConstructor
 public class ChangePasswordService implements ChangePasswordUseCase {
 
   private final RefreshTokenPort refreshTokenPort;
-
   private final RefreshTokenService refreshTokenService;
-
   private final ChangePasswordPort changePasswordPort;
-
-  public ChangePasswordService(
-      RefreshTokenPort refreshTokenPort,
-      RefreshTokenService refreshTokenService,
-      ChangePasswordPort changePasswordPort) {
-    this.refreshTokenPort = refreshTokenPort;
-    this.refreshTokenService = refreshTokenService;
-    this.changePasswordPort = changePasswordPort;
-  }
 
   @Override
   public void changePassword(ChangePasswordCommand command) {

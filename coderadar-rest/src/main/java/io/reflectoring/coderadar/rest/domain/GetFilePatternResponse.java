@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetFilePatternResponse {
-  long id;
-  String pattern;
-  InclusionType inclusionType;
+  private long id;
+  private String pattern;
+  private InclusionType inclusionType;
 }

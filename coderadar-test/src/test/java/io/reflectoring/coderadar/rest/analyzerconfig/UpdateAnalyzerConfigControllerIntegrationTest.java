@@ -63,11 +63,15 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Test
   void updateAnalyzerConfigurationReturnsErrorWhenAnalyzerDoesNotExist() throws Exception {
+    ProjectEntity testProject = new ProjectEntity();
+    testProject.setVcsUrl("https://valid.url");
+    testProject = projectRepository.save(testProject);
+
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("noanalyzer", false);
     mvc()
         .perform(
-            post("/api/projects/0/analyzers/2")
+            post(String.format("/api/projects/%d/analyzers/2", testProject.getId()))
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
@@ -117,12 +121,16 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Test
   void updateAnalyzerConfigurationReturnsErrorWhenNotFound() throws Exception {
+    ProjectEntity testProject = new ProjectEntity();
+    testProject.setVcsUrl("https://valid.url");
+    testProject = projectRepository.save(testProject);
+
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand(
             "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", false);
     mvc()
         .perform(
-            post("/api/projects/0/analyzers/2")
+            post(String.format("/api/projects/%d/analyzers/2", testProject.getId()))
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())

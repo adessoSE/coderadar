@@ -49,7 +49,6 @@ class TreeTest extends ControllerTestTemplate {
       CreateProjectCommand command = new CreateProjectCommand();
       command.setVcsUrl(testRepoURL.toString());
       command.setName("testSrc");
-      command.setVcsOnline(true);
       Project testProject = getProjectPort.get(createProjectUseCase.createProject(command));
       String commitName = "d026b5e9ad0ff034a137711e4faa47322f014fbb";
 

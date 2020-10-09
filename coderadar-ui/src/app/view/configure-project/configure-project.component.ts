@@ -4,7 +4,7 @@ import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {AnalyzerConfiguration} from '../../model/analyzer-configuration';
 import {FilePattern} from '../../model/file-pattern';
-import {CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
+import {BAD_REQUEST, CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Module} from '../../model/module';
 import {Title} from '@angular/platform-browser';
 import {MatDialog,  MatSnackBar} from '@angular/material';
@@ -36,6 +36,8 @@ export class ConfigureProjectComponent implements OnInit {
 
   projectId: any;
   moduleExists = false;
+  invalidModulePath = false;
+  filePatternExists = false;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private contributorService: ContributorService,
@@ -181,6 +183,8 @@ export class ConfigureProjectComponent implements OnInit {
    */
   public submitModule(): void {
     this.moduleExists = false;
+    this.invalidModulePath = false;
+    this.filePatternExists = false;
 
     const module: Module = new Module(null, this.modulesInput);
     this.processing = true;
@@ -191,15 +195,14 @@ export class ConfigureProjectComponent implements OnInit {
         this.modulesInput = '';
       })
       .catch(error => {
+        this.processing = false;
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh(() => this.submitModule());
-        }
-        if (error.status && error.status === CONFLICT) {
+        } else if (error.status && error.status === CONFLICT) {
           this.moduleExists = true;
-          this.processing = false;
-        }
-        if (error.status && error.status === UNPROCESSABLE_ENTITY) {
-          this.processing = false;
+        } else if (error.status && error.status === BAD_REQUEST) {
+          this.invalidModulePath = true;
+        } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
           this.openSnackBar('Cannot edit the project! Try again later', '🞩');
         }
       });
@@ -212,6 +215,8 @@ export class ConfigureProjectComponent implements OnInit {
    */
   deleteModule(module: Module): void {
     this.processing = true;
+    this.filePatternExists = false;
+
     this.projectService.deleteProjectModule(this.projectId, module)
       .then(() => {
         this.processing = false;
@@ -225,14 +230,6 @@ export class ConfigureProjectComponent implements OnInit {
         this.openSnackBar('Cannot edit the project! Try again later', '🞩');
       }
     });
-  }
-
-  /**
-   * Calls submitAnalyzerConfiguration for each AnalyzerConfiguration in this.analyzers
-   * (as the REST API doesn't allow to send them all at once).
-   */
-  private submitAnalyzerConfigurations(): void {
-    this.analyzers.forEach(analyzer => this.submitAnalyzerConfiguration(analyzer));
   }
 
   /**
@@ -274,6 +271,8 @@ export class ConfigureProjectComponent implements OnInit {
    */
   deleteFilePattern(pattern: FilePattern): void {
     this.processing = true;
+    this.filePatternExists = false;
+
     this.projectService.deleteProjectFilePattern(this.projectId, pattern)
       .then(() => {
         this.processing = false;
@@ -297,6 +296,7 @@ export class ConfigureProjectComponent implements OnInit {
     }
 
     this.processing = true;
+    this.filePatternExists = false;
     this.projectService.addProjectFilePattern(this.projectId, pattern).then((value) => {
       this.processing = false;
       pattern.id = value.body.id;
@@ -311,6 +311,8 @@ export class ConfigureProjectComponent implements OnInit {
         this.processing = false;
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh(() => this.submitFilePattern(type));
+        } else if (error.status && error.status === CONFLICT) {
+          this.filePatternExists = true;
         }
       });
   }

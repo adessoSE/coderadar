@@ -3,6 +3,10 @@ import {Team} from '../../model/team';
 import {TeamService} from '../../service/team.service';
 import {UserService} from '../../service/user.service';
 import {FORBIDDEN} from 'http-status-codes';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {DeleteTeamDialogComponent} from '../../components/delete-team-dialog/delete-team-dialog.component';
+import {Title} from '@angular/platform-browser';
+import {Project} from '../../model/project';
 
 @Component({
   selector: 'app-teams-dashboard',
@@ -11,34 +15,68 @@ import {FORBIDDEN} from 'http-status-codes';
 })
 export class TeamsDashboardComponent implements OnInit {
   waiting = false;
-
+  dialogRef: MatDialogRef<DeleteTeamDialogComponent>;
   teams: Team[] = [];
+  projectsForTeams: Record<number, Project[]> = {};
 
-  constructor(private teamService: TeamService, private userService: UserService) { }
+  constructor(private teamService: TeamService, private userService: UserService, private dialog: MatDialog,
+              private titleService: Title) { }
 
   ngOnInit() {
     this.getTeams();
+    this.titleService.setTitle('Coderadar - Teams');
   }
 
   private getTeams() {
-    this.teamService.listTeamsForUser(UserService.getLoggedInUser().userId).then(value =>
-      this.teams = value.body
+    this.teamService.listTeamsForUser(UserService.getLoggedInUser().userId).then(value => {
+        this.teams = value.body;
+        this.getProjectsForTeams();
+      }
     ) .catch(e => {
-      if (e.status && e.status === FORBIDDEN) { // TODO: UNAUTHORIZED
+      if (e.status && e.status === FORBIDDEN) {
         this.userService.refresh(() => this.getTeams());
       }
     });
   }
 
-  removeTeam(id: number) {
-    this.teamService.removeTeam(id)
-      .then(() => {
-        this.teams = this.teams.filter(value => value.id !== id);
-      })
-      .catch(e => {
-      if (e.status && e.status === FORBIDDEN) { // TODO: UNAUTHORIZED
-        this.userService.refresh(() => this.getTeams());
+  openProjectDeletionDialog(teamToBeDeleted: Team) {
+    this.dialogRef = this.dialog.open(DeleteTeamDialogComponent, {
+      data: {
+        team: teamToBeDeleted
       }
     });
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteTeam(result);
+      }
+    });
+  }
+
+  private deleteTeam(team: Team) {
+    this.teamService.deleteTeam(team.id)
+      .then(() => {
+        const index = this.teams.indexOf(team, 0);
+        if (this.teams.indexOf(team, 0) > -1) {
+          this.teams.splice(index, 1);
+        }
+      })
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh(() => this.deleteTeam(team));
+        }
+      });
+  }
+
+  private getProjectsForTeams() {
+    this.teams.forEach(team => {
+      this.teamService.listProjectsForTeam(team.id).then(value => {
+        this.projectsForTeams[team.id] = value.body;
+      });
+    });
+  }
+
+  listProjectsForTeam(teamId: number): Project[] {
+    return this.projectsForTeams[teamId];
   }
 }

@@ -10,9 +10,9 @@ import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
-import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
+import io.reflectoring.coderadar.rest.domain.ProjectWithRolesResponse;
+import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
-import java.util.Collections;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,16 +35,16 @@ class ListProjectsForUserControllerIntegrationTest extends ControllerTestTemplat
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsStart(new Date());
-    testProject.setVcsOnline(true);
-    testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
     projectRepository.save(testProject);
 
     testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));
-    testUser.setProjects(Collections.singletonList(testProject));
     userRepository.save(testUser);
+
+    userRepository.setUserRoleForProject(
+        testProject.getId(), testUser.getId(), ProjectRole.ADMIN.toString(), true);
   }
 
   @Test
@@ -56,11 +56,11 @@ class ListProjectsForUserControllerIntegrationTest extends ControllerTestTemplat
             .andDo(document("user/list/projects"))
             .andReturn();
 
-    GetProjectResponse[] projects =
-        fromJson(result.getResponse().getContentAsString(), GetProjectResponse[].class);
+    ProjectWithRolesResponse[] projects =
+        fromJson(result.getResponse().getContentAsString(), ProjectWithRolesResponse[].class);
     Assertions.assertEquals(1, projects.length);
-    Assertions.assertEquals("project", projects[0].getName());
-    Assertions.assertEquals(testProject.getId(), projects[0].getId());
+    Assertions.assertEquals("project", projects[0].getProject().getName());
+    Assertions.assertEquals(testProject.getId(), projects[0].getProject().getId());
   }
 
   @Test
