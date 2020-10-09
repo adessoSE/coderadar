@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.5.0.null, 2020-09-11">
+<meta name="author" content="v1.0.0.null, 2020-10-09">
 <title>coderadar Administration Guide</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar Administration Guide</h1>
 <div class="details">
-<span id="author" class="author">v0.5.0.null, 2020-09-11</span><br>
+<span id="author" class="author">v1.0.0.null, 2020-10-09</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2126,11 +2126,13 @@ table.tableblock.grid-all {
 <li><a href="#_configuring_logging_levels">2.1.6. Configuring logging levels</a></li>
 <li><a href="#_configuring_the_log_file">2.1.7. Configuring the log file</a></li>
 <li><a href="#_configuring_the_database_connection">2.1.8. Configuring the database connection</a></li>
+<li><a href="#_configuring_the_git_passwords_key">2.1.9. Configuring the git passwords key</a></li>
 </ul>
 </li>
-<li><a href="#_starting_coderadar">2.2. Starting Coderadar</a></li>
-<li><a href="#_starting_the_coderadar_ui">2.3. Starting the Coderadar UI</a></li>
-<li><a href="#_coderadar_system_requirements">2.4. Coderadar system requirements</a></li>
+<li><a href="#_coderadar_platform_admin">2.2. Coderadar platform admin</a></li>
+<li><a href="#_starting_coderadar">2.3. Starting Coderadar</a></li>
+<li><a href="#_shutting_down_coderadar">2.4. Shutting down Coderadar</a></li>
+<li><a href="#_coderadar_system_requirements">2.5. Coderadar system requirements</a></li>
 </ul>
 </li>
 </ul>
@@ -2236,32 +2238,120 @@ The easiest way to quickly configure a local Neo4j instance is by using Neo4j De
 <code>spring.data.neo4j.password=neo3j</code></p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_configuring_the_git_passwords_key"><a class="link" href="#_configuring_the_git_passwords_key">2.1.9. Configuring the git passwords key</a></h4>
+<div class="paragraph">
+<p>Coderadar requires plaintext passwords in order to clone/update private repositories. This is
+problematic as these passwords are saved in the database. To mitigate this problem (at least to some extent),
+the passwords are encrypted (NOT hashed) before they are saved and decrypted when they are needed (again we are talking about per-project repository passwords, not Coderadar passwords, those are hashed using BCrypt).
+The encryption key can be set using the following property:</p>
+</div>
+<div class="paragraph">
+<p><code>coderadar.gitPasswordsEncryptionKey=test-key</code></p>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_starting_coderadar"><a class="link" href="#_starting_coderadar">2.2. Starting Coderadar</a></h3>
+<h3 id="_coderadar_platform_admin"><a class="link" href="#_coderadar_platform_admin">2.2. Coderadar platform admin</a></h3>
+<div class="paragraph">
+<p>The first user to register will receive a platform admin flag.
+This gives the user the needed permission to shut down the app
+and access the "Manage users" page.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_starting_coderadar"><a class="link" href="#_starting_coderadar">2.3. Starting Coderadar</a></h3>
 <div class="paragraph">
 <p>Starting Coderadar requires a running Neo4j instance on port 7687.
-Once started, the Coderadar REST-API will be available on port 8080.
-If the jar contains the coderadar UI, it will also be available on port 8080.
-For more information on it, have a look at the REST-API documentation:</p>
+Once started, the Coderadar UI and REST-API will be available on port 8080.
+For more information on the REST-API, have a look at the documentation:</p>
 </div>
 <div class="paragraph">
 <p><a href="https://adessoag.github.io/coderadar/current/docs/restapi.html" class="bare">https://adessoag.github.io/coderadar/current/docs/restapi.html</a></p>
 </div>
+<div class="paragraph">
+<p>Alternatively, two Docker images can be used. Running the script <code>run.bat/run.sh</code> will automatically pull them and start them.
+These are the steps to run the images manually:</p>
+</div>
+<div class="paragraph">
+<p>1.Pull the images:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>docker pull neo4j:3.5.19
+docker pull maxim615/coderadar</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>2.Start Neo4j</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>docker run -it --publish=7687:7687 --publish=7474:7474 --name neo4j --env NEO4J_dbms_connector_bolt_tls__level=DISABLED --env NEO4J_AUTH=neo4j/neo3j --env NEO4JLABS_PLUGINS=[\"apoc\"] neo4j:3.5.19</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To make the database persistent you should supply docker with the following argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>--volume=%userprofile%/neo4j_docker/data:/data</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use the <code>NEO4J_AUTH</code> environment variable to set the username/password for the database.</p>
+</div>
+<div class="paragraph">
+<p>3.Start Coderadar</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>docker run -it --name coderadar --network="host" maxim615/coderadar</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If running on a Windows host, network mode should be set to "bridge" and <code>spring.data.neo4j.uri</code> to <code>bolt://host.docker.internal:7687</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>docker run -it -p 8080:8080 --name coderadar --network="bridge" --env spring.data.neo4j.uri=bolt://host.docker.internal:7687 maxim615/coderadar:latest</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_starting_the_coderadar_ui"><a class="link" href="#_starting_the_coderadar_ui">2.3. Starting the Coderadar UI</a></h3>
+<h3 id="_shutting_down_coderadar"><a class="link" href="#_shutting_down_coderadar">2.4. Shutting down Coderadar</a></h3>
 <div class="paragraph">
-<p>To start the Coderadar UI, you have to build it first. This requires having NPM installed, going to the <code>coderadar-ui</code> directory and
-installing the dependencies by running <code>npm install</code> and running the UI-server with <code>npm start</code>.
-The UI will be available on port 4200.</p>
+<p>The platform admin has an additional Shutdown-button available in the main sidebar.
+Upon clicking it, all running analysis' will be stopped and all further authentication requests will be denied,
+meaning it is not possible to use the application after this point. Once all running tasks
+are completed, the application will shut down. This is needed in order to be able to cleanly shutdown
+Coderadar without causing any database corruption (for example in the middle of saving a new project).</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_coderadar_system_requirements"><a class="link" href="#_coderadar_system_requirements">2.4. Coderadar system requirements</a></h3>
+<h3 id="_coderadar_system_requirements"><a class="link" href="#_coderadar_system_requirements">2.5. Coderadar system requirements</a></h3>
 <div class="paragraph">
-<p>For comfortable development, Coderadar itself requires about 5GB of System memory. Note that this largely depends on how large
-the projects you&#8217;re working with are and how many of them are. In order to save and analyze very large projects, Neo4j should be configured with at least 10GB of available heap memeory.</p>
+<p>For comfortable use, Coderadar itself requires about 2.5 Gb of System memory. Note that this largely depends on how large
+the projects you&#8217;re working with are and how many of them there are.</p>
+</div>
+<div class="paragraph">
+<p>In order to save and analyze very large projects, Neo4j should be configured with at least 10GB of available heap memory and 10GB reserved for the page cache.
+Coderadar should be running smoothly with about 5 Gb of Java heap space. It is highly recommended to run both Coderadar and Neo4j on high-speed SSD storage.
+As an example, saving the entire Spring-Boot repository (~29000 commits) as of 25.09.2020 took 26 minutes and 22GB of disk space
+(i7-6820HQ; 32 Gb RAM; NVMe SSD).</p>
+</div>
+<div class="paragraph">
+<p>For more information on how to configure Neo4j have a look at:
+<a href="https://neo4j.com/docs/operations-manual/current/performance/memory-configuration/" class="bare">https://neo4j.com/docs/operations-manual/current/performance/memory-configuration/</a></p>
 </div>
 </div>
 </div>
@@ -2269,7 +2359,7 @@ the projects you&#8217;re working with are and how many of them are. In order to
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-09-11 08:00:53 +00:00
+Last updated 2020-10-09 07:30:46 +00:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
