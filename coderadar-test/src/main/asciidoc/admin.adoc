@@ -111,8 +111,10 @@ docker pull maxim615/coderadar
 
 2.Start Neo4j
 ```
-docker run -it --publish=7687:7687 --publish=7474:7474 --name neo4j --env NEO4J_dbms_connector_bolt_tls__level=DISABLED --env NEO4J_AUTH=neo4j/neo3j --env NEO4JLABS_PLUGINS=[\"apoc\"] neo4j:3.5.19
+docker run -it --publish=7687:7687 --publish=7474:7474 --name neo4j --env NEO4J_dbms_connector_bolt_tls__level=DISABLED --env NEO4J_AUTH=neo4j/neo3j --env NEO4JLABS_PLUGINS=['\"apoc\"'] neo4j:3.5.19
 ```
+
+NOTE: If using CMD instead of PowerShell, the syntax for enabling the APOC plugin is as follows: `--env NEO4JLABS_PLUGINS=[\"apoc\"]`
 
 To make the database persistent you should supply docker with the following argument:
 
