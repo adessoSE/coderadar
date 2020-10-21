@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0.null, 2020-10-09">
+<meta name="author" content="v1.0.0.null, 2020-10-21">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0.null, 2020-10-09</span><br>
+<span id="author" class="author">v1.0.0.null, 2020-10-21</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2417,7 +2417,7 @@ This section describes the REST endpoints for managing coderadar users.</p>
 <h4 id="_example_request" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users/208 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users/2607 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2426,10 +2426,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 71
+Content-Length: 72
 
 {
-  "id" : 208,
+  "id" : 2607,
   "username" : "username2",
   "platformAdmin" : false
 }</code></pre>
@@ -2450,10 +2450,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 74
+Content-Length: 75
 
 [ {
-  "id" : 213,
+  "id" : 2632,
   "username" : "username",
   "platformAdmin" : false
 } ]</code></pre>
@@ -2520,10 +2520,10 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json
-Content-Length: 16
+Content-Length: 17
 
 {
-  "id" : 215
+  "id" : 2606
 }</code></pre>
 </div>
 </div>
@@ -2535,7 +2535,7 @@ Content-Length: 16
 <h5 id="_example_request_4"><a class="link" href="#_example_request_4">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users/208 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users/2607 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2546,10 +2546,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 71
+Content-Length: 72
 
 {
-  "id" : 208,
+  "id" : 2607,
   "username" : "username2",
   "platformAdmin" : false
 }</code></pre>
@@ -2628,12 +2628,12 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 507
+Content-Length: 510
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDIyMjk3NTAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE2MDIyMjg4NTAsInVzZXJJZCI6IjIwNSIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.OtbNuxMXXg1kFdQPqBiwFcWK4c3tT_eWc0DdVBmZG1w",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDc0MTI4NTAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNjAyMjI4ODUwLCJ1c2VySWQiOiIyMDUiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.k8k0qUFZqiaIjfz0zd1FSOQk6lEkD52h2l9N2KhNoc0",
-  "userId" : 205,
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDMyNzgzODgsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE2MDMyNzc0ODgsInVzZXJJZCI6IjI1OTIiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.TPAemZg4j21zS_n5TVxl14w4MU6ItMiOifu1Oif1Gcc",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDg0NjE0ODgsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNjAzMjc3NDg4LCJ1c2VySWQiOiIyNTkyIiwidXNlcm5hbWUiOiJ1c2VybmFtZSJ9.oX28LY4vddvh-On1r_oOOEIoWaAsR0W7IDklHf6VV9A",
+  "userId" : 2592,
   "platformAdmin" : false
 }</code></pre>
 </div>
@@ -2682,12 +2682,12 @@ to use the refresh token you got after successful login</p>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/user/refresh HTTP/1.1
 Content-Type: application/json
-Content-Length: 448
+Content-Length: 449
 Host: localhost:8080
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDIyMjgwMTEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE2MDIyMjcxMTEsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.kG3OtsYwMkpT3VrbWJ6FblhxdoIAZUqAoN6SSSsY_JY",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDc0MTI4NTEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNjAyMjI4ODUxLCJ1c2VySWQiOiIyMTciLCJ1c2VybmFtZSI6InJhZGFyIn0.J57bJ2swo5Eo8dmRHq9oFHMEBPVGd8M_XIexP4yOK2Q"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDMyNzY2NDcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE2MDMyNzU3NDcsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.i-vJ_Ox6s5gOZ6BxrpSYhiuDj1ORvnGezzJyl4C1wdw",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDg0NjE0ODcsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNjAzMjc3NDg3LCJ1c2VySWQiOiIyNTg4IiwidXNlcm5hbWUiOiJyYWRhciJ9.a0-dBUcEISX4hcid3c94peFfwJBj4_mf8VuZWnGOaQY"
 }</code></pre>
 </div>
 </div>
@@ -2698,10 +2698,10 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 221
+Content-Length: 222
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDIyMjk3NTIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE2MDIyMjg4NTIsInVzZXJJZCI6IjIxNyIsInVzZXJuYW1lIjoicmFkYXIifQ.Lf51HT94qLHLCwJerSb85zbFkelHiQQ8fzQbwX1FKyI"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDMyNzgzODcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE2MDMyNzc0ODcsInVzZXJJZCI6IjI1ODgiLCJ1c2VybmFtZSI6InJhZGFyIn0.TcYF_-JBNL3XUEsK9Frz6cRYE-a8mqzcHs_5HN_cc3Y"
 }</code></pre>
 </div>
 </div>
@@ -2750,11 +2750,11 @@ again after the current access token is expired.</p>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/user/password/change HTTP/1.1
 Content-Type: application/json
-Content-Length: 267
+Content-Length: 268
 Host: localhost:8080
 
 {
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDc0MTI4NDcsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNjAyMjI4ODQ3LCJ1c2VySWQiOiIxNzUiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.nCrugQiVZjdzYxCU5jI97C6UaRqIN9yk63KoF_5pLQk",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDg0NjE0OTEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNjAzMjc3NDkxLCJ1c2VySWQiOiIyNjI4IiwidXNlcm5hbWUiOiJ1c2VybmFtZSJ9.83D8g3EynMVgOGM7skeScRfnzkLFZBKZIqC5BlEOfk4",
   "newPassword" : "newPassword1"
 }</code></pre>
 </div>
@@ -2869,7 +2869,7 @@ a user has to login again to get a new refresh token.</p>
 <h5 id="_example_request_8"><a class="link" href="#_example_request_8">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/195/users/196 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/2622/users/2623 HTTP/1.1
 Content-Type: application/json
 Content-Length: 22
 Host: localhost:8080
@@ -2895,7 +2895,7 @@ Host: localhost:8080
 <h5 id="_example_request_9"><a class="link" href="#_example_request_9">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/203/users/204 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/2614/users/2615 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2915,7 +2915,7 @@ Host: localhost:8080</code></pre>
 <h5 id="_example_request_10"><a class="link" href="#_example_request_10">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users/182/projects HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users/2627/projects HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2926,16 +2926,16 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 263
+Content-Length: 264
 
 [ {
   "project" : {
-    "id" : 181,
+    "id" : 2626,
     "name" : "project",
     "vcsUsername" : "testUser",
     "vcsPassword" : null,
     "vcsUrl" : "https://valid.url",
-    "startDate" : "2020-10-09T07:34:07.994+0000",
+    "startDate" : "2020-10-21T10:51:31.349+0000",
     "defaultBranch" : null
   },
   "roles" : [ "ADMIN" ]
@@ -2950,7 +2950,7 @@ Content-Length: 263
 <h5 id="_example_request_11"><a class="link" href="#_example_request_11">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/211/users/ HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/2603/users/ HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2961,10 +2961,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 74
+Content-Length: 75
 
 [ {
-  "id" : 212,
+  "id" : 2604,
   "username" : "username",
   "platformAdmin" : false
 } ]</code></pre>
@@ -2978,7 +2978,7 @@ Content-Length: 74
 <h5 id="_example_request_12"><a class="link" href="#_example_request_12">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/users/190/admin?isAdmin=true HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/users/2617/admin?isAdmin=true HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080
 
@@ -3001,7 +3001,7 @@ isAdmin=true</code></pre>
 <h5 id="_example_request_13"><a class="link" href="#_example_request_13">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/users/186 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/users/2598 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3145,10 +3145,10 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json
-Content-Length: 14
+Content-Length: 16
 
 {
-  "id" : 1
+  "id" : 198
 }</code></pre>
 </div>
 </div>
@@ -3171,23 +3171,23 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 404
+Content-Length: 402
 
 [ {
-  "id" : 36,
+  "id" : 2,
   "name" : "project",
   "vcsUsername" : "testUser",
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
-  "startDate" : "2020-10-09T07:33:58.090+0000",
+  "startDate" : "2020-10-21T10:50:52.189+0000",
   "defaultBranch" : null
 }, {
-  "id" : 37,
+  "id" : 3,
   "name" : "project",
   "vcsUsername" : "testUser",
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
-  "startDate" : "2020-10-09T07:33:58.090+0000",
+  "startDate" : "2020-10-21T10:50:52.189+0000",
   "defaultBranch" : null
 } ]</code></pre>
 </div>
@@ -3200,7 +3200,7 @@ Content-Length: 404
 <h5 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/35 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/231 HTTP/1.1
 Content-Type: application/json
 Content-Length: 206
 Host: localhost:8080
@@ -3211,7 +3211,7 @@ Host: localhost:8080
   "vcsPassword" : "password",
   "vcsUrl" : "http://valid.url",
   "vcsOnline" : true,
-  "startDate" : 1602228837765,
+  "startDate" : 1603277441599,
   "defaultBranch" : "dev"
 }</code></pre>
 </div>
@@ -3232,7 +3232,7 @@ Host: localhost:8080
 <h5 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/34 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3243,15 +3243,15 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 199
+Content-Length: 198
 
 {
-  "id" : 34,
+  "id" : 1,
   "name" : "project",
   "vcsUsername" : "testUser",
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
-  "startDate" : "2020-10-09T07:33:57.633+0000",
+  "startDate" : "2020-10-21T10:50:52.107+0000",
   "defaultBranch" : null
 }</code></pre>
 </div>
@@ -3322,7 +3322,7 @@ files in all commits have to be updated during these operations.</p>
 <h5 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/425/modules HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/58/modules HTTP/1.1
 Content-Type: application/json
 Content-Length: 28
 Host: localhost:8080
@@ -3339,10 +3339,10 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json
-Content-Length: 16
+Content-Length: 15
 
 {
-  "id" : 426
+  "id" : 59
 }</code></pre>
 </div>
 </div>
@@ -3354,7 +3354,7 @@ Content-Length: 16
 <h5 id="_example_request_20"><a class="link" href="#_example_request_20">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/419/modules/420 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/45/modules/46 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3365,10 +3365,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 42
+Content-Length: 41
 
 {
-  "id" : 420,
+  "id" : 46,
   "path" : "test-module"
 }</code></pre>
 </div>
@@ -3381,7 +3381,7 @@ Content-Length: 42
 <h5 id="_example_request_21"><a class="link" href="#_example_request_21">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/429/modules HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/47/modules HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3392,19 +3392,19 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 192
+Content-Length: 188
 
 [ {
-  "id" : 432,
+  "id" : 50,
   "path" : "test-module2"
 }, {
-  "id" : 433,
+  "id" : 51,
   "path" : "test-module/src/asd"
 }, {
-  "id" : 431,
+  "id" : 49,
   "path" : "test-module/src"
 }, {
-  "id" : 430,
+  "id" : 48,
   "path" : "test-module/"
 } ]</code></pre>
 </div>
@@ -3417,7 +3417,7 @@ Content-Length: 192
 <h5 id="_example_request_22"><a class="link" href="#_example_request_22">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/427/modules/428 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/52/modules/53 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3440,7 +3440,7 @@ Host: localhost:8080</code></pre>
 <h5 id="_example_request_23"><a class="link" href="#_example_request_23">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1541/branches HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/2341/branches HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3515,7 +3515,7 @@ defined. File Patterns may either define a pattern for files to be INCLUDED or f
 <h5 id="_example_request_24"><a class="link" href="#_example_request_24">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/46/filePatterns HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/2508/filePatterns HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3526,16 +3526,16 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 151
+Content-Length: 155
 
 [ {
-  "id" : 44,
-  "pattern" : "**/*.java",
-  "inclusionType" : "INCLUDE"
-}, {
-  "id" : 45,
+  "id" : 2507,
   "pattern" : "**/*.xml",
   "inclusionType" : "EXCLUDE"
+}, {
+  "id" : 2506,
+  "pattern" : "**/*.java",
+  "inclusionType" : "INCLUDE"
 } ]</code></pre>
 </div>
 </div>
@@ -3550,7 +3550,7 @@ Content-Length: 151
 <h5 id="_example_request_25"><a class="link" href="#_example_request_25">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/40/filePatterns HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/2513/filePatterns HTTP/1.1
 Content-Type: application/json
 Content-Length: 60
 Host: localhost:8080
@@ -3568,10 +3568,10 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json
-Content-Length: 15
+Content-Length: 17
 
 {
-  "id" : 41
+  "id" : 2514
 }</code></pre>
 </div>
 </div>
@@ -3583,7 +3583,7 @@ Content-Length: 15
 <h5 id="_example_request_26"><a class="link" href="#_example_request_26">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/38/filePatterns/39 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/2511/filePatterns/2512 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3603,7 +3603,7 @@ Host: localhost:8080</code></pre>
 <h5 id="_example_request_27"><a class="link" href="#_example_request_27">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/42/filePatterns/43 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/2509/filePatterns/2510 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3614,10 +3614,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 73
+Content-Length: 75
 
 {
-  "id" : 43,
+  "id" : 2510,
   "pattern" : "**/*.java",
   "inclusionType" : "INCLUDE"
 }</code></pre>
@@ -3631,7 +3631,7 @@ Content-Length: 73
 <h5 id="_example_request_28"><a class="link" href="#_example_request_28">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/40/filePatterns HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/2513/filePatterns HTTP/1.1
 Content-Type: application/json
 Content-Length: 60
 Host: localhost:8080
@@ -3649,10 +3649,10 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json
-Content-Length: 15
+Content-Length: 17
 
 {
-  "id" : 41
+  "id" : 2514
 }</code></pre>
 </div>
 </div>
@@ -3704,7 +3704,7 @@ plugin via the AnalyzerConfiguration resource.</p>
 <h5 id="_example_request_29"><a class="link" href="#_example_request_29">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/65/analyzers HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/19/analyzers HTTP/1.1
 Content-Type: application/json
 Content-Length: 129
 Host: localhost:8080
@@ -3725,7 +3725,7 @@ Content-Type: application/json
 Content-Length: 15
 
 {
-  "id" : 66
+  "id" : 20
 }</code></pre>
 </div>
 </div>
@@ -3737,7 +3737,7 @@ Content-Length: 15
 <h5 id="_example_request_30"><a class="link" href="#_example_request_30">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/62/analyzers/63 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/13/analyzers/14 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3783,7 +3783,7 @@ Content-Length: 67
 <h5 id="_example_request_32"><a class="link" href="#_example_request_32">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/76/analyzers HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/15/analyzers HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3797,13 +3797,13 @@ Content-Type: application/json
 Content-Length: 140
 
 [ {
-  "id" : 77,
-  "analyzerName" : "analyzer",
-  "enabled" : true
-}, {
-  "id" : 78,
+  "id" : 17,
   "analyzerName" : "analyzer2",
   "enabled" : false
+}, {
+  "id" : 16,
+  "analyzerName" : "analyzer",
+  "enabled" : true
 } ]</code></pre>
 </div>
 </div>
@@ -3815,7 +3815,7 @@ Content-Length: 140
 <h5 id="_example_request_33"><a class="link" href="#_example_request_33">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/79/analyzers/80 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/11/analyzers/12 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3829,7 +3829,7 @@ Content-Type: application/json
 Content-Length: 66
 
 {
-  "id" : 80,
+  "id" : 12,
   "analyzerName" : "analyzer",
   "enabled" : true
 }</code></pre>
@@ -3857,7 +3857,7 @@ all branches are analyzed.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/0/analyze HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/2633/analyze HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -3878,7 +3878,7 @@ Host: localhost:8080</code></pre>
 <h5 id="_example_request_35"><a class="link" href="#_example_request_35">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/148/analyzingStatus HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/2781/analyzingStatus HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3904,7 +3904,7 @@ Content-Length: 22
 <h5 id="_example_request_36"><a class="link" href="#_example_request_36">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/148/analyze/reset HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/2781/analyze/reset HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -4003,7 +4003,7 @@ many analyzers are configured, analysis will take a while.</p>
 <h5 id="_example_request_38"><a class="link" href="#_example_request_38">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1147/metrics HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1090/metrics HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -4017,7 +4017,7 @@ Host: localhost:8080</code></pre>
 Content-Type: application/json
 Content-Length: 113
 
-[ "coderadar:size:loc:java", "coderadar:size:cloc:java", "coderadar:size:eloc:java", "coderadar:size:sloc:java" ]</code></pre>
+[ "coderadar:size:eloc:java", "coderadar:size:cloc:java", "coderadar:size:loc:java", "coderadar:size:sloc:java" ]</code></pre>
 </div>
 </div>
 </div>
@@ -4091,7 +4091,7 @@ are available.</p>
 <h5 id="_example_request_39"><a class="link" href="#_example_request_39">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/809/master/commits HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/66/master/commits HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -4217,7 +4217,7 @@ Content-Length: 2907
 <h5 id="_example_request_40"><a class="link" href="#_example_request_40">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/776/master/commits?email=Kilian.Krause@adesso.de HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/33/master/commits?email=Kilian.Krause@adesso.de HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -4318,7 +4318,7 @@ Content-Length: 213
 <h5 id="_example_request_41"><a class="link" href="#_example_request_41">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/0/commitLog HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1092/commitLog HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -4574,7 +4574,7 @@ many analyzers are configured, analysis will take a while.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/2491/metricvalues/perCommit HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/643/metricvalues/perCommit HTTP/1.1
 Content-Type: application/json
 Content-Length: 188
 Host: localhost:8080
@@ -4686,7 +4686,7 @@ Content-Length: 195
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1706/files/content HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1010/files/content HTTP/1.1
 Content-Type: application/json
 Content-Length: 113
 Host: localhost:8080
@@ -4804,7 +4804,7 @@ Content-Length: 735
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/459/files/diff HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/300/files/diff HTTP/1.1
 Content-Type: application/json
 Content-Length: 112
 Host: localhost:8080
@@ -4927,7 +4927,7 @@ time of a specified commit.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/2775/metricvalues/tree HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1314/metricvalues/tree HTTP/1.1
 Content-Type: application/json
 Content-Length: 188
 Host: localhost:8080
@@ -5113,7 +5113,7 @@ commits.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/175/metricvalues/deltaTree HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/726/metricvalues/deltaTree HTTP/1.1
 Content-Type: application/json
 Content-Length: 247
 Host: localhost:8080
@@ -5273,7 +5273,7 @@ Content-Length: 2236
 <h5 id="_example_request_47"><a class="link" href="#_example_request_47">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1262/files/tree/d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df?changedOnly=false HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/132/files/tree/d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df?changedOnly=false HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -5350,7 +5350,7 @@ Content-Length: 190
 <h4 id="_example_request_48" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/320/contributors HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/165/contributors HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -5363,12 +5363,12 @@ Content-Type: application/json
 Content-Length: 278
 
 [ {
-  "id" : 321,
+  "id" : 166,
   "displayName" : "Krause",
   "names" : [ "Krause" ],
   "emailAddresses" : [ "kilian.krause@adesso.de" ]
 }, {
-  "id" : 322,
+  "id" : 167,
   "displayName" : "maximAtanasov",
   "names" : [ "maximAtanasov", "Atanasov" ],
   "emailAddresses" : [ "maksim.atanasov@adesso.de" ]
@@ -5423,7 +5423,7 @@ Content-Length: 278
 <h4 id="_example_request_for_a_file" class="discrete">Example Request for a File</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/287/contributors/path HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/132/contributors/path HTTP/1.1
 Content-Type: application/json
 Content-Length: 109
 Host: localhost:8080
@@ -5442,7 +5442,7 @@ Content-Type: application/json
 Content-Length: 154
 
 [ {
-  "id" : 289,
+  "id" : 134,
   "displayName" : "maximAtanasov",
   "names" : [ "maximAtanasov", "Atanasov" ],
   "emailAddresses" : [ "maksim.atanasov@adesso.de" ]
@@ -5452,7 +5452,7 @@ Content-Length: 154
 <h4 id="_example_request_for_a_directory" class="discrete">Example Request for a Directory</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/254/contributors/path HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/99/contributors/path HTTP/1.1
 Content-Type: application/json
 Content-Length: 89
 Host: localhost:8080
@@ -5471,12 +5471,12 @@ Content-Type: application/json
 Content-Length: 278
 
 [ {
-  "id" : 255,
+  "id" : 100,
   "displayName" : "Krause",
   "names" : [ "Krause" ],
   "emailAddresses" : [ "kilian.krause@adesso.de" ]
 }, {
-  "id" : 256,
+  "id" : 101,
   "displayName" : "maximAtanasov",
   "names" : [ "maximAtanasov", "Atanasov" ],
   "emailAddresses" : [ "maksim.atanasov@adesso.de" ]
@@ -5489,7 +5489,7 @@ Content-Length: 278
 <h4 id="_example_request_49" class="discrete">Example request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/contributors/387 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/contributors/67 HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -5499,10 +5499,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 122
+Content-Length: 121
 
 {
-  "id" : 387,
+  "id" : 67,
   "displayName" : "Krause",
   "names" : [ "Krause" ],
   "emailAddresses" : [ "kilian.krause@adesso.de" ]
@@ -5544,11 +5544,11 @@ Content-Length: 122
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/contributors/merge HTTP/1.1
 Content-Type: application/json
-Content-Length: 63
+Content-Length: 61
 Host: localhost:8080
 
 {
-  "contributorIds" : [ 354, 355 ],
+  "contributorIds" : [ 34, 35 ],
   "displayName" : "Test"
 }</code></pre>
 </div>
@@ -5587,7 +5587,7 @@ Host: localhost:8080
 <h4 id="_example_request_51" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/contributors/222 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/contributors/1 HTTP/1.1
 Content-Type: application/json
 Content-Length: 39
 Host: localhost:8080
@@ -5646,7 +5646,7 @@ Host: localhost:8080
 <h5 id="_example_request_52"><a class="link" href="#_example_request_52">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1822/files/critical?numOfContr=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/199/files/critical?numOfContr=2 HTTP/1.1
 Content-Type: application/json
 Content-Length: 93
 Host: localhost:8080
@@ -5714,7 +5714,7 @@ Content-Length: 101
 <h5 id="_example_request_53"><a class="link" href="#_example_request_53">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1889/files/modification/frequency HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/266/files/modification/frequency HTTP/1.1
 Content-Type: application/json
 Content-Length: 113
 Host: localhost:8080
@@ -5789,12 +5789,12 @@ Content-Length: 294
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/teams HTTP/1.1
 Content-Type: application/json
-Content-Length: 48
+Content-Length: 49
 Host: localhost:8080
 
 {
   "name" : "testTeam",
-  "userIds" : [ 129 ]
+  "userIds" : [ 2575 ]
 }</code></pre>
 </div>
 </div>
@@ -5803,10 +5803,10 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json
-Content-Length: 16
+Content-Length: 17
 
 {
-  "id" : 130
+  "id" : 2576
 }</code></pre>
 </div>
 </div>
@@ -5842,14 +5842,14 @@ Content-Length: 16
 <h4 id="_example_request_55" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/teams/161 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/teams/2523 HTTP/1.1
 Content-Type: application/json
-Content-Length: 49
+Content-Length: 50
 Host: localhost:8080
 
 {
   "name" : "testTeam2",
-  "userIds" : [ 159 ]
+  "userIds" : [ 2521 ]
 }</code></pre>
 </div>
 </div>
@@ -5865,7 +5865,7 @@ Host: localhost:8080
 <h4 id="_example_request_56" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/teams/153 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/teams/2585 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -5902,13 +5902,13 @@ Host: localhost:8080</code></pre>
 <h4 id="_example_request_57" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/teams/123/users HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/teams/2551/users HTTP/1.1
 Content-Type: application/json
-Content-Length: 26
+Content-Length: 27
 Host: localhost:8080
 
 {
-  "elements" : [ 122 ]
+  "elements" : [ 2550 ]
 }</code></pre>
 </div>
 </div>
@@ -5945,13 +5945,13 @@ Host: localhost:8080
 <h4 id="_example_request_58" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/teams/132/users HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/teams/2539/users HTTP/1.1
 Content-Type: application/json
-Content-Length: 26
+Content-Length: 27
 Host: localhost:8080
 
 {
-  "elements" : [ 131 ]
+  "elements" : [ 2538 ]
 }</code></pre>
 </div>
 </div>
@@ -5967,7 +5967,7 @@ Host: localhost:8080
 <h4 id="_example_request_59" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/teams/117 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/teams/2516 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -5976,10 +5976,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 58
+Content-Length: 59
 
 {
-  "id" : 117,
+  "id" : 2516,
   "name" : "testTeam",
   "members" : [ ]
 }</code></pre>
@@ -6000,10 +6000,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 62
+Content-Length: 63
 
 [ {
-  "id" : 103,
+  "id" : 2537,
   "name" : "testTeam",
   "members" : [ ]
 } ]</code></pre>
@@ -6036,7 +6036,7 @@ Content-Length: 62
 <h4 id="_example_request_61" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/144/teams/143 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/projects/2569/teams/2568 HTTP/1.1
 Content-Type: application/json
 Content-Length: 22
 Host: localhost:8080
@@ -6058,7 +6058,7 @@ Host: localhost:8080
 <h4 id="_example_request_62" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/108/teams/109 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/projects/2556/teams/2557 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -6074,7 +6074,7 @@ Host: localhost:8080</code></pre>
 <h4 id="_example_request_63" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/114/teams HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/2562/teams HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -6083,10 +6083,10 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 62
+Content-Length: 63
 
 [ {
-  "id" : 115,
+  "id" : 2563,
   "name" : "testTeam",
   "members" : [ ]
 } ]</code></pre>
@@ -6098,7 +6098,7 @@ Content-Length: 62
 <h4 id="_example_request_64" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users/158/teams HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/users/2520/teams HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -6107,13 +6107,13 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 141
+Content-Length: 143
 
 [ {
-  "id" : 157,
+  "id" : 2519,
   "name" : "testTeam",
   "members" : [ {
-    "id" : 158,
+    "id" : 2520,
     "username" : "testUser",
     "platformAdmin" : false
   } ]
@@ -6126,7 +6126,7 @@ Content-Length: 141
 <h4 id="_example_request_65" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/teams/148/projects HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/teams/2580/projects HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -6135,15 +6135,15 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 204
+Content-Length: 205
 
 [ {
-  "id" : 147,
+  "id" : 2579,
   "name" : "project",
   "vcsUsername" : "testUser",
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
-  "startDate" : "2020-10-09T07:34:04.961+0000",
+  "startDate" : "2020-10-21T10:51:26.882+0000",
   "defaultBranch" : null
 } ]</code></pre>
 </div>
@@ -6154,7 +6154,7 @@ Content-Length: 204
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-10-09 07:30:46 +00:00
+Last updated 2020-10-21 10:47:22 +00:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

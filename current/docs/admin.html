@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0.null, 2020-10-09">
+<meta name="author" content="v1.0.0.null, 2020-10-21">
 <title>coderadar Administration Guide</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar Administration Guide</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0.null, 2020-10-09</span><br>
+<span id="author" class="author">v1.0.0.null, 2020-10-21</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2287,8 +2287,20 @@ docker pull maxim615/coderadar</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>docker run -it --publish=7687:7687 --publish=7474:7474 --name neo4j --env NEO4J_dbms_connector_bolt_tls__level=DISABLED --env NEO4J_AUTH=neo4j/neo3j --env NEO4JLABS_PLUGINS=[\"apoc\"] neo4j:3.5.19</code></pre>
+<pre class="highlightjs highlight"><code>docker run -it --publish=7687:7687 --publish=7474:7474 --name neo4j --env NEO4J_dbms_connector_bolt_tls__level=DISABLED --env NEO4J_AUTH=neo4j/neo3j --env NEO4JLABS_PLUGINS=['\"apoc\"'] neo4j:3.5.19</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If using CMD instead of PowerShell, the syntax for enabling the APOC plugin is as follows: <code>--env NEO4JLABS_PLUGINS=[\"apoc\"]</code>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>To make the database persistent you should supply docker with the following argument:</p>
@@ -2359,7 +2371,7 @@ As an example, saving the entire Spring-Boot repository (~29000 commits) as of 2
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-10-09 07:30:46 +00:00
+Last updated 2020-10-21 10:47:22 +00:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
