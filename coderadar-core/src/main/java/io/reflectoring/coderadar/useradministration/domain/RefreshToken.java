@@ -9,6 +9,6 @@ import lombok.Data;
  */
 @Data
 public class RefreshToken {
-  private Long id;
+  private long id;
   private String token;
 }
