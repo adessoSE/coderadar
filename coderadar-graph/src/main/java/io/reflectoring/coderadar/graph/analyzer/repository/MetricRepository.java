@@ -1,13 +1,12 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
+import java.util.List;
+import java.util.Map;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
 
 @Transactional(readOnly = true)
 public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Long> {
@@ -27,12 +26,12 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    * relationships between metric values and commits.
    *
    * @param saveData A list of Objects, where each objects contains a list with the id of an
-   *     existing FileEntity ("fileId") and an existing CommitEntity ("commitId"), the name of the
-   *     metric to save, its value and its findings.
+   *     existing FileEntity and an existing CommitEntity, the name of the metric to save, its value
+   *     and its findings.
    */
   @Query(
       "UNWIND {0} as x "
-          + "MATCH (f), (c) WHERE ID(f) = x [3] AND ID(c) = x[4] "
+          + "MATCH (f), (c) WHERE ID(f) = x[3] AND ID(c) = x[4] "
           + "CREATE (f)-[:MEASURED_BY]->(m:MetricValueEntity {value: x[0], name: x[1], findings: x[2]})-[:VALID_FOR]->(c)")
   @Transactional
   void saveMetrics(@NonNull List<Object> saveData);
