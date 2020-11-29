@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Transactional(readOnly = true)
 public interface AnalyzerConfigurationRepository
     extends Neo4jRepository<AnalyzerConfigurationEntity, Long> {
 
@@ -23,5 +23,6 @@ public interface AnalyzerConfigurationRepository
   boolean existsById(long id);
 
   @Query("MATCH (p), (a) WHERE ID(p) = {0} AND ID(a) = {1} " + "CREATE (p)-[:HAS]->(a)")
+  @Transactional
   void addConfigurationToProject(long projectId, long analyzerConfigurationId);
 }

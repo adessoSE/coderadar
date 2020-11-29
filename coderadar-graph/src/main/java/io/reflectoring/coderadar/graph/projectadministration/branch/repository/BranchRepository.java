@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
 
   /**
@@ -34,6 +36,7 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.hash = {1} WITH c, p LIMIT 1 "
           + "CREATE (b:BranchEntity {name: {2}, commitHash: {1}, isTag: {3}})-[:POINTS_TO]->(c) WITH b, p "
           + "CREATE (p)-[:HAS_BRANCH]->(b)")
+  @Transactional
   void setBranchOnCommit(
       long projectId, @NonNull String commitHash, @NonNull String branchName, boolean isTag);
 
@@ -58,6 +61,7 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
           + "OPTIONAL MATCH (b)-[r:POINTS_TO]->() DELETE r WITH p, b "
           + "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.hash = {2} WITH c, b LIMIT 1 "
           + "CREATE (b)-[r1:POINTS_TO]->(c) SET b.commitHash = c.hash")
+  @Transactional
   void moveBranchToCommit(long projectId, @NonNull String branchName, @NonNull String commitHash);
 
   @Query(

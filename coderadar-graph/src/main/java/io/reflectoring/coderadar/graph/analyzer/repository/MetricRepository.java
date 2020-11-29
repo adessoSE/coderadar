@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Transactional(readOnly = true)
 public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Long> {
 
   /**
@@ -33,6 +33,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
       "UNWIND {0} as x "
           + "MATCH (f), (c) WHERE ID(f) = x [3] AND ID(c) = x[4] "
           + "CREATE (f)-[:MEASURED_BY]->(m:MetricValueEntity {value: x[0], name: x[1], findings: x[2]})-[:VALID_FOR]->(c)")
+  @Transactional
   void saveMetrics(@NonNull List<Object> saveData);
 
   /**
@@ -57,5 +58,6 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
       long projectId, @NonNull String branchName);
 
   @Query("MATCH (c)<-[:VALID_FOR]-(m) WHERE ID(c) = {0} DETACH DELETE m")
+  @Transactional
   void deleteMetricsForCommit(long id);
 }

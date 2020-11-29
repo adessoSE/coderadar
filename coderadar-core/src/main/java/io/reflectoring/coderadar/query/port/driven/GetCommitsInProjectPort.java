@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.query.port.driven;
 
+import io.reflectoring.coderadar.analyzer.domain.AnalyzeCommitDto;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.query.domain.CommitResponse;
@@ -33,7 +34,7 @@ public interface GetCommitsInProjectPort {
    * @param filePatterns The patterns to use.
    * @return A list of commits with initialized FileToCommitRelationShips and no parents.
    */
-  List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
+  AnalyzeCommitDto[] getNonAnalyzedSortedByTimestampAscWithNoParents(
       long projectId, List<FilePattern> filePatterns, String branch);
 
   /**

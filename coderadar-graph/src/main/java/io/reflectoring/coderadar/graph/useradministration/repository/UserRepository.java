@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Transactional(readOnly = true)
 public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
 
   /**
@@ -58,6 +58,7 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
       "MATCH (p), (u) WHERE ID(p) = {0} AND ID(u) = {1} WITH p, u "
           + "OPTIONAL MATCH (p)<-[r:ASSIGNED_TO]-(u) DELETE r "
           + "CREATE (p)<-[r1:ASSIGNED_TO {creator: {3}, role: {2}}]-(u)")
+  @Transactional
   void setUserRoleForProject(long projectId, long userId, String role, boolean creator);
 
   @Query("MATCH (p)<-[r:ASSIGNED_TO]-(u) WHERE ID(p) = {0} AND ID(u) = {1} RETURN r.role LIMIT 1")
@@ -74,6 +75,7 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
    * @param userId The user id.
    */
   @Query("MATCH (p)<-[r:ASSIGNED_TO]-(u:UserEntity) WHERE ID(p) = {0} AND ID(u) = {1} DELETE r")
+  @Transactional
   void removeUserRoleFromProject(long projectId, long userId);
 
   @Query(
@@ -86,5 +88,6 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
   List<UserEntity> findAll();
 
   @Query("MATCH (u:UserEntity) WHERE ID(u) = {0} SET u.platformAdmin = {1}")
+  @Transactional
   void setPlatformPermission(long userId, boolean isAdmin);
 }

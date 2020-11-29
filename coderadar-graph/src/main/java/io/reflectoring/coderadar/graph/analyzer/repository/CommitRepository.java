@@ -7,7 +7,9 @@ import java.util.Map;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
   /**
@@ -15,6 +17,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    *
    * @param projectId The project id.
    */
+  @Transactional
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} SET c.analyzed = false")
   void resetAnalyzedStatus(long projectId);
 
@@ -102,6 +105,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    *
    * @param commitIds The commit ids.
    */
+  @Transactional
   @Query("MATCH (c) WHERE ID(c) IN {0} SET c.analyzed = true")
   void setCommitsWithIDsAsAnalyzed(@NonNull List<Long> commitIds);
 
@@ -116,6 +120,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "MATCH (c1) WHERE ID(c1) = c[0] "
           + "MATCH (c2) WHERE ID(c2) = c[1] "
           + "CREATE (c1)-[:IS_CHILD_OF {parentOrder: c[2]}]->(c2)")
+  @Transactional
   void createParentRelationships(@NonNull List<Long[]> parentRels);
 
   /**
@@ -129,6 +134,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "MATCH (c) WHERE ID(c) = x[0] "
           + "MATCH (f) WHERE ID(f) = x[1] "
           + "CREATE (f)-[:CHANGED_IN]->(c)")
+  @Transactional
   void createFileRelationships(@NonNull List<long[]> fileRels);
 
   @Query(
@@ -136,6 +142,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "MATCH (c) WHERE ID(c) = x[0] "
           + "MATCH (f) WHERE ID(f) = x[1] "
           + "CREATE (f)-[:DELETED_IN]->(c)")
+  @Transactional
   void createFileDeleteRelationships(@NonNull List<long[]> fileRels);
 
   /**
@@ -159,6 +166,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "MATCH (c) WHERE ID(c) = {0} WITH c "
           + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->(c) "
           + "WHERE NOT EXISTS((c)--(f)-[:CHANGED_IN]->()) DETACH DELETE c, f")
+  @Transactional
   void deleteCommitAndAddedOrRenamedFiles(long commitId);
 
   @Query(

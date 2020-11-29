@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
 import com.google.common.collect.Maps;
-import io.reflectoring.coderadar.projectadministration.domain.File;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzeFileDto;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.io.ByteArrayOutputStream;
@@ -120,14 +120,13 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   }
 
   @Override
-  public HashMap<File, byte[]> getCommitContentBulkWithFiles(
-      String projectRoot,
-      List<io.reflectoring.coderadar.projectadministration.domain.File> files,
-      String commitHash) {
+  public HashMap<AnalyzeFileDto, byte[]> getCommitContentBulkWithFiles(
+      String projectRoot, AnalyzeFileDto[] files, String commitHash) {
     try (Git git = Git.open(new java.io.File(projectRoot))) {
       ObjectId commitId = git.getRepository().resolve(commitHash);
-      HashMap<File, byte[]> bulkContent = Maps.newLinkedHashMapWithExpectedSize(files.size());
-      for (File file : files) {
+      HashMap<AnalyzeFileDto, byte[]> bulkContent =
+          Maps.newLinkedHashMapWithExpectedSize(files.length);
+      for (AnalyzeFileDto file : files) {
         bulkContent.put(
             file, BlobUtils.getRawContent(git.getRepository(), commitId, file.getPath()));
       }

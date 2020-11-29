@@ -1,13 +1,14 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
+import io.reflectoring.coderadar.analyzer.domain.AnalyzeCommitDto;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzeFileDto;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.query.domain.CommitResponse;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   @Override
-  public List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
+  public AnalyzeCommitDto[] getNonAnalyzedSortedByTimestampAscWithNoParents(
       long projectId, List<FilePattern> filePatterns, String branch) {
     // Map Ant-Patterns to RegEx
     Pair<List<String>, List<String>> includesAndExcludes =
@@ -78,29 +79,29 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
    * @param commitEntities The commit entities to map.
    * @return A list of commit domain objects.
    */
-  private List<Commit> mapCommitEntitiesNoParents(List<Map<String, Object>> commitEntities) {
-    List<Commit> commits = new ArrayList<>(commitEntities.size());
-    Map<Long, File> walkedFiles = new HashMap<>();
+  private AnalyzeCommitDto[] mapCommitEntitiesNoParents(List<Map<String, Object>> commitEntities) {
+    AnalyzeCommitDto[] commits = new AnalyzeCommitDto[commitEntities.size()];
+    Map<Long, AnalyzeFileDto> walkedFiles = new HashMap<>();
+    int i = 0;
     for (Map<String, Object> result : commitEntities) {
-      var commitEntity = (Map<String, Object>) result.get("commit");
-      var files = (Object[]) result.get("files");
-      Commit commit =
-          new Commit()
-              .setId((long) commitEntity.get("id"))
-              .setHash((String) commitEntity.get("hash"));
-
-      commit.setChangedFiles(new ArrayList<>(files.length));
+      var files =
+          Arrays.stream((Object[]) result.get("files"))
+              .filter(o -> ((Map) o).get("id") != null)
+              .toArray();
+      AnalyzeFileDto[] changedFiles = new AnalyzeFileDto[files.length];
+      int j = 0;
       for (var val : files) {
         var filePathAndId = (Map) val;
         var fileId = (Long) filePathAndId.get("id");
         var filepath = (String) filePathAndId.get("path");
-        if (fileId == null || filepath == null) {
-          continue;
-        }
-        File file = walkedFiles.computeIfAbsent(fileId, id -> new File(id, filepath));
-        commit.getChangedFiles().add(file);
+        AnalyzeFileDto file =
+            walkedFiles.computeIfAbsent(fileId, id -> new AnalyzeFileDto(id, filepath));
+        changedFiles[j++] = file;
       }
-      commits.add(commit);
+      var commitEntity = (Map<String, Object>) result.get("commit");
+      commits[i++] =
+          new AnalyzeCommitDto(
+              (long) commitEntity.get("id"), (String) commitEntity.get("hash"), changedFiles);
     }
     return commits;
   }

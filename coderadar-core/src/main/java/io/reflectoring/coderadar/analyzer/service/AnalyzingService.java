@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.analyzer.service;
 
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzeCommitDto;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzeFileDto;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.analyzer.port.driver.GetAnalyzingStatusUseCase;
@@ -106,19 +108,18 @@ public class AnalyzingService
       List<FilePattern> filePatterns,
       List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins,
       String branchName) {
-    long projectId = project.getId();
-    List<Commit> commits =
+    AnalyzeCommitDto[] commits =
         getCommitsInProjectPort.getNonAnalyzedSortedByTimestampAscWithNoParents(
-            projectId, filePatterns, branchName);
-    if (commits.isEmpty() || sourceCodeFileAnalyzerPlugins.isEmpty()) {
+            project.getId(), filePatterns, branchName);
+    if (commits.length == 0 || sourceCodeFileAnalyzerPlugins.isEmpty()) {
       return;
     }
     List<Long> commitIds = new ArrayList<>();
     Map<Long, List<MetricValue>> fileMetrics =
-        saveMetricPort.getMetricsForFiles(projectId, branchName);
-    for (Commit commit : commits) {
-      if (!activeAnalysis.containsKey(projectId)
-          || Boolean.FALSE.equals(activeAnalysis.get(projectId))) {
+        saveMetricPort.getMetricsForFiles(project.getId(), branchName);
+    for (AnalyzeCommitDto commit : commits) {
+      if (!activeAnalysis.containsKey(project.getId())
+          || Boolean.FALSE.equals(activeAnalysis.get(project.getId()))) {
         break;
       }
       List<MetricValue> metrics =
@@ -130,9 +131,9 @@ public class AnalyzingService
         commitIds.clear();
       }
       commitIds.add(commit.getId());
-      log(commit);
+      logger.info("Analyzed commit {}", commit.getHash());
     }
-    if (!getAvailableMetricsInProjectPort.get(projectId).isEmpty()) {
+    if (!getAvailableMetricsInProjectPort.get(project.getId()).isEmpty()) {
       saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
     }
   }
@@ -146,9 +147,11 @@ public class AnalyzingService
    * @param fileMetrics All of the metrics gather for each file up until now.
    */
   private void zeroOutMissingMetrics(
-      Commit commit, List<MetricValue> metrics, Map<Long, List<MetricValue>> fileMetrics) {
+      AnalyzeCommitDto commit,
+      List<MetricValue> metrics,
+      Map<Long, List<MetricValue>> fileMetrics) {
 
-    for (File file : commit.getChangedFiles()) {
+    for (AnalyzeFileDto file : commit.getChangedFiles()) {
       List<MetricValue> values = fileMetrics.getOrDefault(file.getId(), Collections.emptyList());
 
       for (MetricValue value : values) {
@@ -182,15 +185,6 @@ public class AnalyzingService
       }
     }
     fileMetrics.put(fileId, metricsForFile);
-  }
-
-  /**
-   * Logs the successful analysis of a commit.
-   *
-   * @param commit The commit that was analyzed.
-   */
-  private void log(Commit commit) {
-    logger.info("Analyzed commit {}", commit.getHash());
   }
 
   /**

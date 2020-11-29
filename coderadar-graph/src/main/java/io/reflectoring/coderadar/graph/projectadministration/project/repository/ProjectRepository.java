@@ -7,9 +7,9 @@ import java.util.Optional;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Transactional(readOnly = true)
 public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> {
 
   /**
@@ -22,6 +22,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} "
           + "WITH mv LIMIT 10000 DETACH DELETE mv RETURN COUNT(mv)")
+  @Transactional
   int deleteProjectMetrics(long projectId);
 
   /**
@@ -33,6 +34,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    */
   @Query(
       "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} WITH f LIMIT 10000 DETACH DELETE f RETURN COUNT(f)")
+  @Transactional
   int deleteProjectFiles(long projectId);
 
   /**
@@ -41,6 +43,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param projectId The id of the project.
    */
   @Query("MATCH (p)-[:CONTAINS*]->(m:ModuleEntity) WHERE ID(p) = {0} WITH m DETACH DELETE m")
+  @Transactional
   void deleteProjectModules(long projectId);
 
   /**
@@ -49,6 +52,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param projectId The project id.
    */
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} DETACH DELETE c")
+  @Transactional
   void deleteProjectCommits(long projectId);
 
   /**
@@ -57,6 +61,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param projectId The project id.
    */
   @Query("MATCH (p)-[:HAS]->(a) WHERE ID(p) = {0} DETACH DELETE a")
+  @Transactional
   void deleteProjectConfiguration(long projectId);
 
   /**
@@ -65,6 +70,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param projectId The project id.
    */
   @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} DETACH DELETE b")
+  @Transactional
   void deleteProjectBranches(long projectId);
 
   /** @return All projects that are not currently being deleted. */
@@ -116,6 +122,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param value The status.
    */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingProcessed = {1}")
+  @Transactional
   void setBeingProcessed(long id, boolean value);
 
   /**
@@ -140,6 +147,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param status The status.
    */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingDeleted = {1}")
+  @Transactional
   void setBeingDeleted(long id, @NonNull Boolean status);
 
   /**
@@ -153,6 +161,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
       "MATCH (p) WHERE ID(p) = {0} "
           + "MATCH (f) WHERE ID(f) IN {1} "
           + "CREATE (p)-[r:CONTAINS]->(f)")
+  @Transactional
   void attachFilesWithIds(long projectId, @NonNull List<Long> fileIds);
 
   /**
@@ -166,10 +175,12 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
       "MATCH (p) WHERE ID(p) = {0} "
           + "MATCH (c) WHERE ID(c) IN {1} "
           + "CREATE (p)-[r:CONTAINS_COMMIT]->(c)")
+  @Transactional
   void attachCommitsWithIds(long projectId, @NonNull List<Long> commitIds);
 
   /** @param projectId The id of the project */
   @Query("MATCH (p)<-[r:WORKS_ON]-() WHERE ID(p) = {0} DELETE r")
+  @Transactional
   void deleteContributorRelationships(long projectId);
 
   /**
