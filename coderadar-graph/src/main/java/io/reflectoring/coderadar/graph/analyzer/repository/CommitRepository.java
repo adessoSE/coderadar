@@ -55,11 +55,22 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   List<CommitEntity> findByProjectIdAndBranchName(long projectId, @NonNull String branch);
 
   @Query(
-          "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
-                  + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
-                  + "RETURN node.hash as hash, node.author as author, node.authorEmail as authorEmail, " +
-                  "node.comment as comment, node.timestamp as timestamp, node.analyzed as analyzed ORDER BY timestamp DESC")
-  List<Map<String, Object>> findByProjectIdAndBranchNameResponses(long projectId, @NonNull String branch);
+      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
+          + "RETURN node.hash as hash, node.author as author, node.authorEmail as authorEmail, "
+          + "node.comment as comment, node.timestamp as timestamp, node.analyzed as analyzed ORDER BY timestamp DESC")
+  List<Map<String, Object>> findByProjectIdAndBranchNameResponses(
+      long projectId, @NonNull String branch);
+
+  @Query(
+      "MATCH (co)-[:WORKS_ON]->(p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE toLower({2}) IN co.emails "
+          + "AND ID(p) = {0} AND b.name = {1} WITH co.emails as emails, c LIMIT 1 "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
+          + "WHERE toLower(c.authorEmail) IN emails "
+          + "RETURN c.hash as hash, c.author as author, c.authorEmail as authorEmail, "
+          + "c.comment as comment, c.timestamp as timestamp, c.analyzed as analyzed ORDER BY timestamp DESC")
+  List<Map<String, Object>> findByProjectIdAndBranchNameAndEmailResponses(
+      long projectId, @NonNull String branch, @NonNull String email);
 
   /**
    * Returns all commits in a project. (Files and parents are not initialized).

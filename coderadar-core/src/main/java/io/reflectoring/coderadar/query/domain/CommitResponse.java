@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommitResponse {
-    private String hash;
-    private String author;
-    private String authorEmail;
-    private String comment;
-    private long timestamp;
-    private boolean analyzed;
+  private String hash;
+  private String author;
+  private String authorEmail;
+  private String comment;
+  private long timestamp;
+  private boolean analyzed;
 }

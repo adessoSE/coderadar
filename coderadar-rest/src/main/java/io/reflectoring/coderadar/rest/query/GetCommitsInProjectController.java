@@ -1,13 +1,9 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.query.domain.CommitResponse;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
-import io.reflectoring.coderadar.rest.GetCommitResponseMapper;
-import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,12 +30,11 @@ public class GetCommitsInProjectController implements AbstractBaseController {
       @RequestParam(value = "email", required = false) String email) {
     authenticationService.authenticateMember(projectId);
     CommitResponse[] commits;
-    //if (email == null || email.isEmpty()) {
-      commits = getCommitsInProjectUseCase.getResponses(projectId, branchName);
-   // } else {
-      //commits = getCommitsInProjectUseCase.getForContributor(projectId, branchName, email);
-  //  }
-   // List<GetCommitResponse> result = GetCommitResponseMapper.mapCommits(commits);
+    if (email == null || email.isEmpty()) {
+      commits = getCommitsInProjectUseCase.get(projectId, branchName);
+    } else {
+      commits = getCommitsInProjectUseCase.getForContributor(projectId, branchName, email);
+    }
     return new ResponseEntity<>(commits, HttpStatus.OK);
   }
 }

@@ -41,30 +41,34 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   @Override
-  public CommitResponse[] getCommitResponses(
-          long projectId, String branch) {
-    List<Map<String, Object>> entities = commitRepository.findByProjectIdAndBranchNameResponses(projectId, branch);
+  public CommitResponse[] getCommitResponses(long projectId, String branch) {
+    return mapCommitResponses(
+        commitRepository.findByProjectIdAndBranchNameResponses(projectId, branch));
+  }
+
+  @Override
+  public CommitResponse[] getCommitsForContributorResponses(
+      long projectId, String branchName, String email) {
+    return mapCommitResponses(
+        commitRepository.findByProjectIdAndBranchNameAndEmailResponses(
+            projectId, branchName, email));
+  }
+
+  private CommitResponse[] mapCommitResponses(List<Map<String, Object>> entities) {
     CommitResponse[] commits = new CommitResponse[entities.size()];
     int i = 0;
     for (Map<String, Object> commitEntity : entities) {
       CommitResponse commit =
-              new CommitResponse()
-                      .setHash((String) commitEntity.get("hash"))
+          new CommitResponse()
+              .setHash((String) commitEntity.get("hash"))
               .setAnalyzed((boolean) commitEntity.get("analyzed"))
-                      .setAuthor((String) commitEntity.get("author"))
-                      .setAuthorEmail((String) commitEntity.get("authorEmail"))
-                      .setComment((String) commitEntity.get("comment"))
-                      .setTimestamp((long) commitEntity.get("timestamp"));
+              .setAuthor((String) commitEntity.get("author"))
+              .setAuthorEmail((String) commitEntity.get("authorEmail"))
+              .setComment((String) commitEntity.get("comment"))
+              .setTimestamp((long) commitEntity.get("timestamp"));
       commits[i++] = commit;
     }
     return commits;
-  }
-
-  @Override
-  public List<Commit> getCommitsForContributorSortedByTimestampDescWithNoRelationships(
-      long projectId, String branchName, String email) {
-    return commitBaseDataMapper.mapNodeEntities(
-        commitRepository.findByProjectIdBranchNameAndContributor(projectId, branchName, email));
   }
 
   /**
