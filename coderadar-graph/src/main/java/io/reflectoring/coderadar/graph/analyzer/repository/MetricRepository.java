@@ -1,12 +1,13 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.FileIdAndMetricQueryResult;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
-import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 
 @Transactional(readOnly = true)
 public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Long> {
@@ -53,9 +54,8 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "UNWIND commits as c "
           + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) WHERE "
           + "NOT(f IN deletes OR f IN renames) AND m.value <> 0 WITH ID(f) as id, m.name as name, head(collect(m)) as metric "
-          + "RETURN  id, collect(metric) as metrics")
-  List<FileIdAndMetricQueryResult> getLastMetricsForFiles(
-      long projectId, @NonNull String branchName);
+          + "RETURN  id, collect({name: metric.name, value: metric.value}) as metrics")
+  List<Map<String, Object>> getLastMetricsForFiles(long projectId, @NonNull String branchName);
 
   @Query("MATCH (c)<-[:VALID_FOR]-(m) WHERE ID(c) = {0} DETACH DELETE m")
   @Transactional
