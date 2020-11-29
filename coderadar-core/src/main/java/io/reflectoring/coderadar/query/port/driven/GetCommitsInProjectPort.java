@@ -2,6 +2,8 @@ package io.reflectoring.coderadar.query.port.driven;
 
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.query.domain.CommitResponse;
+
 import java.util.List;
 
 public interface GetCommitsInProjectPort {
@@ -14,6 +16,8 @@ public interface GetCommitsInProjectPort {
    * @return A list of commit domain objects with no relationships.
    */
   List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(long projectId, String branch);
+
+  CommitResponse[] getCommitResponses(long projectId, String branch);
 
   /**
    * Returns all not yet analyzed commits in this project, that match the supplied file patterns and

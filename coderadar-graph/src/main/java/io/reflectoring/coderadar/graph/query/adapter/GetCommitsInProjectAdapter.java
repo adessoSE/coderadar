@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.adapter.Com
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.query.domain.CommitResponse;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,26 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     return mapCommitEntitiesNoParents(
         commitRepository.findByProjectIdNonAnalyzedWithFiles(
             projectId, branch, includesAndExcludes.getFirst(), includesAndExcludes.getSecond()));
+  }
+
+  @Override
+  public CommitResponse[] getCommitResponses(
+          long projectId, String branch) {
+    List<Map<String, Object>> entities = commitRepository.findByProjectIdAndBranchNameResponses(projectId, branch);
+    CommitResponse[] commits = new CommitResponse[entities.size()];
+    int i = 0;
+    for (Map<String, Object> commitEntity : entities) {
+      CommitResponse commit =
+              new CommitResponse()
+                      .setHash((String) commitEntity.get("hash"))
+              .setAnalyzed((boolean) commitEntity.get("analyzed"))
+                      .setAuthor((String) commitEntity.get("author"))
+                      .setAuthorEmail((String) commitEntity.get("authorEmail"))
+                      .setComment((String) commitEntity.get("comment"))
+                      .setTimestamp((long) commitEntity.get("timestamp"));
+      commits[i++] = commit;
+    }
+    return commits;
   }
 
   @Override

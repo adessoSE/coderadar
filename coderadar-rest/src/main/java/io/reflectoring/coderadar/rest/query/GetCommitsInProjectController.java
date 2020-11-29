@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.query;
 
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.query.domain.CommitResponse;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.GetCommitResponseMapper;
@@ -27,18 +28,18 @@ public class GetCommitsInProjectController implements AbstractBaseController {
   @GetMapping(
       path = "/projects/{projectId}/{branchName}/commits",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<GetCommitResponse>> listCommitsForBranch(
+  public ResponseEntity<CommitResponse[]> listCommitsForBranch(
       @PathVariable("projectId") long projectId,
       @PathVariable("branchName") String branchName,
       @RequestParam(value = "email", required = false) String email) {
     authenticationService.authenticateMember(projectId);
-    List<Commit> commits;
-    if (email == null || email.isEmpty()) {
-      commits = getCommitsInProjectUseCase.get(projectId, branchName);
-    } else {
-      commits = getCommitsInProjectUseCase.getForContributor(projectId, branchName, email);
-    }
-    List<GetCommitResponse> result = GetCommitResponseMapper.mapCommits(commits);
-    return new ResponseEntity<>(result, HttpStatus.OK);
+    CommitResponse[] commits;
+    //if (email == null || email.isEmpty()) {
+      commits = getCommitsInProjectUseCase.getResponses(projectId, branchName);
+   // } else {
+      //commits = getCommitsInProjectUseCase.getForContributor(projectId, branchName, email);
+  //  }
+   // List<GetCommitResponse> result = GetCommitResponseMapper.mapCommits(commits);
+    return new ResponseEntity<>(commits, HttpStatus.OK);
   }
 }

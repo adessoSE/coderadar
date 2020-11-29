@@ -54,6 +54,13 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "RETURN node ORDER BY node.timestamp DESC")
   List<CommitEntity> findByProjectIdAndBranchName(long projectId, @NonNull String branch);
 
+  @Query(
+          "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
+                  + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
+                  + "RETURN node.hash as hash, node.author as author, node.authorEmail as authorEmail, " +
+                  "node.comment as comment, node.timestamp as timestamp, node.analyzed as analyzed ORDER BY timestamp DESC")
+  List<Map<String, Object>> findByProjectIdAndBranchNameResponses(long projectId, @NonNull String branch);
+
   /**
    * Returns all commits in a project. (Files and parents are not initialized).
    *

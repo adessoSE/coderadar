@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.query.service;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.query.domain.CommitResponse;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import java.util.List;
@@ -20,6 +21,16 @@ public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
     if (getProjectPort.existsById(projectId)) {
       return getCommitsInProjectPort.getCommitsSortedByTimestampDescWithNoRelationships(
           projectId, branch);
+    } else {
+      throw new ProjectNotFoundException(projectId);
+    }
+  }
+
+  @Override
+  public CommitResponse[] getResponses(long projectId, String branch) {
+    if (getProjectPort.existsById(projectId)) {
+      return getCommitsInProjectPort.getCommitResponses(
+              projectId, branch);
     } else {
       throw new ProjectNotFoundException(projectId);
     }
