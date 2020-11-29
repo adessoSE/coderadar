@@ -23,6 +23,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.c
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
+import io.reflectoring.coderadar.query.domain.Changes;
 import io.reflectoring.coderadar.query.domain.DeltaTree;
 import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
@@ -311,7 +312,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     Assertions.assertEquals(
         firstChangedFile.getCommit2Metrics().get(2).getValue(),
         firstChangedFile.getCommit1Metrics().get(2).getValue() - 3L);
-    Assertions.assertTrue(firstChangedFile.getChanges().isModified());
+    Assertions.assertEquals(Changes.CHANGES_MODIFIED, firstChangedFile.getChanges());
 
     DeltaTree secondChangedFile = firstChild.getChildren().get(11);
     Assertions.assertEquals("src/paysim/output/KafkaOutput.java", secondChangedFile.getName());
@@ -320,7 +321,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     Assertions.assertEquals(
         secondChangedFile.getCommit2Metrics().get(1).getValue(),
         secondChangedFile.getCommit1Metrics().get(1).getValue() - 1L);
-    Assertions.assertTrue(secondChangedFile.getChanges().isModified());
+    Assertions.assertEquals(Changes.CHANGES_MODIFIED, secondChangedFile.getChanges());
 
     for (int i = 1; i < 19; i++) {
       if (i == 11) {
@@ -336,10 +337,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         Assertions.assertEquals(3, file.getCommit1Metrics().size());
         Assertions.assertEquals(file.getCommit2Metrics().get(1), file.getCommit1Metrics().get(1));
       }
-      Assertions.assertFalse(file.getChanges().isModified());
-      Assertions.assertFalse(file.getChanges().isAdded());
-      Assertions.assertFalse(file.getChanges().isRenamed());
-      Assertions.assertFalse(file.getChanges().isDeleted());
+      Assertions.assertEquals(Changes.CHANGES_UNCHANGED, file.getChanges());
     }
     session.clear();
   }

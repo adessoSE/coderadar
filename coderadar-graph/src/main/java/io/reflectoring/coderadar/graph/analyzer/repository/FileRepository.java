@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
 
   /**
@@ -28,6 +30,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "MATCH (f1) WHERE ID(f1) = x[0] "
           + "MATCH (f2) WHERE ID(f2) = x[1] "
           + "CREATE (f1)-[:RENAMED_FROM]->(f2)")
+  @Transactional
   void createRenameRelationships(@NonNull List<long[]> renameRels);
 
   @Query(

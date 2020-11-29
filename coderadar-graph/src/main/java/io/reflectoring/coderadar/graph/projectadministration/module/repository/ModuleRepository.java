@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Transactional(readOnly = true)
 public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
 
   /**
@@ -35,6 +35,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
           + "DELETE r1 WITH m "
           + "RETURN m")
   @NonNull
+  @Transactional
   ModuleEntity createModule(long projectOrModuleId, @NonNull String modulePath);
 
   /**
@@ -44,6 +45,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
    * @param moduleId The id of the module to detach.
    */
   @Query("MATCH (p)-[r]->(m) WHERE ID(p) = {0} AND ID(m) = {1} DELETE r")
+  @Transactional
   void detachModuleFromProject(long projectId, long moduleId);
 
   /**
@@ -54,5 +56,6 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
    * @param childId The id of the module to detach.
    */
   @Query("MATCH (m1)-[r]->(m2) WHERE ID(m1) = {0} AND ID(m2) = {1} DELETE r")
+  @Transactional
   void detachModuleFromModule(long parentId, long childId);
 }

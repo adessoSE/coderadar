@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.vcs.port.driven;
 
+import io.reflectoring.coderadar.analyzer.domain.AnalyzeFileDto;
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.data.util.Pair;
@@ -44,11 +45,8 @@ public interface GetRawCommitContentPort {
    * @param commitHash The commit hash
    * @return The raw commit data grouped by the file.
    */
-  HashMap<io.reflectoring.coderadar.projectadministration.domain.File, byte[]>
-      getCommitContentBulkWithFiles(
-          String projectRoot,
-          List<io.reflectoring.coderadar.projectadministration.domain.File> files,
-          String commitHash);
+  HashMap<AnalyzeFileDto, byte[]> getCommitContentBulkWithFiles(
+      String projectRoot, AnalyzeFileDto[] files, String commitHash);
 
   /**
    * @param parentHash The first commit hash.

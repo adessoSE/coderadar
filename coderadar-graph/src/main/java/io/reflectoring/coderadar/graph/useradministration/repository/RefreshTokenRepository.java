@@ -4,9 +4,9 @@ import io.reflectoring.coderadar.graph.useradministration.domain.RefreshTokenEnt
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Transactional(readOnly = true)
 public interface RefreshTokenRepository extends Neo4jRepository<RefreshTokenEntity, Long> {
 
   /**
@@ -22,9 +22,11 @@ public interface RefreshTokenRepository extends Neo4jRepository<RefreshTokenEnti
    * @param userId The user id.
    */
   @Query("MATCH (r:RefreshTokenEntity)<-[:HAS]-(u) WHERE ID(u) = {0} DETACH DELETE r")
+  @Transactional
   void deleteByUser(long userId);
 
   /** @param token The token to save. */
   @Query("MATCH (u) WHERE ID(u) = {1} CREATE (u)-[:HAS]->(r:RefreshTokenEntity {token: {0}})")
+  @Transactional
   void saveToken(String token, long userId);
 }

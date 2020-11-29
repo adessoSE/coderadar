@@ -2,12 +2,12 @@ package io.reflectoring.coderadar.analyzer.service;
 
 import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzeCommitDto;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzeFileDto;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
@@ -33,7 +33,7 @@ public class AnalyzeCommitService {
    * @return A list of metric values for the given commit.
    */
   public List<MetricValue> analyzeCommit(
-      Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
+      AnalyzeCommitDto commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
     List<MetricValue> metricValues = new ArrayList<>();
     analyzeBulk(commit.getHash(), commit.getChangedFiles(), analyzers, project)
         .forEach(
@@ -53,12 +53,12 @@ public class AnalyzeCommitService {
    */
   private Map<Long, FileMetrics> analyzeBulk(
       String commitHash,
-      List<File> files,
+      AnalyzeFileDto[] files,
       List<SourceCodeFileAnalyzerPlugin> analyzers,
       Project project) {
-    Map<Long, FileMetrics> fileMetricsMap = Maps.newLinkedHashMapWithExpectedSize(files.size());
+    Map<Long, FileMetrics> fileMetricsMap = Maps.newLinkedHashMapWithExpectedSize(files.length);
     try {
-      HashMap<File, byte[]> fileContents =
+      HashMap<AnalyzeFileDto, byte[]> fileContents =
           getRawCommitContentPort.getCommitContentBulkWithFiles(
               coderadarConfigurationProperties.getWorkdir()
                   + "/projects/"
@@ -84,7 +84,7 @@ public class AnalyzeCommitService {
    * @param fileId The DB id of the current file.
    * @return A list of MetricValues.
    */
-  private List<MetricValue> getMetrics(FileMetrics fileMetrics, Long commitId, Long fileId) {
+  private List<MetricValue> getMetrics(FileMetrics fileMetrics, long commitId, long fileId) {
     List<MetricValue> metricValues = new ArrayList<>(fileMetrics.getMetrics().size());
     for (Metric metric : fileMetrics.getMetrics()) {
       metricValues.add(

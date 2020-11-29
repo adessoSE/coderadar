@@ -11,7 +11,6 @@ import io.reflectoring.coderadar.query.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetDeltaTreeForTwoCommitsPort;
 import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoCommitsCommand;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -67,14 +66,12 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
       DeltaTree oldEntry = findChildInDeltaTree(deltaTree, rename.getFirst());
       DeltaTree newEntry = findChildInDeltaTree(deltaTree, rename.getSecond());
       if (oldEntry != null && newEntry != null) {
-        newEntry.setCommit1Metrics(oldEntry.getCommit1Metrics());
 
-        newEntry.getChanges().setAdded(false);
-        newEntry.getChanges().setRenamed(true);
+        newEntry.setCommit1Metrics(oldEntry.getCommit1Metrics());
+        newEntry.setChanges(Changes.CHANGES_RENAMED);
         newEntry.setRenamedFrom(rename.getFirst());
 
-        oldEntry.getChanges().setRenamed(true);
-        oldEntry.getChanges().setDeleted(false);
+        oldEntry.setChanges(Changes.CHANGES_RENAMED);
         oldEntry.setRenamedTo(rename.getSecond());
       }
     }
@@ -108,9 +105,9 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
       MetricTree metricTree1 =
           tree1Counter < commit1ChildrenSize ? commit1Tree.getChildren().get(tree1Counter) : null;
 
-      if (getChangeType(metricTree1, metricTree2).equals(ChangeType.MODIFY)) {
-        if (Objects.requireNonNull(metricTree1).getType().equals(MetricTreeNodeType.MODULE)
-            && Objects.requireNonNull(metricTree2).getType().equals(MetricTreeNodeType.MODULE)) {
+      if (getChangeType(metricTree1, metricTree2) == ChangeType.MODIFY) {
+        if (Objects.requireNonNull(metricTree1).getType() == MetricTreeNodeType.MODULE
+            && Objects.requireNonNull(metricTree2).getType() == MetricTreeNodeType.MODULE) {
           deltaTree.getChildren().add(createDeltaTree(metricTree1, metricTree2));
         } else {
           deltaTree
@@ -119,11 +116,11 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
         }
         ++tree1Counter;
         ++tree2Counter;
-      } else if (getChangeType(metricTree1, metricTree2).equals(ChangeType.DELETE)) {
+      } else if (getChangeType(metricTree1, metricTree2) == ChangeType.DELETE) {
         deltaTree.getChildren().add(createDeletedFileNode(Objects.requireNonNull(metricTree1)));
         ++tree1Counter;
       } else {
-        if (Objects.requireNonNull(metricTree2).getType().equals(MetricTreeNodeType.MODULE)
+        if (Objects.requireNonNull(metricTree2).getType() == MetricTreeNodeType.MODULE
             && metricTree1 != null) {
           deltaTree.getChildren().add(createAddedFileNode(metricTree1));
           tree1Counter++;
@@ -156,11 +153,9 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     DeltaTree child = new DeltaTree();
     child.setName(metricTree2.getName());
     child.setType(MetricTreeNodeType.FILE);
-    child.setCommit1Metrics(new ArrayList<>());
+    child.setCommit1Metrics(null);
     child.setCommit2Metrics(metricTree2.getMetrics());
-    Changes changes = new Changes();
-    changes.setAdded(true);
-    child.setChanges(changes);
+    child.setChanges(Changes.CHANGES_ADDED);
     return child;
   }
 
@@ -169,10 +164,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     child.setName(metricTree1.getName());
     child.setType(MetricTreeNodeType.FILE);
     child.setCommit1Metrics(metricTree1.getMetrics());
-    child.setCommit2Metrics(new ArrayList<>());
-    Changes changes = new Changes();
-    changes.setDeleted(true);
-    child.setChanges(changes);
+    child.setChanges(Changes.CHANGES_DELETED);
     return child;
   }
 
@@ -182,15 +174,12 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     child.setType(metricTree1.getType());
     child.setCommit1Metrics(metricTree1.getMetrics());
     child.setCommit2Metrics(metricTree2.getMetrics());
-
-    Changes changes = new Changes().setModified(false);
-    child.setChanges(changes);
-
+    child.setChanges(Changes.CHANGES_UNCHANGED);
     for (MetricValueForCommit value : metricTree1.getMetrics()) {
       for (MetricValueForCommit value2 : metricTree2.getMetrics()) {
         if (value.getMetricName().equals(value2.getMetricName())
             && value.getValue() != value2.getValue()) {
-          changes.setModified(true);
+          child.setChanges(Changes.CHANGES_MODIFIED);
           return child;
         }
       }
@@ -207,7 +196,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
    */
   private DeltaTree findChildInDeltaTree(DeltaTree deltaTree, String path) {
     for (DeltaTree child : deltaTree.getChildren()) {
-      if (child.getType().equals(MetricTreeNodeType.FILE)) {
+      if (child.getType() == MetricTreeNodeType.FILE) {
         if (child.getName().equals(path)) {
           return child;
         }

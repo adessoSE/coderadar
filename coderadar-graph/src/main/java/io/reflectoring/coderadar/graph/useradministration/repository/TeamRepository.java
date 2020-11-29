@@ -4,7 +4,9 @@ import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
 
   /**
@@ -28,6 +30,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
           + "MATCH (t) WHERE ID(t) = {1} WITH p, t "
           + "OPTIONAL MATCH (t)-[r:ASSIGNED_TO]->(p) DELETE r "
           + "CREATE (t)-[r1:ASSIGNED_TO {role: {2}}]->(p)")
+  @Transactional
   void addTeamToProject(long projectId, long teamId, String role);
 
   @Query(
@@ -35,6 +38,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
           + "UNWIND {1} as x "
           + "MATCH (u) WHERE ID(u) = x "
           + "MERGE (u)-[r:IS_IN]->(t)")
+  @Transactional
   void addUsersToTeam(long teamId, List<Long> userIds);
 
   @Query(
@@ -42,6 +46,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
           + "UNWIND {1} as x "
           + "MATCH (u)-[r:IS_IN]->(t) WHERE ID(u) = x "
           + "DELETE r")
+  @Transactional
   void deleteUsersFromTeam(long teamId, List<Long> userIds);
 
   /**
@@ -72,6 +77,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
    * @param teamId The id of the team.
    */
   @Query("MATCH (p)<-[r:ASSIGNED_TO]-(t) WHERE ID(p) = {0} AND ID(t) = {1} DELETE r")
+  @Transactional
   void removeTeamFromProject(long projectId, long teamId);
 
   /** @return All teams in the database along with their members. */
@@ -84,5 +90,6 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
   @Query(
       "MATCH (t:TeamEntity)<-[:IS_IN]-(u:UserEntity) WHERE ID(u) = {0} "
           + "AND SIZE ((t)<-[:IS_IN]-()) = 1 DETACH DELETE t")
+  @Transactional
   void deleteIfOnlyUserWithIdRemains(long userId);
 }
