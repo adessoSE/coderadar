@@ -204,7 +204,8 @@ export class ProjectService {
    * @param branch The branch to use for getting the commits.
    */
   public getCommits(id: number, branch: string): Promise<HttpResponse<Commit[]>> {
-    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits', {observe: 'response'}).toPromise();
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/commits?branchName=' +
+      encodeURIComponent(branch), {observe: 'response'}).toPromise();
   }
 
   /**
@@ -215,7 +216,7 @@ export class ProjectService {
    * @param branch The branch to use for getting the commits.
    */
   public getCommitsForContributor(id: number, branch: string, email: string): Promise<HttpResponse<Commit[]>> {
-    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits?email=' +
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/commits?branchName=' + encodeURIComponent(branch) + '&email=' +
       encodeURIComponent(email),
       {observe: 'response'}).toPromise();
   }
