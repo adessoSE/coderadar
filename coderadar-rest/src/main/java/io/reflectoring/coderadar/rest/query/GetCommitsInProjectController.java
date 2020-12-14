@@ -19,12 +19,10 @@ public class GetCommitsInProjectController implements AbstractBaseController {
   private final GetCommitsInProjectUseCase getCommitsInProjectUseCase;
   private final AuthenticationService authenticationService;
 
-  @GetMapping(
-      path = "/projects/{projectId}/{branchName}/commits",
-      produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(path = "/projects/{projectId}/commits", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CommitResponse[]> listCommitsForBranch(
       @PathVariable("projectId") long projectId,
-      @PathVariable("branchName") String branchName,
+      @RequestParam(value = "branchName", required = true) String branchName,
       @RequestParam(value = "email", required = false) String email) {
     authenticationService.authenticateMember(projectId);
     CommitResponse[] commits;

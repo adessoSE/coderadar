@@ -45,7 +45,7 @@ export class ListViewComponent implements OnInit, OnChanges {
   @ViewChild('paginator1') paginator1: MatPaginator;
   @ViewChild('paginator2') paginator2: MatPaginator;
 
-  pageSizeOptions: number[] = [15, 25, 50, 100];
+  pageSizeOptions: number[] = [15, 25, 50];
 
   selectedCommit1: Commit;
   selectedCommit2: Commit;

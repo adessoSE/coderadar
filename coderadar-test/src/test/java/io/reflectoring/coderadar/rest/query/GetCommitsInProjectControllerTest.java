@@ -47,7 +47,7 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/api/projects/" + projectId + "/master/commits")
+                get("/api/projects/" + projectId + "/commits?branchName=master")
                     .contentType(MediaType.APPLICATION_JSON))
             .andDo(
                 document(
@@ -79,15 +79,15 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/api/projects/" + projectId + "/master/commits?email=Kilian.Krause@adesso.de")
+                get("/api/projects/"
+                        + projectId
+                        + "/commits?email=Kilian.Krause@adesso.de&branchName=master")
                     .contentType(MediaType.APPLICATION_JSON))
             .andDo(document("commit/list/email"))
             .andReturn();
 
     List<GetCommitResponse> commits =
-        fromJson(
-            new TypeReference<List<GetCommitResponse>>() {},
-            result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     Assertions.assertEquals(1, commits.size());
     Assertions.assertEquals("modify testModule1/NewRandomFile.java", commits.get(0).getComment());
@@ -98,7 +98,8 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/api/projects/1234/master/commits").contentType(MediaType.APPLICATION_JSON))
+                get("/api/projects/1234/commits?branchName=master")
+                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn();
 
