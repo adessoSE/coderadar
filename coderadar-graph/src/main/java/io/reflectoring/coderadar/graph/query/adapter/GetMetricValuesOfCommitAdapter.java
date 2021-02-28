@@ -21,7 +21,8 @@ public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPo
   public List<MetricValueForCommit> get(long projectId, GetMetricValuesOfCommitCommand command) {
     String commitHash = ValidationUtils.validateAndTrimCommitHash(command.getCommit());
     List<Map<String, Object>> result =
-        metricQueryRepository.getMetricValuesForCommit(projectId, commitHash, command.getMetrics());
+        metricQueryRepository.getMetricValuesForCommit(
+            projectId, Long.parseUnsignedLong(commitHash, 16), command.getMetrics());
     List<MetricValueForCommit> values = new ArrayList<>(result.size());
     for (Map<String, Object> queryResult : result) {
       values.add(

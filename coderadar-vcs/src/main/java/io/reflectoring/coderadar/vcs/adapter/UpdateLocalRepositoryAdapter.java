@@ -96,7 +96,8 @@ public class UpdateLocalRepositoryAdapter implements UpdateLocalRepositoryPort {
             updatedBranches.add(
                 new Branch(
                     truncatedName,
-                    objectId.abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name(),
+                    Long.parseUnsignedLong(
+                        objectId.abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name(), 16),
                     tags.contains(objectId)));
           }
         });

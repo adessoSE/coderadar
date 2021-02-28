@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
+import io.reflectoring.coderadar.projectadministration.LongToHashMapper;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
@@ -52,7 +53,7 @@ public class AnalyzeCommitService {
    * @return A map of File and corresponding FileMetrics
    */
   private Map<Long, FileMetrics> analyzeBulk(
-      String commitHash,
+      long commitHash,
       AnalyzeFileDto[] files,
       List<SourceCodeFileAnalyzerPlugin> analyzers,
       Project project) {
@@ -64,7 +65,7 @@ public class AnalyzeCommitService {
                   + "/projects/"
                   + project.getWorkdirName(),
               files,
-              commitHash);
+              LongToHashMapper.longToHash(commitHash));
       fileContents.forEach(
           (file, content) ->
               fileMetricsMap.put(

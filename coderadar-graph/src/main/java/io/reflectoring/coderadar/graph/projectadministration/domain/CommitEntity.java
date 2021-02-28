@@ -16,8 +16,8 @@ import org.neo4j.ogm.annotation.Relationship;
 public class CommitEntity {
   private Long id;
   private long timestamp;
+  private long hash;
   private boolean analyzed;
-  private String hash;
   private String comment;
   private String author;
   private String authorEmail;

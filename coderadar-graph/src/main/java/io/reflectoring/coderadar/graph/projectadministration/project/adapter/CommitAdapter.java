@@ -240,7 +240,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   private void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
 
     // Get all of the existing commits and save them in a map
-    Map<String, CommitEntity> walkedCommits = Maps.newHashMapWithExpectedSize(commits.size());
+    Map<Long, CommitEntity> walkedCommits = Maps.newHashMapWithExpectedSize(commits.size());
     Map<String, FileEntity> walkedFiles = new HashMap<>();
     commitRepository.findByProjectId(projectId).forEach(c -> walkedCommits.put(c.getHash(), c));
 
@@ -336,7 +336,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
   @Override
   public void updateCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
-    Set<String> newCommitHashes = new HashSet<>(commits.size());
+    Set<Long> newCommitHashes = new HashSet<>(commits.size());
     commits.forEach(c -> newCommitHashes.add(c.getHash()));
 
     List<CommitEntity> unreachableCommits = Collections.emptyList();

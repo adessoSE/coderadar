@@ -12,8 +12,8 @@ import lombok.ToString;
 public class Commit {
   private long id;
   private long timestamp;
+  private long hash;
   private boolean analyzed;
-  private String hash;
   private String comment;
   private String author;
   private String authorEmail;

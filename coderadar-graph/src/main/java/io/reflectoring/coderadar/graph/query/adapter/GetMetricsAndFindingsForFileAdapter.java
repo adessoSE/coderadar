@@ -23,7 +23,7 @@ public class GetMetricsAndFindingsForFileAdapter implements GetMetricsAndFinding
   private static final String FINDINGS = "findings";
 
   public List<MetricWithFindings> getMetricsAndFindingsForFile(
-      long projectId, String commitHash, String filepath) {
+      long projectId, long commitHash, String filepath) {
     List<Map<String, Object>> metrics =
         metricQueryRepository.getMetricsAndFindingsForCommitAndFilepath(
             projectId, commitHash, filepath);

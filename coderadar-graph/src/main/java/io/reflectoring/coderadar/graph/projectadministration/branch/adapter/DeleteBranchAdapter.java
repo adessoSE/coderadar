@@ -45,7 +45,7 @@ public class DeleteBranchAdapter implements DeleteBranchPort {
     List<CommitEntity> children = commitRepository.getCommitChildren(commit.getId());
     if (children != null
         && commitRepository.getCommitChildren(commit.getId()).isEmpty()
-        && branchesInProject.stream().noneMatch(b -> b.getCommitHash().equals(commit.getHash()))) {
+        && branchesInProject.stream().noneMatch(b -> b.getCommitHash() == commit.getHash())) {
       List<CommitEntity> parents = commitRepository.getCommitParents(commit.getId());
       metricRepository.deleteMetricsForCommit(commit.getId());
       commitRepository.deleteCommitAndAddedOrRenamedFiles(commit.getId());

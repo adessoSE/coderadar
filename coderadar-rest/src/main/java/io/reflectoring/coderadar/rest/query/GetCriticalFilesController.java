@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.query;
 
-import static io.reflectoring.coderadar.rest.GetCommitResponseMapper.mapCommits;
+import static io.reflectoring.coderadar.rest.CommitResponseMapper.mapCommits;
 
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;

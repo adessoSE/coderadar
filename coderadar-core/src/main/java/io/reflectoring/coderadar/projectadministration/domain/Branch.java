@@ -8,6 +8,6 @@ import lombok.Value;
 @Value
 public class Branch {
   String name;
-  String commitHash;
+  long commitHash;
   boolean isTag;
 }

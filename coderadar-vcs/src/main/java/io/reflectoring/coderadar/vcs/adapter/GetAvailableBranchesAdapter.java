@@ -38,7 +38,8 @@ public class GetAvailableBranchesAdapter implements GetAvailableBranchesPort {
         result.add(
             new Branch(
                 truncatedName,
-                ref.getObjectId().abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name(),
+                Long.parseUnsignedLong(
+                    ref.getObjectId().abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name(), 16),
                 tags.contains(ref)));
       }
     }

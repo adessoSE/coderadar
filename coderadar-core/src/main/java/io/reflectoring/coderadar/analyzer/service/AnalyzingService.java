@@ -131,7 +131,6 @@ public class AnalyzingService
         commitIds.clear();
       }
       commitIds.add(commit.getId());
-      logger.info("Analyzed commit {}", commit.getHash());
     }
     if (!getAvailableMetricsInProjectPort.get(project.getId()).isEmpty()) {
       saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);

@@ -22,7 +22,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
   private final MetricQueryRepository metricQueryRepository;
   private final ProjectRepository projectRepository;
 
-  MetricTree get(ProjectEntity project, String commitHash, List<String> metrics) {
+  MetricTree get(ProjectEntity project, long commitHash, List<String> metrics) {
     List<Map<String, Object>> result =
         metricQueryRepository.getMetricTreeForCommit(project.getId(), commitHash, metrics);
     List<ModuleEntity> moduleEntities = getAllModulesInProject(project.getModules());
@@ -52,7 +52,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
     return get(
         projectEntity,
-        ValidationUtils.validateAndTrimCommitHash(command.getCommit()),
+        Long.parseUnsignedLong(ValidationUtils.validateAndTrimCommitHash(command.getCommit()), 16),
         command.getMetrics());
   }
 

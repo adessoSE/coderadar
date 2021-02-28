@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommitResponse {
   private String hash;
+  private long timestamp;
+  private boolean analyzed;
   private String author;
   private String authorEmail;
   private String comment;
-  private long timestamp;
-  private boolean analyzed;
 }

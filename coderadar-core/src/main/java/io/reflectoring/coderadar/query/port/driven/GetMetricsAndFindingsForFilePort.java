@@ -12,5 +12,5 @@ public interface GetMetricsAndFindingsForFilePort {
    * @return All of the metrics for the file along with their location in it.
    */
   List<MetricWithFindings> getMetricsAndFindingsForFile(
-      long projectId, String commitHash, String filepath);
+      long projectId, long commitHash, String filepath);
 }

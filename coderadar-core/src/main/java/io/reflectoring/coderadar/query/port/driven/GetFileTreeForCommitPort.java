@@ -10,5 +10,5 @@ public interface GetFileTreeForCommitPort {
    * @param changedFilesOnly Return only the files changed in the commit.
    * @return A recursive tree structure describing the files and directories in the commit.
    */
-  FileTree getFileTreeForCommit(long projectId, String commitHash, boolean changedFilesOnly);
+  FileTree getFileTreeForCommit(long projectId, long commitHash, boolean changedFilesOnly);
 }

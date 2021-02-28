@@ -43,7 +43,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   private List<Commit> getCommits(List<RevCommit> revCommits) {
     int revCommitsSize = revCommits.size();
     IdentityHashMap<RevCommit, Commit> map = new IdentityHashMap<>(revCommitsSize);
-    ArrayList<Commit> result =
+    List<Commit> result =
         new ArrayList<>(revCommitsSize); // List needed to return commits in same order
     for (RevCommit rc : revCommits) {
       Commit commit = map.computeIfAbsent(rc, this::mapRevCommitToCommit);
@@ -62,7 +62,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
 
   private Commit mapRevCommitToCommit(RevCommit rc) {
     Commit commit = new Commit();
-    commit.setHash(rc.abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name());
+    commit.setHash(
+        Long.parseUnsignedLong(rc.abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name(), 16));
 
     PersonIdent personIdent = rc.getAuthorIdent();
     commit.setAuthor(personIdent.getName());

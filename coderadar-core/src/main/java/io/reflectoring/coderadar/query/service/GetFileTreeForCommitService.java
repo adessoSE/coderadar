@@ -20,7 +20,8 @@ public class GetFileTreeForCommitService implements GetFileTreeForCommitUseCase 
       long projectId, String commitHash, boolean changedFilesOnly) {
     commitHash = ValidationUtils.validateAndTrimCommitHash(commitHash);
     if (getProjectPort.existsById(projectId)) {
-      return getFileTreeForCommitPort.getFileTreeForCommit(projectId, commitHash, changedFilesOnly);
+      return getFileTreeForCommitPort.getFileTreeForCommit(
+          projectId, Long.parseUnsignedLong(commitHash, 16), changedFilesOnly);
     } else {
       throw new ProjectNotFoundException(projectId);
     }

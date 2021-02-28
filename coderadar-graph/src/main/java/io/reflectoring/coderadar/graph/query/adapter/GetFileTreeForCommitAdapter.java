@@ -16,7 +16,7 @@ public class GetFileTreeForCommitAdapter implements GetFileTreeForCommitPort {
   private final MetricQueryRepository metricQueryRepository;
 
   @Override
-  public FileTree getFileTreeForCommit(long projectId, String commitHash, boolean changeFilesOnly) {
+  public FileTree getFileTreeForCommit(long projectId, long commitHash, boolean changeFilesOnly) {
     List<String> filepaths;
     if (changeFilesOnly) {
       filepaths = metricQueryRepository.getFilesChangedInCommit(projectId, commitHash);

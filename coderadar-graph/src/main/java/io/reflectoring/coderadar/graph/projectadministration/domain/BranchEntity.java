@@ -11,6 +11,6 @@ import org.neo4j.ogm.annotation.NodeEntity;
 public class BranchEntity {
   private Long id;
   private String name;
-  private String commitHash;
+  private long commitHash;
   private boolean isTag;
 }
