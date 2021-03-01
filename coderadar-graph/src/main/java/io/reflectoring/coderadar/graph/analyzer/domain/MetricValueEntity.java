@@ -16,7 +16,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @EqualsAndHashCode
 public class MetricValueEntity {
   private Long id;
-  private String name;
+  private int name;
   private int value;
   private List<String> findings;
 

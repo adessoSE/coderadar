@@ -32,7 +32,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "RETURN name, SUM(value) AS value ORDER BY name ")
   @NonNull
   List<Map<String, Object>> getMetricValuesForCommit(
-      long projectId, long commitHash, @NonNull List<String> metricNames);
+      long projectId, long commitHash, @NonNull int[] metricNames);
 
   /**
    * Metrics for each file are collected as string in the following format: "metricName=value" The
@@ -58,7 +58,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "RETURN path, collect(name + \"=\" + value) AS metrics ORDER BY path")
   @NonNull
   List<Map<String, Object>> getMetricTreeForCommit(
-      long projectId, long commitHash, @NonNull List<String> metricNames);
+      long projectId, long commitHash, @NonNull int[] metricNames);
 
   /**
    * @param projectId The project id.
@@ -67,7 +67,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} RETURN DISTINCT mv.name")
   @NonNull
-  List<String> getAvailableMetricsInProject(long projectId);
+  List<Integer> getAvailableMetricsInProject(long projectId);
 
   /**
    * NOTE: This query is currently unused, but I believe it might be useful in the future.
@@ -90,7 +90,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "head(collect(m.findings)) as location ORDER BY path, name WHERE value <> 0 "
           + "RETURN path, collect(name + \"=\" + value + location) as metrics ORDER BY path")
   List<Map<String, Object>> getMetricTreeForCommitWithFindings(
-      long projectId, long commitHash, @NonNull List<String> metricNames);
+      long projectId, long commitHash, @NonNull int[] metricNames);
 
   /**
    * @param projectId The project id.

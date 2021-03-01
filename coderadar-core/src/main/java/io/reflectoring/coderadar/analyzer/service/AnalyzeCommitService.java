@@ -2,9 +2,7 @@ package io.reflectoring.coderadar.analyzer.service;
 
 import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.domain.AnalyzeCommitDto;
-import io.reflectoring.coderadar.analyzer.domain.AnalyzeFileDto;
-import io.reflectoring.coderadar.analyzer.domain.MetricValue;
+import io.reflectoring.coderadar.analyzer.domain.*;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
@@ -90,7 +88,7 @@ public class AnalyzeCommitService {
     for (Metric metric : fileMetrics.getMetrics()) {
       metricValues.add(
           new MetricValue(
-              metric.getId(),
+                  MetricNameMapper.mapToInt(metric.getId()),
               fileMetrics.getMetricCount(metric),
               commitId,
               fileId,

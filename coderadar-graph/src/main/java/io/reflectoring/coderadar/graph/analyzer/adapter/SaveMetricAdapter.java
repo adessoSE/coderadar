@@ -43,7 +43,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
       for (var entity : (Map<String, Object>[]) fileMetrics) {
         mapped.add(
             new MetricValue(
-                (String) entity.get("name"),
+                (int) (long) entity.get("name"),
                 (int) (long) entity.get("value"),
                 0L,
                 fileId,

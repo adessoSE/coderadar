@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MetricValue {
-  private final String name;
+  private final int name;
   private final int value;
   private final long commitId;
   private final long fileId;

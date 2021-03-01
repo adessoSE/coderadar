@@ -158,7 +158,7 @@ public class AnalyzingService
             && metrics.stream()
                 .noneMatch(
                     metricValue ->
-                        metricValue.getName().equals(value.getName())
+                        metricValue.getName() == value.getName()
                             && metricValue.getFileId() == value.getFileId())) {
           metrics.add(
               new MetricValue(

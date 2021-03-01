@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
+import io.reflectoring.coderadar.analyzer.domain.MetricName;
 import io.reflectoring.coderadar.graph.analyzer.FindingsMapper;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import io.reflectoring.coderadar.plugin.api.Finding;
@@ -29,7 +30,7 @@ public class GetMetricsAndFindingsForFileAdapter implements GetMetricsAndFinding
             projectId, commitHash, filepath);
     List<MetricWithFindings> result = new ArrayList<>(metrics.size());
     for (Map<String, Object> metric : metrics) {
-      String name = (String) metric.get(NAME);
+      int name = (int)(long) metric.get(NAME);
       long value = (long) metric.get(VALUE);
       var findingsTemp = (Object[]) metric.get(FINDINGS);
       List<String> strings = new ArrayList<>(findingsTemp.length);
@@ -37,7 +38,7 @@ public class GetMetricsAndFindingsForFileAdapter implements GetMetricsAndFinding
         strings.add((String) f);
       }
       List<Finding> findings = findingsMapper.mapNodeEntities(strings);
-      result.add(new MetricWithFindings(name, value, findings));
+      result.add(new MetricWithFindings(MetricName.valueOfInt(name).getName(), value, findings));
     }
     return result;
   }
