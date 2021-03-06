@@ -88,7 +88,7 @@ public class AnalyzeCommitService {
     for (Metric metric : fileMetrics.getMetrics()) {
       metricValues.add(
           new MetricValue(
-                  MetricNameMapper.mapToInt(metric.getId()),
+              MetricNameMapper.mapToInt(metric.getId()),
               fileMetrics.getMetricCount(metric),
               commitId,
               fileId,

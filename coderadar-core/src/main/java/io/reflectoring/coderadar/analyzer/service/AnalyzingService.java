@@ -114,7 +114,6 @@ public class AnalyzingService
     if (commits.length == 0 || sourceCodeFileAnalyzerPlugins.isEmpty()) {
       return;
     }
-    List<Long> commitIds = new ArrayList<>();
     Map<Long, List<MetricValue>> fileMetrics =
         saveMetricPort.getMetricsForFiles(project.getId(), branchName);
     for (AnalyzeCommitDto commit : commits) {
@@ -127,13 +126,9 @@ public class AnalyzingService
       zeroOutMissingMetrics(commit, metrics, fileMetrics);
       if (!metrics.isEmpty()) {
         saveMetricPort.saveMetricValues(metrics);
-        saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
-        commitIds.clear();
+        saveCommitPort.setCommitToAnalyzed(commit.getId());
       }
-      commitIds.add(commit.getId());
-    }
-    if (!getAvailableMetricsInProjectPort.get(project.getId()).isEmpty()) {
-      saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+      saveCommitPort.setCommitToAnalyzed(commit.getId());
     }
   }
 
@@ -152,7 +147,6 @@ public class AnalyzingService
 
     for (AnalyzeFileDto file : commit.getChangedFiles()) {
       List<MetricValue> values = fileMetrics.getOrDefault(file.getId(), Collections.emptyList());
-
       for (MetricValue value : values) {
         if (value.getValue() != 0
             && metrics.stream()

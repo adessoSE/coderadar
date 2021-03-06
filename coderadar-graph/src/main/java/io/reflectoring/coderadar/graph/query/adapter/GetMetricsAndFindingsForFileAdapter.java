@@ -30,7 +30,7 @@ public class GetMetricsAndFindingsForFileAdapter implements GetMetricsAndFinding
             projectId, commitHash, filepath);
     List<MetricWithFindings> result = new ArrayList<>(metrics.size());
     for (Map<String, Object> metric : metrics) {
-      int name = (int)(long) metric.get(NAME);
+      int name = (int) (long) metric.get(NAME);
       long value = (long) metric.get(VALUE);
       var findingsTemp = (Object[]) metric.get(FINDINGS);
       List<String> strings = new ArrayList<>(findingsTemp.length);
