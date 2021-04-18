@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.contributor.port.driven;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
+import io.reflectoring.coderadar.domain.Contributor;
 import java.util.List;
 
 public interface SaveContributorsPort {

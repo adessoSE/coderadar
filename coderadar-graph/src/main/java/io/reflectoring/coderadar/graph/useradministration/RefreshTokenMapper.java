@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.useradministration;
 
+import io.reflectoring.coderadar.domain.RefreshToken;
 import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.useradministration.domain.RefreshTokenEntity;
-import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
 
 public class RefreshTokenMapper implements Mapper<RefreshToken, RefreshTokenEntity> {
   @Override

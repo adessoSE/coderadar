@@ -2,9 +2,9 @@ package io.reflectoring.coderadar.rest.useradministration;
 
 import static io.reflectoring.coderadar.rest.GetUserResponseMapper.mapUser;
 
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
-import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driver.get.GetUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

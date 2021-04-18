@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.domain;
 
-import io.reflectoring.coderadar.query.domain.CommitResponse;
+import io.reflectoring.coderadar.domain.CommitResponse;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;

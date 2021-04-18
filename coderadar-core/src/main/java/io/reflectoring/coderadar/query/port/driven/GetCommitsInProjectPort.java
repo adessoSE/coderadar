@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.query.port.driven;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzeCommitDto;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.query.domain.CommitResponse;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.CommitResponse;
+import io.reflectoring.coderadar.domain.FilePattern;
 import java.util.List;
 
 public interface GetCommitsInProjectPort {

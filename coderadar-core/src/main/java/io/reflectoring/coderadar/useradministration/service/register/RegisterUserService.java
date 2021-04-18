@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.useradministration.service.register;
 
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.useradministration.UsernameAlreadyInUseException;
-import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListUsersPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RegisterUserPort;

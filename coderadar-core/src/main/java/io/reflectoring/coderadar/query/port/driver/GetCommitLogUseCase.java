@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.query.port.driver;
 
-import io.reflectoring.coderadar.query.domain.CommitLog;
+import io.reflectoring.coderadar.domain.CommitLog;
 import java.util.List;
 
 public interface GetCommitLogUseCase {

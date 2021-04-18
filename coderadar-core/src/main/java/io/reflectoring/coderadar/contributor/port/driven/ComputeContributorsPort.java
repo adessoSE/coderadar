@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.contributor.port.driven;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
-import io.reflectoring.coderadar.query.domain.DateRange;
+import io.reflectoring.coderadar.domain.Contributor;
+import io.reflectoring.coderadar.domain.DateRange;
 import java.util.List;
 
 public interface ComputeContributorsPort {

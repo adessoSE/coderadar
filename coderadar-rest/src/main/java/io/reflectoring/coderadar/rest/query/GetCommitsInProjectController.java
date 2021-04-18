@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.query.domain.CommitResponse;
+import io.reflectoring.coderadar.domain.CommitResponse;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;

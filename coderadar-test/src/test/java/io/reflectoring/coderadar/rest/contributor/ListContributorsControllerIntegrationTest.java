@@ -85,9 +85,7 @@ class ListContributorsControllerIntegrationTest extends ControllerTestTemplate {
             .andReturn();
 
     List<GetContributorResponse> contributors =
-        fromJson(
-            new TypeReference<List<GetContributorResponse>>() {},
-            result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
     GetContributorResponse contributor = contributors.get(0);
 
     Assertions.assertThat(contributors.size()).isEqualTo(1);

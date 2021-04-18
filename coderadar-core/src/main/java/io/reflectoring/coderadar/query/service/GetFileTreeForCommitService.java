@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.ValidationUtils;
+import io.reflectoring.coderadar.domain.FileTree;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.query.domain.FileTree;
 import io.reflectoring.coderadar.query.port.driven.GetFileTreeForCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetFileTreeForCommitUseCase;
 import lombok.RequiredArgsConstructor;

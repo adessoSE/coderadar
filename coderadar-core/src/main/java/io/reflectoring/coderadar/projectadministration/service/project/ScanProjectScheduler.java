@@ -4,11 +4,11 @@ import static io.reflectoring.coderadar.projectadministration.service.project.Cr
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.service.AnalyzingService;
+import io.reflectoring.coderadar.domain.Branch;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.Module;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.Module;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;

@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.module.get;
 
-import io.reflectoring.coderadar.projectadministration.domain.Module;
+import io.reflectoring.coderadar.domain.Module;
 import java.util.List;
 
 public interface ListModulesOfProjectUseCase {

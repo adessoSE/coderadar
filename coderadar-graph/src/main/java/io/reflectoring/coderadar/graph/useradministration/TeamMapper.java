@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.useradministration;
 
+import io.reflectoring.coderadar.domain.Team;
 import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
-import io.reflectoring.coderadar.useradministration.domain.Team;
 
 public class TeamMapper implements Mapper<Team, TeamEntity> {
 

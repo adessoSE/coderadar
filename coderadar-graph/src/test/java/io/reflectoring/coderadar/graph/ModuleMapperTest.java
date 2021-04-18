@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph;
 
+import io.reflectoring.coderadar.domain.Module;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.ModuleMapper;
-import io.reflectoring.coderadar.projectadministration.domain.Module;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.unit;
 
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.query.domain.CommitResponse;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.CommitResponse;
 import io.reflectoring.coderadar.rest.CommitResponseMapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +34,14 @@ class CommitResponseMapperTest {
 
     List<CommitResponse> responses = CommitResponseMapper.mapCommits(commits);
     Assertions.assertEquals(2L, responses.size());
-    Assertions.assertEquals("testHash1", responses.get(0).getHash());
+    Assertions.assertEquals("0000000000000159", responses.get(0).getHash());
     Assertions.assertTrue(responses.get(0).isAnalyzed());
     Assertions.assertEquals("testAuthor1", responses.get(0).getAuthor());
     Assertions.assertEquals("testEmail1", responses.get(0).getAuthorEmail());
     Assertions.assertEquals("testComment1", responses.get(0).getComment());
     Assertions.assertEquals(0L, responses.get(0).getTimestamp());
 
-    Assertions.assertEquals("testHash2", responses.get(1).getHash());
+    Assertions.assertEquals("000000000000007b", responses.get(1).getHash());
     Assertions.assertFalse(responses.get(1).isAnalyzed());
     Assertions.assertEquals("testAuthor2", responses.get(1).getAuthor());
     Assertions.assertEquals("testEmail2", responses.get(1).getAuthorEmail());

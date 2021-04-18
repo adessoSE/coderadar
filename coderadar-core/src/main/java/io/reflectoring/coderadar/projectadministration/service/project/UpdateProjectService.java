@@ -4,15 +4,15 @@ import static io.reflectoring.coderadar.projectadministration.service.project.Cr
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
-import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
-import io.reflectoring.coderadar.contributor.port.driven.DetachContributorPort;
 import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
+import io.reflectoring.coderadar.contributor.port.driven.RemoveContributorPort;
 import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.Contributor;
+import io.reflectoring.coderadar.domain.Module;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.Module;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
@@ -51,7 +51,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final DeleteProjectPort deleteProjectPort;
   private final ComputeContributorsPort computeContributorsPort;
   private final SaveContributorsPort saveContributorsPort;
-  private final DetachContributorPort detachContributorPort;
+  private final RemoveContributorPort removeContributorPort;
   private final ListContributorsPort listContributorsPort;
 
   private static final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
@@ -116,7 +116,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
                 createModulePort.createModule(module.getPath(), projectId);
               }
               // Get contributors anew
-              detachContributorPort.detachContributorsFromProject(
+              removeContributorPort.removeContributorsFromProject(
                   listContributorsPort.listAllByProjectId(projectId), projectId);
               saveContributors(project);
             } catch (Exception e) {

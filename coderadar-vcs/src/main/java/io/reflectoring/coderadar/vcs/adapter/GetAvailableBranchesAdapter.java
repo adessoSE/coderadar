@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.CoderadarConstants;
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
+import io.reflectoring.coderadar.domain.Branch;
 import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import java.io.File;
 import java.util.ArrayList;

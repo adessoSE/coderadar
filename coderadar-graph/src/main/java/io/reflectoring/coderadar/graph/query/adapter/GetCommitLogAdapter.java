@@ -1,12 +1,12 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import com.google.common.collect.Maps;
+import io.reflectoring.coderadar.domain.CommitLog;
+import io.reflectoring.coderadar.domain.CommitLogAuthor;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
-import io.reflectoring.coderadar.query.domain.CommitLog;
-import io.reflectoring.coderadar.query.domain.CommitLogAuthor;
 import io.reflectoring.coderadar.query.port.driven.GetCommitLogPort;
 import java.util.*;
 import java.util.stream.Collectors;

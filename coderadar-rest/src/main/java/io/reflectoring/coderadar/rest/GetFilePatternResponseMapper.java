@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest;
 
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.domain.FilePattern;
 import io.reflectoring.coderadar.rest.domain.GetFilePatternResponse;
 import java.util.ArrayList;
 import java.util.List;

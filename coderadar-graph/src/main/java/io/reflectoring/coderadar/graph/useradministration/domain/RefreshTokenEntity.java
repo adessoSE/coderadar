@@ -2,12 +2,13 @@ package io.reflectoring.coderadar.graph.useradministration.domain;
 
 import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
+import io.reflectoring.coderadar.domain.RefreshToken;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-/** @see io.reflectoring.coderadar.useradministration.domain.RefreshToken */
+/** @see RefreshToken */
 @NodeEntity
 @Data
 public class RefreshTokenEntity {

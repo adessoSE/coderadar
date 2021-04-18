@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.useradministration;
 
-import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
+import io.reflectoring.coderadar.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.GetProjectResponseMapper;
 import io.reflectoring.coderadar.rest.domain.ProjectWithRolesResponse;

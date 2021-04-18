@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.projectadministration.project;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.service.project.GetProjectService;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;

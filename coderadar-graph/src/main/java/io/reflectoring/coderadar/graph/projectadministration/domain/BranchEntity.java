@@ -1,10 +1,11 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
+import io.reflectoring.coderadar.domain.Branch;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.NodeEntity;
 
-/** @see io.reflectoring.coderadar.projectadministration.domain.Branch */
+/** @see Branch */
 @Data
 @NoArgsConstructor
 @NodeEntity

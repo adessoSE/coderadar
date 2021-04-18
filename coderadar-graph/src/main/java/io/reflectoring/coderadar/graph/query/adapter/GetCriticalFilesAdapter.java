@@ -1,13 +1,13 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
+import io.reflectoring.coderadar.domain.ContributorsForFile;
+import io.reflectoring.coderadar.domain.FileAndCommitsForTimePeriod;
+import io.reflectoring.coderadar.domain.FilePattern;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
 import io.reflectoring.coderadar.graph.query.domain.ContributorsForFileQueryResult;
 import io.reflectoring.coderadar.graph.query.domain.FileAndCommitsForTimePeriodQueryResult;
 import io.reflectoring.coderadar.graph.query.repository.ContributorQueryRepository;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.query.domain.ContributorsForFile;
-import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
 import io.reflectoring.coderadar.query.port.driven.GetCriticalFilesPort;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +25,7 @@ public class GetCriticalFilesAdapter implements GetCriticalFilesPort {
 
   @Override
   public List<ContributorsForFile> getFilesWithContributors(
-      long projectId, int numberOfContributors, String commitHash, List<FilePattern> filePatterns) {
+      long projectId, int numberOfContributors, long commitHash, List<FilePattern> filePatterns) {
     Pair<List<String>, List<String>> includesAndExcludes =
         PatternUtil.mapPatternsToRegex(filePatterns);
     return mapContributorsForFileResult(
@@ -40,7 +40,7 @@ public class GetCriticalFilesAdapter implements GetCriticalFilesPort {
   @Override
   public List<FileAndCommitsForTimePeriod> getFrequentlyChangedFiles(
       long projectId,
-      String commitHash,
+      long commitHash,
       Date startDate,
       int frequency,
       List<FilePattern> filePatterns) {

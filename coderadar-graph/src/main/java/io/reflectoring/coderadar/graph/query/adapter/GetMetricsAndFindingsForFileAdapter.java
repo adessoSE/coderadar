@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.analyzer.domain.MetricName;
+import io.reflectoring.coderadar.domain.MetricWithFindings;
 import io.reflectoring.coderadar.graph.analyzer.FindingsMapper;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import io.reflectoring.coderadar.plugin.api.Finding;
-import io.reflectoring.coderadar.query.domain.MetricWithFindings;
 import io.reflectoring.coderadar.query.port.driven.GetMetricsAndFindingsForFilePort;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +33,7 @@ public class GetMetricsAndFindingsForFileAdapter implements GetMetricsAndFinding
       int name = (int) (long) metric.get(NAME);
       long value = (long) metric.get(VALUE);
       var findingsTemp = (Object[]) metric.get(FINDINGS);
+      findingsTemp = findingsTemp == null ? new Object[0] : findingsTemp;
       List<String> strings = new ArrayList<>(findingsTemp.length);
       for (Object f : findingsTemp) {
         strings.add((String) f);

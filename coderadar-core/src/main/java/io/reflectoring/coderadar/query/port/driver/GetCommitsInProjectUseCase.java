@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.query.port.driver;
 
-import io.reflectoring.coderadar.query.domain.CommitResponse;
+import io.reflectoring.coderadar.domain.CommitResponse;
 
 public interface GetCommitsInProjectUseCase {
 

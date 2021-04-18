@@ -2,9 +2,9 @@ package io.reflectoring.coderadar.rest.useradministration;
 
 import static io.reflectoring.coderadar.rest.GetUserResponseMapper.mapUsers;
 
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
-import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListUsersForProjectUseCase;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;

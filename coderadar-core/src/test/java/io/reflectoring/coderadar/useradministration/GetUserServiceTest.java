@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.useradministration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.useradministration.domain.User;
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.service.get.GetUserService;
 import org.junit.jupiter.api.BeforeEach;

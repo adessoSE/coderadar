@@ -51,7 +51,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "WHERE size(commits) >= {3} RETURN f.path AS path, commits ORDER BY f.path")
   List<FileAndCommitsForTimePeriodQueryResult> getFrequentlyChangedFiles(
       long projectId,
-      @NonNull String commitHash,
+      long commitHash,
       long dateTime,
       int frequency,
       @NonNull List<String> includes,

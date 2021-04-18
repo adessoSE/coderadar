@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.useradministration.service.teams.get;
 
-import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
+import io.reflectoring.coderadar.domain.Project;
+import io.reflectoring.coderadar.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;

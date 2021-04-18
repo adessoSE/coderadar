@@ -2,10 +2,10 @@ package io.reflectoring.coderadar.rest.unit.useradministration;
 
 import static org.mockito.Mockito.mock;
 
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
 import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.GetUserController;
-import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driver.get.GetUserUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

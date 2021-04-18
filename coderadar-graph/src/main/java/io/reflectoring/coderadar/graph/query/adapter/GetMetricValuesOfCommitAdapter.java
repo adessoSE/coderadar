@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.analyzer.domain.MetricName;
+import io.reflectoring.coderadar.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
-import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
 import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitCommand;
 import java.util.ArrayList;

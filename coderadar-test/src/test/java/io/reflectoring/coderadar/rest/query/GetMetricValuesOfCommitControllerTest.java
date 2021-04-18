@@ -7,11 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.domain.InclusionType;
+import io.reflectoring.coderadar.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
-import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
@@ -115,8 +115,8 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
     Assertions.assertEquals(3L, metricValuesForCommit.size());
     Assertions.assertEquals(8L, metricValuesForCommit.get(0).getValue());
-    Assertions.assertEquals(18L, metricValuesForCommit.get(1).getValue());
-    Assertions.assertEquals(15L, metricValuesForCommit.get(2).getValue());
+    Assertions.assertEquals(15L, metricValuesForCommit.get(1).getValue());
+    Assertions.assertEquals(18L, metricValuesForCommit.get(2).getValue());
   }
 
   @Test
@@ -145,8 +145,8 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
     Assertions.assertEquals(3L, metricValuesForCommit.size());
     Assertions.assertEquals(8L, metricValuesForCommit.get(0).getValue());
-    Assertions.assertEquals(12L, metricValuesForCommit.get(1).getValue());
-    Assertions.assertEquals(10L, metricValuesForCommit.get(2).getValue());
+    Assertions.assertEquals(10L, metricValuesForCommit.get(1).getValue());
+    Assertions.assertEquals(12L, metricValuesForCommit.get(2).getValue());
   }
 
   @Test
@@ -175,8 +175,8 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
     Assertions.assertEquals(3L, metricValuesForCommit.size());
     Assertions.assertEquals(15L, metricValuesForCommit.get(0).getValue());
-    Assertions.assertEquals(27L, metricValuesForCommit.get(1).getValue());
-    Assertions.assertEquals(21L, metricValuesForCommit.get(2).getValue());
+    Assertions.assertEquals(21L, metricValuesForCommit.get(1).getValue());
+    Assertions.assertEquals(27L, metricValuesForCommit.get(2).getValue());
   }
 
   @Test
@@ -203,8 +203,8 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
     Assertions.assertEquals(3L, metricValuesForCommit.size());
     Assertions.assertEquals(15L, metricValuesForCommit.get(0).getValue());
-    Assertions.assertEquals(27L, metricValuesForCommit.get(1).getValue());
-    Assertions.assertEquals(21L, metricValuesForCommit.get(2).getValue());
+    Assertions.assertEquals(21L, metricValuesForCommit.get(1).getValue());
+    Assertions.assertEquals(27L, metricValuesForCommit.get(2).getValue());
   }
 
   @Test

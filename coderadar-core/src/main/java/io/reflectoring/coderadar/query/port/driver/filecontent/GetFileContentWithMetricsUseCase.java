@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.query.port.driver.filecontent;
 
-import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
+import io.reflectoring.coderadar.domain.FileContentWithMetrics;
 
 public interface GetFileContentWithMetricsUseCase {
 

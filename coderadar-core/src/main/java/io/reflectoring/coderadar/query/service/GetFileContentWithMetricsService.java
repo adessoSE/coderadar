@@ -2,11 +2,11 @@ package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.ValidationUtils;
+import io.reflectoring.coderadar.domain.FileContentWithMetrics;
+import io.reflectoring.coderadar.domain.MetricWithFindings;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.projectadministration.LongToHashMapper;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
-import io.reflectoring.coderadar.query.domain.MetricWithFindings;
 import io.reflectoring.coderadar.query.port.driven.GetMetricsAndFindingsForFilePort;
 import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsCommand;
 import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsUseCase;

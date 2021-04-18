@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service.branch;
 
+import io.reflectoring.coderadar.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.branch.list.ListBranchesUseCase;

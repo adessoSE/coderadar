@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.rest.useradministration.teams;
 
 import static io.reflectoring.coderadar.rest.GetProjectResponseMapper.mapProjects;
 
-import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
+import io.reflectoring.coderadar.domain.Project;
+import io.reflectoring.coderadar.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.GetProjectResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;

@@ -2,12 +2,12 @@ package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzeCommitDto;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzeFileDto;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.CommitResponse;
+import io.reflectoring.coderadar.domain.FilePattern;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
 import io.reflectoring.coderadar.projectadministration.LongToHashMapper;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.query.domain.CommitResponse;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.Arrays;
 import java.util.HashMap;

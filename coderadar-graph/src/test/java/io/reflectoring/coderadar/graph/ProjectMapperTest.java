@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph;
 
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.ProjectMapper;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

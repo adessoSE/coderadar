@@ -2,12 +2,12 @@ package io.reflectoring.coderadar.rest.unit.useradministration.teams;
 
 import static org.mockito.Mockito.mock;
 
+import io.reflectoring.coderadar.domain.Team;
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
 import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.teams.GetTeamController;
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
-import io.reflectoring.coderadar.useradministration.domain.Team;
-import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.GetTeamUseCase;
 import java.util.Collections;
 import org.junit.jupiter.api.Assertions;

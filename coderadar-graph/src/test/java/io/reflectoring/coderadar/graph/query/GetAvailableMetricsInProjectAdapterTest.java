@@ -30,7 +30,7 @@ class GetAvailableMetricsInProjectAdapterTest {
   @Test
   @DisplayName("Should return empty list of strings when no metrics are available")
   void shouldReturnEmptyListOfStringsWhenNoMetricsAreAvailable() {
-    List<String> mockListOfMetrics = new LinkedList<>();
+    List<Integer> mockListOfMetrics = new LinkedList<>();
     when(projectRepository.existsById(anyLong())).thenReturn(true);
     when(metricQueryRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
@@ -43,29 +43,31 @@ class GetAvailableMetricsInProjectAdapterTest {
   @Test
   @DisplayName("Should return list of strings with size of one when one metric is available")
   void shouldReturnListOfStringsWithSizeOfOneWhenOneMetricIsAvailable() {
-    List<String> mockListOfMetrics = new LinkedList<>();
-    mockListOfMetrics.add("loc");
+    List<Integer> mockListOfMetrics = new LinkedList<>();
+    mockListOfMetrics.add(1);
     when(projectRepository.existsById(anyLong())).thenReturn(true);
     when(metricQueryRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 
     List<String> returnedMetrics = getAvailableMetricsInProjectAdapter.get(1L);
 
-    assertThat(returnedMetrics).hasSize(1).containsExactly("loc");
+    assertThat(returnedMetrics).hasSize(1).containsExactly("coderadar:size:sloc:java");
   }
 
   @Test
   @DisplayName("Should return list of strings with size of two when two metrics are available")
   void shouldReturnListOfStringsWithSizeOfTwoWhenTwoMetricsAreAvailable() {
-    List<String> mockListOfMetrics = new LinkedList<>();
-    mockListOfMetrics.add("sloc");
-    mockListOfMetrics.add("cloc");
+    List<Integer> mockListOfMetrics = new LinkedList<>();
+    mockListOfMetrics.add(1);
+    mockListOfMetrics.add(2);
     when(projectRepository.existsById(anyLong())).thenReturn(true);
     when(metricQueryRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 
     List<String> returnedMetrics = getAvailableMetricsInProjectAdapter.get(1L);
 
-    assertThat(returnedMetrics).hasSize(2).containsExactly("sloc", "cloc");
+    assertThat(returnedMetrics)
+        .hasSize(2)
+        .containsExactly("coderadar:size:sloc:java", "coderadar:size:cloc:java");
   }
 }

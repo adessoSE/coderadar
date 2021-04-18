@@ -1,6 +1,9 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 
 import com.google.common.collect.Maps;
+import io.reflectoring.coderadar.domain.Branch;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.File;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
@@ -9,9 +12,6 @@ import io.reflectoring.coderadar.graph.projectadministration.branch.repository.B
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import java.util.*;

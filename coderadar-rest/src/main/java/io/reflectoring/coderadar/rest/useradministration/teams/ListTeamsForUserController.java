@@ -2,9 +2,9 @@ package io.reflectoring.coderadar.rest.useradministration.teams;
 
 import static io.reflectoring.coderadar.rest.GetTeamResponseMapper.mapTeams;
 
+import io.reflectoring.coderadar.domain.Team;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
-import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListTeamsForUserUseCase;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

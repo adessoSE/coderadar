@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest;
 
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.CommitResponse;
 import io.reflectoring.coderadar.projectadministration.LongToHashMapper;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.query.domain.CommitResponse;
 import java.util.ArrayList;
 import java.util.List;
 

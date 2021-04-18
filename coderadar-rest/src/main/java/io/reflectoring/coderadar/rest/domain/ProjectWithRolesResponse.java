@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.domain;
 
-import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
+import io.reflectoring.coderadar.domain.ProjectRole;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
 import com.google.common.collect.Sets;
-import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
-import io.reflectoring.coderadar.query.domain.DateRange;
+import io.reflectoring.coderadar.domain.Contributor;
+import io.reflectoring.coderadar.domain.DateRange;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
 import java.util.*;
 import org.eclipse.jgit.lib.PersonIdent;

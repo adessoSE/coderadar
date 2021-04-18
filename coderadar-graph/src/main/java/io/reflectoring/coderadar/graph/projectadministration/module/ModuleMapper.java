@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.module;
 
+import io.reflectoring.coderadar.domain.Module;
 import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
-import io.reflectoring.coderadar.projectadministration.domain.Module;
 
 public class ModuleMapper implements Mapper<Module, ModuleEntity> {
 

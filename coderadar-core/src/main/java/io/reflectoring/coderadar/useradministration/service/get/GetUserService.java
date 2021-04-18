@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.useradministration.service.get;
 
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
-import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.get.GetUserUseCase;
 import lombok.RequiredArgsConstructor;

@@ -2,10 +2,10 @@ package io.reflectoring.coderadar.vcs.adapter;
 
 import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.CoderadarConstants;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.DateRange;
+import io.reflectoring.coderadar.domain.File;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.File;
-import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
 import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;

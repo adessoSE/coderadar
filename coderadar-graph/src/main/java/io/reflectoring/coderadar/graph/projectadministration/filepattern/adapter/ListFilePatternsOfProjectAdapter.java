@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.filepattern.adapter;
 
+import io.reflectoring.coderadar.domain.FilePattern;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.FilePatternMapper;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
