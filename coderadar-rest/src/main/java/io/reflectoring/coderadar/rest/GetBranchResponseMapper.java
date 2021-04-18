@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest;
 
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
+import io.reflectoring.coderadar.domain.Branch;
 import io.reflectoring.coderadar.rest.domain.GetBranchResponse;
 import java.util.ArrayList;
 import java.util.List;

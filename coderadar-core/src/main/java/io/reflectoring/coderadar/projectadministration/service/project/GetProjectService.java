@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
+import io.reflectoring.coderadar.domain.Project;
+import io.reflectoring.coderadar.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectUseCase;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;

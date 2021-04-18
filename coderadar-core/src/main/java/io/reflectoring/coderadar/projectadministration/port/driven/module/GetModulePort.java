@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.module;
 
-import io.reflectoring.coderadar.projectadministration.domain.Module;
+import io.reflectoring.coderadar.domain.Module;
 
 public interface GetModulePort {
   /**

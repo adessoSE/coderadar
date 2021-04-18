@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.useradministration.adapter.teams;
 
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.graph.useradministration.UserMapper;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
-import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.ListUsersForProjectPort;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

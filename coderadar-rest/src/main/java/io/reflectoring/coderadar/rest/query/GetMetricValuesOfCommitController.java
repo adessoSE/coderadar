@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
+import io.reflectoring.coderadar.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitCommand;
 import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;

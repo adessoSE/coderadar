@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.useradministration.adapter.teams;
 
+import io.reflectoring.coderadar.domain.Team;
 import io.reflectoring.coderadar.graph.useradministration.TeamMapper;
 import io.reflectoring.coderadar.graph.useradministration.repository.TeamRepository;
-import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

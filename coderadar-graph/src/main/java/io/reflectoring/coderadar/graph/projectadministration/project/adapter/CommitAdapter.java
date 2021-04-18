@@ -1,6 +1,9 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 
 import com.google.common.collect.Maps;
+import io.reflectoring.coderadar.domain.Branch;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.File;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
@@ -9,9 +12,6 @@ import io.reflectoring.coderadar.graph.projectadministration.branch.repository.B
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import java.util.*;
@@ -240,7 +240,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   private void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
 
     // Get all of the existing commits and save them in a map
-    Map<String, CommitEntity> walkedCommits = Maps.newHashMapWithExpectedSize(commits.size());
+    Map<Long, CommitEntity> walkedCommits = Maps.newHashMapWithExpectedSize(commits.size());
     Map<String, FileEntity> walkedFiles = new HashMap<>();
     commitRepository.findByProjectId(projectId).forEach(c -> walkedCommits.put(c.getHash(), c));
 
@@ -330,13 +330,13 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   }
 
   @Override
-  public void setCommitsWithIDsAsAnalyzed(List<Long> commitIds) {
-    commitRepository.setCommitsWithIDsAsAnalyzed(commitIds);
+  public void setCommitToAnalyzed(long commitId) {
+    commitRepository.setCommitAsAnalyzed(commitId);
   }
 
   @Override
   public void updateCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
-    Set<String> newCommitHashes = new HashSet<>(commits.size());
+    Set<Long> newCommitHashes = new HashSet<>(commits.size());
     commits.forEach(c -> newCommitHashes.add(c.getHash()));
 
     List<CommitEntity> unreachableCommits = Collections.emptyList();

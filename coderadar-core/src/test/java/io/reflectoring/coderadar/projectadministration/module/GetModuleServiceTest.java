@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.projectadministration.module;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.projectadministration.domain.Module;
+import io.reflectoring.coderadar.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.projectadministration.service.module.GetModuleService;
 import org.junit.jupiter.api.BeforeEach;

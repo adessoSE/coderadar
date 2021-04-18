@@ -4,7 +4,7 @@ import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.dependencymap.domain.Node;
 import io.reflectoring.coderadar.dependencymap.port.driven.GetDependencyTreePort;
 import io.reflectoring.coderadar.dependencymap.port.driver.GetDependencyTreeUseCase;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

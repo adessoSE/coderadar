@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.rest.unit;
 
+import io.reflectoring.coderadar.domain.Team;
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.rest.GetTeamResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
-import io.reflectoring.coderadar.useradministration.domain.Team;
-import io.reflectoring.coderadar.useradministration.domain.User;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

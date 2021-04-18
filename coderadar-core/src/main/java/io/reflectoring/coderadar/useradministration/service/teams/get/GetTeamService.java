@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.useradministration.service.teams.get;
 
+import io.reflectoring.coderadar.domain.Team;
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
-import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.GetTeamUseCase;
 import lombok.RequiredArgsConstructor;

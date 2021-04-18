@@ -10,14 +10,14 @@ import lombok.Setter;
 @Setter
 public class GetBranchResponse {
   private String name;
-  private String commitHash;
+  private long commitHash;
   private boolean isTag;
 
   public String getName() {
     return name;
   }
 
-  public String getCommitHash() {
+  public long getCommitHash() {
     return commitHash;
   }
 

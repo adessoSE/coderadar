@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.branch;
 
+import io.reflectoring.coderadar.domain.Branch;
 import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
 
 public class BranchMapper implements Mapper<Branch, BranchEntity> {
   @Override

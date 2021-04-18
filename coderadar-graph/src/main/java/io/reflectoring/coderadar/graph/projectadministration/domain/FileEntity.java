@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
+import io.reflectoring.coderadar.domain.File;
 import java.util.Collections;
 import java.util.List;
 import lombok.Data;
@@ -9,7 +10,7 @@ import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-/** @see io.reflectoring.coderadar.projectadministration.domain.File */
+/** @see File */
 @NodeEntity
 @Data
 @EqualsAndHashCode

@@ -101,13 +101,13 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   List<LinkedHashMap<String, Object>> findByProjectIdWithParents(long projectId);
 
   /**
-   * Sets all of the commits with the given id to analyzed.
+   * Set the commit with the given id to analyzed.
    *
-   * @param commitIds The commit ids.
+   * @param commitId The commit id.
    */
   @Transactional
-  @Query("MATCH (c) WHERE ID(c) IN {0} SET c.analyzed = true")
-  void setCommitsWithIDsAsAnalyzed(@NonNull List<Long> commitIds);
+  @Query("MATCH (c) WHERE ID(c) = {0} SET c.analyzed = true")
+  void setCommitAsAnalyzed(long commitId);
 
   /**
    * Creates [:IS_CHILD_OF] Relationships between commits.
@@ -154,7 +154,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "MATCH (c1:CommitEntity) WHERE c1.hash = {0} WITH c1 LIMIT 1 "
           + "MATCH (c2:CommitEntity) WHERE c2.hash = {1} WITH c1, c2 LIMIT 1 "
           + "RETURN c1.timestamp > c2.timestamp")
-  boolean commitIsNewer(@NonNull String commit1, @NonNull String commit2);
+  boolean commitIsNewer(long commit1, long commit2);
 
   @Query("MATCH (c)-[:IS_CHILD_OF]->(c2) WHERE ID(c) = {0} RETURN c2")
   List<CommitEntity> getCommitParents(long commitId);

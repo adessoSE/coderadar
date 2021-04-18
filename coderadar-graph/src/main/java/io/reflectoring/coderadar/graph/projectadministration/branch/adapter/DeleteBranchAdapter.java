@@ -1,11 +1,11 @@
 package io.reflectoring.coderadar.graph.projectadministration.branch.adapter;
 
+import io.reflectoring.coderadar.domain.Branch;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
 import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class DeleteBranchAdapter implements DeleteBranchPort {
     List<CommitEntity> children = commitRepository.getCommitChildren(commit.getId());
     if (children != null
         && commitRepository.getCommitChildren(commit.getId()).isEmpty()
-        && branchesInProject.stream().noneMatch(b -> b.getCommitHash().equals(commit.getHash()))) {
+        && branchesInProject.stream().noneMatch(b -> b.getCommitHash() == commit.getHash())) {
       List<CommitEntity> parents = commitRepository.getCommitParents(commit.getId());
       metricRepository.deleteMetricsForCommit(commit.getId());
       commitRepository.deleteCommitAndAddedOrRenamedFiles(commit.getId());

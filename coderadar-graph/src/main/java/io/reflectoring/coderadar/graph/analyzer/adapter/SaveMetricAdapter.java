@@ -19,17 +19,18 @@ public class SaveMetricAdapter implements SaveMetricPort {
   @Override
   public void saveMetricValues(List<MetricValue> metricValues) {
     List<Object> saveData = new ArrayList<>(metricValues.size());
+    long commitId = metricValues.get(0).getCommitId();
     for (MetricValue metricValue : metricValues) {
+      List<String> findings = findingsMapper.mapDomainObjects(metricValue.getFindings());
       saveData.add(
           new Object[] {
             metricValue.getValue(),
             metricValue.getName(),
-            findingsMapper.mapDomainObjects(metricValue.getFindings()),
+            findings.isEmpty() ? null : findings,
             metricValue.getFileId(),
-            metricValue.getCommitId()
           });
     }
-    metricRepository.saveMetrics(saveData);
+    metricRepository.saveMetrics(commitId, saveData);
   }
 
   @Override
@@ -43,7 +44,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
       for (var entity : (Map<String, Object>[]) fileMetrics) {
         mapped.add(
             new MetricValue(
-                (String) entity.get("name"),
+                (int) (long) entity.get("name"),
                 (int) (long) entity.get("value"),
                 0L,
                 fileId,

@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.unit;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
+import io.reflectoring.coderadar.domain.Contributor;
 import io.reflectoring.coderadar.rest.GetContributorResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
 import java.util.ArrayList;

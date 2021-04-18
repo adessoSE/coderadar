@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.adapter;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
-import io.reflectoring.coderadar.query.domain.DateRange;
+import io.reflectoring.coderadar.domain.Contributor;
+import io.reflectoring.coderadar.domain.DateRange;
 import io.reflectoring.coderadar.vcs.adapter.ComputeContributorAdapter;
 import java.io.File;
 import java.io.IOException;

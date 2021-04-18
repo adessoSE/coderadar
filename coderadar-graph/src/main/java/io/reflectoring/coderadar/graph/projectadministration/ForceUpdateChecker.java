@@ -15,7 +15,7 @@ public class ForceUpdateChecker {
     this.commitRepository = commitRepository;
   }
 
-  public List<CommitEntity> getUnreachableCommits(long projectId, Set<String> newCommitHashes) {
+  public List<CommitEntity> getUnreachableCommits(long projectId, Set<Long> newCommitHashes) {
     List<CommitEntity> unreachableCommits = new ArrayList<>();
     List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
     for (CommitEntity commit : commits) {

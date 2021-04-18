@@ -3,13 +3,12 @@ package io.reflectoring.coderadar.projectadministration.service.project;
 import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.CoderadarConstants;
 import io.reflectoring.coderadar.analyzer.service.AnalyzingService;
+import io.reflectoring.coderadar.domain.Branch;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.Module;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.Module;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
@@ -155,7 +154,7 @@ public class ScanProjectScheduler {
 
       if (!updatedBranches.isEmpty()) {
         for (Branch branch : updatedBranches) {
-          if (branch.getCommitHash().equals(CoderadarConstants.ZERO_HASH)) {
+          if (branch.getCommitHash() == 0) {
             deleteBranchPort.delete(project.getId(), branch);
           }
         }

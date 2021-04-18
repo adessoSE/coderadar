@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.reflectoring.coderadar.domain.CommitResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
-import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import java.net.URL;
 import java.util.List;
@@ -64,9 +64,9 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
                             .description("Whether this commit is already analyzed or not."))))
             .andReturn();
 
-    List<GetCommitResponse> commits =
+    List<CommitResponse> commits =
         fromJson(
-            new TypeReference<List<GetCommitResponse>>() {},
+            new TypeReference<List<CommitResponse>>() {},
             result.getResponse().getContentAsString());
 
     Assertions.assertEquals(14, commits.size());
@@ -86,7 +86,7 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
             .andDo(document("commit/list/email"))
             .andReturn();
 
-    List<GetCommitResponse> commits =
+    List<CommitResponse> commits =
         fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
 
     Assertions.assertEquals(1, commits.size());

@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.project.ProjectMapper;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

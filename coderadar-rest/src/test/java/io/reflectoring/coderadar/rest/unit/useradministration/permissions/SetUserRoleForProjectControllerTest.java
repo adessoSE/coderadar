@@ -2,12 +2,12 @@ package io.reflectoring.coderadar.rest.unit.useradministration.permissions;
 
 import static org.mockito.Mockito.mock;
 
+import io.reflectoring.coderadar.domain.ProjectRole;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.rest.ProjectRoleJsonWrapper;
 import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.permissions.SetUserRoleForProjectController;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
-import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driver.permissions.SetUserRoleForProjectUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

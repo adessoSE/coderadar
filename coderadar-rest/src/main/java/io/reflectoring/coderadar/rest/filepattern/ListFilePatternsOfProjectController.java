@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.rest.filepattern;
 
 import static io.reflectoring.coderadar.rest.GetFilePatternResponseMapper.mapFilePatterns;
 
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetFilePatternResponse;

@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.rest.module;
 
 import static io.reflectoring.coderadar.rest.GetModuleResponseMapper.mapModules;
 
-import io.reflectoring.coderadar.projectadministration.domain.Module;
+import io.reflectoring.coderadar.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetModuleResponse;

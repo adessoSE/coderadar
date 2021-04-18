@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.graph.useradministration.adapter;
 
+import io.reflectoring.coderadar.domain.ProjectRole;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
-import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserRoleForProjectPort;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.contributor.port.driven;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
+import io.reflectoring.coderadar.domain.Contributor;
 import java.util.List;
 
 public interface ListContributorsPort {
@@ -19,6 +19,5 @@ public interface ListContributorsPort {
    * @param path The path to look for. It can be a directory or a filepath.
    * @return The list of contributors that worked on the given file/directory.
    */
-  List<Contributor> listAllByProjectIdAndPathInCommit(
-      long projectId, String commitHash, String path);
+  List<Contributor> listAllByProjectIdAndPathInCommit(long projectId, long commitHash, String path);
 }

@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.useradministration.service.delete;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.port.driver.StopAnalyzingUseCase;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.ScanProjectScheduler;

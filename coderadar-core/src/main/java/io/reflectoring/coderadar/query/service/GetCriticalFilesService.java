@@ -2,12 +2,12 @@ package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.ValidationUtils;
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
+import io.reflectoring.coderadar.domain.ContributorsForFile;
+import io.reflectoring.coderadar.domain.FileAndCommitsForTimePeriod;
+import io.reflectoring.coderadar.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.query.domain.ContributorsForFile;
-import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
 import io.reflectoring.coderadar.query.port.driven.GetCriticalFilesPort;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetCriticalFilesUseCase;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFilesWithContributorsCommand;
@@ -31,7 +31,8 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     return getCriticalFilesPort.getFilesWithContributors(
         projectId,
         command.getNumberOfContributors(),
-        ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()),
+        Long.parseUnsignedLong(
+            ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()), 16),
         filePatterns);
   }
 
@@ -42,7 +43,8 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     List<FilePattern> filePatterns = getFilePatternsForProject(projectId);
     return getCriticalFilesPort.getFrequentlyChangedFiles(
         projectId,
-        ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()),
+        Long.parseUnsignedLong(
+            ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()), 16),
         command.getStartDate(),
         command.getFrequency(),
         filePatterns);

@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
+import io.reflectoring.coderadar.domain.FileContentWithMetrics;
 import io.reflectoring.coderadar.query.port.driver.filediff.GetFileDiffCommand;
 import io.reflectoring.coderadar.query.port.driver.filediff.GetFileDiffUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;

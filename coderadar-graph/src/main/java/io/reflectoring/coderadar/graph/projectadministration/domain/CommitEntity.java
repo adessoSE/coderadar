@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
+import io.reflectoring.coderadar.domain.Commit;
 import java.util.Collections;
 import java.util.List;
 import lombok.Data;
@@ -8,7 +9,7 @@ import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-/** @see io.reflectoring.coderadar.projectadministration.domain.Commit */
+/** @see Commit */
 @NodeEntity
 @Data
 @EqualsAndHashCode
@@ -16,8 +17,8 @@ import org.neo4j.ogm.annotation.Relationship;
 public class CommitEntity {
   private Long id;
   private long timestamp;
+  private long hash;
   private boolean analyzed;
-  private String hash;
   private String comment;
   private String author;
   private String authorEmail;

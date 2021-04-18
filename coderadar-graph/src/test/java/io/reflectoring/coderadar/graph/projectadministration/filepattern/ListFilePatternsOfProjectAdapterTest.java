@@ -3,10 +3,10 @@ package io.reflectoring.coderadar.graph.projectadministration.filepattern;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import io.reflectoring.coderadar.domain.FilePattern;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.adapter.ListFilePatternsOfProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

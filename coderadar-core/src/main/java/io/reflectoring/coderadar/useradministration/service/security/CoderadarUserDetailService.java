@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.useradministration.service.security;
 
-import io.reflectoring.coderadar.useradministration.domain.User;
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import java.util.Collections;
 import java.util.List;

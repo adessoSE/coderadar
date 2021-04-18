@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.analyzer;
 
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.domain.Branch;
+import io.reflectoring.coderadar.domain.Commit;
 import java.util.List;
 
 public interface SaveCommitPort {
@@ -17,9 +17,9 @@ public interface SaveCommitPort {
   void saveCommits(List<Commit> commits, List<Branch> branches, long projectId);
 
   /**
-   * Marks the commits with the given ids as analyzed.
+   * Marks the commit with the given id as analyzed.
    *
-   * @param commitIds A list with the DB ids of the commits.
+   * @param commitId The commit id.
    */
-  void setCommitsWithIDsAsAnalyzed(List<Long> commitIds);
+  void setCommitToAnalyzed(long commitId);
 }

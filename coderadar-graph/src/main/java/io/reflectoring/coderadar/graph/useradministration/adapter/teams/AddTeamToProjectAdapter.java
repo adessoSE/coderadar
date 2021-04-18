@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.graph.useradministration.adapter.teams;
 
+import io.reflectoring.coderadar.domain.ProjectRole;
 import io.reflectoring.coderadar.graph.useradministration.repository.TeamRepository;
-import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driven.AddTeamToProjectPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

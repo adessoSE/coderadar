@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create;
 
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.domain.InclusionType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.query.port.driven;
 
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.query.domain.ContributorsForFile;
-import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
+import io.reflectoring.coderadar.domain.ContributorsForFile;
+import io.reflectoring.coderadar.domain.FileAndCommitsForTimePeriod;
+import io.reflectoring.coderadar.domain.FilePattern;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface GetCriticalFilesPort {
    * @return the filepath and the contributors who changed those files.
    */
   List<ContributorsForFile> getFilesWithContributors(
-      long projectId, int numberOfContributors, String commitHash, List<FilePattern> filePatterns);
+      long projectId, int numberOfContributors, long commitHash, List<FilePattern> filePatterns);
 
   /**
    * Search from the start date to the date of the given commit for files that are changed >=
@@ -32,7 +32,7 @@ public interface GetCriticalFilesPort {
    */
   List<FileAndCommitsForTimePeriod> getFrequentlyChangedFiles(
       long projectId,
-      String commitHash,
+      long commitHash,
       Date startDate,
       int frequency,
       List<FilePattern> filePatterns);

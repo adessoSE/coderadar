@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.filepattern;
 
+import io.reflectoring.coderadar.domain.FilePattern;
 import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 
 public class FilePatternMapper implements Mapper<FilePattern, FilePatternEntity> {
 

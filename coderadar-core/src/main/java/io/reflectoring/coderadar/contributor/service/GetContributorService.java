@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.contributor.service;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.GetContributorPort;
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorUseCase;
+import io.reflectoring.coderadar.domain.Contributor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

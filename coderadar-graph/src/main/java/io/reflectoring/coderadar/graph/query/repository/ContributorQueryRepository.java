@@ -27,7 +27,7 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
   List<ContributorsForFileQueryResult> getFilesWithContributors(
       long projectId,
       int numberOfContributors,
-      String commitHash,
+      long commitHash,
       @NonNull List<String> includes,
       @NonNull List<String> excludes);
 
@@ -43,7 +43,7 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
           + "MATCH (c)<-[:CHANGED_IN]-(f) WHERE f IN files WITH DISTINCT c.authorEmail as email "
           + "MATCH (co:ContributorEntity)-[:WORKS_ON]->(p) WHERE ID(p) = {0} AND toLower(email) IN co.emails RETURN co ORDER BY co.displayName")
   List<ContributorEntity> findAllByProjectIdAndFilepathInCommit(
-      long projectId, String commitHash, String filepath);
+      long projectId, long commitHash, String filepath);
 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.hash = {1} WITH c LIMIT 1 "
@@ -57,5 +57,5 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
           + "MATCH (c)<-[:CHANGED_IN]-(f) WHERE f IN files WITH DISTINCT c.authorEmail as email "
           + "MATCH (co:ContributorEntity)-[:WORKS_ON]->(p) WHERE ID(p) = {0} AND toLower(email) IN co.emails RETURN co ORDER BY co.displayName")
   List<ContributorEntity> findAllByProjectIdAndDirectoryInCommit(
-      long projectId, String commitHash, String directory);
+      long projectId, long commitHash, String directory);
 }

@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.graph.contributor.adapter;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
+import io.reflectoring.coderadar.domain.Contributor;
 import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;

@@ -2,10 +2,10 @@ package io.reflectoring.coderadar.vcs.adapter;
 
 import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.CoderadarConstants;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.DateRange;
+import io.reflectoring.coderadar.domain.File;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.File;
-import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
 import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
@@ -43,7 +43,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   private List<Commit> getCommits(List<RevCommit> revCommits) {
     int revCommitsSize = revCommits.size();
     IdentityHashMap<RevCommit, Commit> map = new IdentityHashMap<>(revCommitsSize);
-    ArrayList<Commit> result =
+    List<Commit> result =
         new ArrayList<>(revCommitsSize); // List needed to return commits in same order
     for (RevCommit rc : revCommits) {
       Commit commit = map.computeIfAbsent(rc, this::mapRevCommitToCommit);
@@ -62,7 +62,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
 
   private Commit mapRevCommitToCommit(RevCommit rc) {
     Commit commit = new Commit();
-    commit.setHash(rc.abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name());
+    commit.setHash(
+        Long.parseUnsignedLong(rc.abbreviate(CoderadarConstants.COMMIT_HASH_LENGTH).name(), 16));
 
     PersonIdent personIdent = rc.getAuthorIdent();
     commit.setAuthor(personIdent.getName());

@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.branches;
 
+import io.reflectoring.coderadar.domain.Branch;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
@@ -24,9 +24,12 @@ class DeleteBranchTest extends ControllerTestTemplate {
   @Autowired private DeleteBranchPort deleteBranchPort;
 
   private Long projectId;
-  private final Branch master = new Branch("master", "e9f7ff6fdd8c0863", false);
-  private final Branch testBranch1 = new Branch("testBranch1", "d3272b3793bc4b2b", false);
-  private final Branch testBranch2 = new Branch("testBranch2", "fcd9a0e7c34086fd", false);
+  private final Branch master =
+      new Branch("master", Long.parseUnsignedLong("e9f7ff6fdd8c0863", 16), false);
+  private final Branch testBranch1 =
+      new Branch("testBranch1", Long.parseUnsignedLong("d3272b3793bc4b2b", 16), false);
+  private final Branch testBranch2 =
+      new Branch("testBranch2", Long.parseUnsignedLong("fcd9a0e7c34086fd", 16), false);
 
   @BeforeEach
   void setUp() {

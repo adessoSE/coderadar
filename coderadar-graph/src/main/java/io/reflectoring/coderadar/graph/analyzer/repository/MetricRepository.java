@@ -30,11 +30,11 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    *     and its findings.
    */
   @Query(
-      "UNWIND {0} as x "
-          + "MATCH (f), (c) WHERE ID(f) = x[3] AND ID(c) = x[4] "
+      "MATCH (c) WHERE ID(c) = {0} WITH c UNWIND {1} as x "
+          + "MATCH (f) WHERE ID(f) = x[3] "
           + "CREATE (f)-[:MEASURED_BY]->(m:MetricValueEntity {value: x[0], name: x[1], findings: x[2]})-[:VALID_FOR]->(c)")
   @Transactional
-  void saveMetrics(@NonNull List<Object> saveData);
+  void saveMetrics(long commitId, @NonNull List<Object> saveData);
 
   /**
    * Uses APOC.

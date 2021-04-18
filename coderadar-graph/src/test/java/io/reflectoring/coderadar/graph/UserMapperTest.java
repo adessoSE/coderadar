@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph;
 
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.graph.useradministration.UserMapper;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
-import io.reflectoring.coderadar.useradministration.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

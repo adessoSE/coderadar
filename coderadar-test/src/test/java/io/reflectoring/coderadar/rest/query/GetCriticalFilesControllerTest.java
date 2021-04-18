@@ -7,16 +7,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.reflectoring.coderadar.domain.ContributorsForFile;
+import io.reflectoring.coderadar.domain.InclusionType;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
-import io.reflectoring.coderadar.query.domain.ContributorsForFile;
-import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFilesWithContributorsCommand;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFrequentlyChangedFilesCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.FileAndCommitsForTimePeriodResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import java.net.URL;
 import java.util.Date;
@@ -138,9 +138,7 @@ class GetCriticalFilesControllerTest extends ControllerTestTemplate {
             .andReturn();
 
     List<ContributorsForFile> response =
-        fromJson(
-            new TypeReference<List<ContributorsForFile>>() {},
-            result.getResponse().getContentAsString());
+        fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
     ContributorsForFile responseItem = response.get(0);
 
     Assertions.assertThat(response.size()).isEqualTo(1);
@@ -175,12 +173,10 @@ class GetCriticalFilesControllerTest extends ControllerTestTemplate {
             .andDo(documentGetFrequentlyChangedFiles())
             .andReturn();
 
-    List<FileAndCommitsForTimePeriod> result =
-        fromJson(
-            new TypeReference<List<FileAndCommitsForTimePeriod>>() {},
-            mvcResult.getResponse().getContentAsString());
+    List<FileAndCommitsForTimePeriodResponse> result =
+        fromJson(new TypeReference<>() {}, mvcResult.getResponse().getContentAsString());
 
-    FileAndCommitsForTimePeriod resultItem = result.get(0);
+    FileAndCommitsForTimePeriodResponse resultItem = result.get(0);
 
     Assertions.assertThat(result.size()).isEqualTo(1);
     Assertions.assertThat(resultItem.getPath()).isEqualTo("testModule1/NewRandomFile.java");

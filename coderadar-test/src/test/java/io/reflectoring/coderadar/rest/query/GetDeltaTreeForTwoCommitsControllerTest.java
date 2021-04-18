@@ -6,14 +6,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.domain.Changes;
+import io.reflectoring.coderadar.domain.DeltaTree;
+import io.reflectoring.coderadar.domain.InclusionType;
+import io.reflectoring.coderadar.domain.MetricTreeNodeType;
+import io.reflectoring.coderadar.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
-import io.reflectoring.coderadar.query.domain.Changes;
-import io.reflectoring.coderadar.query.domain.DeltaTree;
-import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
-import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoCommitsCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
@@ -147,12 +147,12 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
     List<MetricValueForCommit> commit2Metrics = deltaTree.getCommit2Metrics();
 
     Assertions.assertEquals(8L, commit1Metrics.get(0).getValue());
-    Assertions.assertEquals(12L, commit1Metrics.get(1).getValue());
-    Assertions.assertEquals(10L, commit1Metrics.get(2).getValue());
+    Assertions.assertEquals(10L, commit1Metrics.get(1).getValue());
+    Assertions.assertEquals(12L, commit1Metrics.get(2).getValue());
 
     Assertions.assertEquals(8L, commit2Metrics.get(0).getValue());
-    Assertions.assertEquals(18L, commit2Metrics.get(1).getValue());
-    Assertions.assertEquals(15L, commit2Metrics.get(2).getValue());
+    Assertions.assertEquals(15L, commit2Metrics.get(1).getValue());
+    Assertions.assertEquals(18L, commit2Metrics.get(2).getValue());
 
     DeltaTree firstChild = deltaTree.getChildren().get(0); // Finding.java
     Assertions.assertEquals("Finding.java", firstChild.getName());

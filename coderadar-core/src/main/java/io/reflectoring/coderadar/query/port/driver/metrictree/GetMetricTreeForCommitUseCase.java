@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.query.port.driver.metrictree;
 
-import io.reflectoring.coderadar.query.domain.MetricTree;
+import io.reflectoring.coderadar.domain.MetricTree;
 
 public interface GetMetricTreeForCommitUseCase {
 

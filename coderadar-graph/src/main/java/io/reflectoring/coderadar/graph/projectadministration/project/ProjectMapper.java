@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 
 public class ProjectMapper implements Mapper<Project, ProjectEntity> {
 
