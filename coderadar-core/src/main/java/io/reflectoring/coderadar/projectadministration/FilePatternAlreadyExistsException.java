@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.projectadministration;
 
 import io.reflectoring.coderadar.EntityAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.domain.InclusionType;
 
 public class FilePatternAlreadyExistsException extends EntityAlreadyExistsException {
   public FilePatternAlreadyExistsException(InclusionType inclusionType, String pattern) {

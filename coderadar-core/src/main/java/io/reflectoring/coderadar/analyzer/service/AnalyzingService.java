@@ -8,8 +8,11 @@ import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.analyzer.port.driver.GetAnalyzingStatusUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StopAnalyzingUseCase;
+import io.reflectoring.coderadar.domain.Branch;
+import io.reflectoring.coderadar.domain.FilePattern;
+import io.reflectoring.coderadar.domain.InclusionType;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-import io.reflectoring.coderadar.projectadministration.domain.*;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.ListAnalyzerConfigurationsPort;
@@ -114,7 +117,6 @@ public class AnalyzingService
     if (commits.length == 0 || sourceCodeFileAnalyzerPlugins.isEmpty()) {
       return;
     }
-    List<Long> commitIds = new ArrayList<>();
     Map<Long, List<MetricValue>> fileMetrics =
         saveMetricPort.getMetricsForFiles(project.getId(), branchName);
     for (AnalyzeCommitDto commit : commits) {
@@ -127,14 +129,9 @@ public class AnalyzingService
       zeroOutMissingMetrics(commit, metrics, fileMetrics);
       if (!metrics.isEmpty()) {
         saveMetricPort.saveMetricValues(metrics);
-        saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
-        commitIds.clear();
+        saveCommitPort.setCommitToAnalyzed(commit.getId());
       }
-      commitIds.add(commit.getId());
-      logger.info("Analyzed commit {}", commit.getHash());
-    }
-    if (!getAvailableMetricsInProjectPort.get(project.getId()).isEmpty()) {
-      saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+      saveCommitPort.setCommitToAnalyzed(commit.getId());
     }
   }
 
@@ -153,13 +150,12 @@ public class AnalyzingService
 
     for (AnalyzeFileDto file : commit.getChangedFiles()) {
       List<MetricValue> values = fileMetrics.getOrDefault(file.getId(), Collections.emptyList());
-
       for (MetricValue value : values) {
         if (value.getValue() != 0
             && metrics.stream()
                 .noneMatch(
                     metricValue ->
-                        metricValue.getName().equals(value.getName())
+                        metricValue.getName() == value.getName()
                             && metricValue.getFileId() == value.getFileId())) {
           metrics.add(
               new MetricValue(

@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.rest.unit.module;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.projectadministration.domain.Module;
+import io.reflectoring.coderadar.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
 import io.reflectoring.coderadar.rest.module.ListModulesOfProjectController;

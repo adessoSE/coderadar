@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.query.port.driver.deltatree;
 
-import io.reflectoring.coderadar.query.domain.DeltaTree;
+import io.reflectoring.coderadar.domain.DeltaTree;
 
 public interface GetDeltaTreeForTwoCommitsUseCase {
 

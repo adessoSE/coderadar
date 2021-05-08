@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.service.filepattern;
 
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.DeleteFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.delete.DeleteFilePatternFromProjectUseCase;

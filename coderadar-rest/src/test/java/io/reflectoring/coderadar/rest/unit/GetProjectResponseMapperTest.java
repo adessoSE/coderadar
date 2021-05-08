@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.unit;
 
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.rest.GetProjectResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
 import java.util.ArrayList;

@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.graph;
 
+import io.reflectoring.coderadar.domain.FilePattern;
+import io.reflectoring.coderadar.domain.InclusionType;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.FilePatternMapper;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

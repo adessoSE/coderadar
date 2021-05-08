@@ -3,8 +3,8 @@ package io.reflectoring.coderadar.projectadministration.filepattern;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.domain.FilePattern;
+import io.reflectoring.coderadar.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.GetFilePatternService;
 import org.junit.jupiter.api.BeforeEach;

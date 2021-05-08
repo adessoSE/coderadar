@@ -2,10 +2,11 @@ package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.ValidationUtils;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.domain.FileContentWithMetrics;
+import io.reflectoring.coderadar.domain.MetricWithFindings;
+import io.reflectoring.coderadar.domain.Project;
+import io.reflectoring.coderadar.projectadministration.LongToHashMapper;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
-import io.reflectoring.coderadar.query.domain.MetricWithFindings;
 import io.reflectoring.coderadar.query.port.driven.GetMetricsAndFindingsForFilePort;
 import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsCommand;
 import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsUseCase;
@@ -26,12 +27,15 @@ public class GetFileContentWithMetricsService implements GetFileContentWithMetri
   @Override
   public FileContentWithMetrics getFileContentWithMetrics(
       long projectId, GetFileContentWithMetricsCommand command) {
-    String commitHash = ValidationUtils.validateAndTrimCommitHash(command.getCommitHash());
+    long commitHash =
+        Long.parseUnsignedLong(
+            ValidationUtils.validateAndTrimCommitHash(command.getCommitHash()), 16);
     Project project = getProjectPort.get(projectId);
     String workdir =
         coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
     byte[] rawContent =
-        getRawCommitContentPort.getCommitContent(workdir, command.getFilepath(), commitHash);
+        getRawCommitContentPort.getCommitContent(
+            workdir, command.getFilepath(), LongToHashMapper.longToHash(commitHash));
     if (rawContent != null) {
       List<MetricWithFindings> metrics =
           getMetricsAndFindingsForFilePort.getMetricsAndFindingsForFile(

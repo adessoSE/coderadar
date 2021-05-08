@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.useradministration.service.refresh;
 
+import io.reflectoring.coderadar.domain.RefreshToken;
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.useradministration.AccessTokenNotExpiredException;
 import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
-import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
-import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenCommand;

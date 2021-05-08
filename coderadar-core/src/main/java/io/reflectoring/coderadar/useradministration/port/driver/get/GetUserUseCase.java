@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.useradministration.port.driver.get;
 
-import io.reflectoring.coderadar.useradministration.domain.User;
+import io.reflectoring.coderadar.domain.User;
 
 public interface GetUserUseCase {
 

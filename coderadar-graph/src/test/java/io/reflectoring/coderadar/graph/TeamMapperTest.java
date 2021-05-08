@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.graph;
 
+import io.reflectoring.coderadar.domain.Team;
 import io.reflectoring.coderadar.graph.useradministration.TeamMapper;
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
-import io.reflectoring.coderadar.useradministration.domain.Team;
 import java.util.Collections;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

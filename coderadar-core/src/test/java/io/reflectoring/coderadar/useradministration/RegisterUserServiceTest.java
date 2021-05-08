@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.useradministration.domain.User;
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListUsersPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RegisterUserPort;

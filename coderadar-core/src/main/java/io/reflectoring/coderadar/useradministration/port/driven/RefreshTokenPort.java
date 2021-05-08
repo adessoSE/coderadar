@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.useradministration.port.driven;
 
-import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
-import io.reflectoring.coderadar.useradministration.domain.User;
+import io.reflectoring.coderadar.domain.RefreshToken;
+import io.reflectoring.coderadar.domain.User;
 
 public interface RefreshTokenPort {
 

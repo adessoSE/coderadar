@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.contributor;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
+import io.reflectoring.coderadar.domain.Contributor;
 import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 

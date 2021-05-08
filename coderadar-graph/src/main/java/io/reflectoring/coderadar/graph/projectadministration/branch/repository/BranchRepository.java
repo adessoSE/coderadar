@@ -38,7 +38,7 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
           + "CREATE (p)-[:HAS_BRANCH]->(b)")
   @Transactional
   void setBranchOnCommit(
-      long projectId, @NonNull String commitHash, @NonNull String branchName, boolean isTag);
+      long projectId, long commitHash, @NonNull String branchName, boolean isTag);
 
   /**
    * @param projectId The id of the project.
@@ -62,7 +62,7 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
           + "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.hash = {2} WITH c, b LIMIT 1 "
           + "CREATE (b)-[r1:POINTS_TO]->(c) SET b.commitHash = c.hash")
   @Transactional
-  void moveBranchToCommit(long projectId, @NonNull String branchName, @NonNull String commitHash);
+  void moveBranchToCommit(long projectId, @NonNull String branchName, long commitHash);
 
   @Query(
       "MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} "

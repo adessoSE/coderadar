@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class AnalyzeCommitDto {
   private final long id;
-  private final String hash;
+  private final long hash;
   private final AnalyzeFileDto[] changedFiles;
 }

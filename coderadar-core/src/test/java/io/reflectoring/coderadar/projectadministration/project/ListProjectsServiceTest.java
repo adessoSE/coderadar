@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.projectadministration.project;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.projectadministration.service.project.ListProjectsService;
 import java.util.Arrays;

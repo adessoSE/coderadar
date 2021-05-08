@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.vcs.port.driven;
 
+import io.reflectoring.coderadar.domain.DiffEntry;
 import io.reflectoring.coderadar.vcs.UnableToGetDiffsFromCommitsException;
-import io.reflectoring.coderadar.vcs.domain.DiffEntry;
 import java.util.List;
 
 public interface GetDiffEntriesForCommitsPort {

@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
+import io.reflectoring.coderadar.domain.Contributor;
 import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import java.util.Collections;

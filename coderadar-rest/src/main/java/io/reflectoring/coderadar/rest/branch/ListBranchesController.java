@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.rest.branch;
 
 import static io.reflectoring.coderadar.rest.GetBranchResponseMapper.mapBranches;
 
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
+import io.reflectoring.coderadar.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.port.driver.branch.list.ListBranchesUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetBranchResponse;

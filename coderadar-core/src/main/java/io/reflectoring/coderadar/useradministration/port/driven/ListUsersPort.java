@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.useradministration.port.driven;
 
-import io.reflectoring.coderadar.useradministration.domain.User;
+import io.reflectoring.coderadar.domain.User;
 import java.util.List;
 
 public interface ListUsersPort {

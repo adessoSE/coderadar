@@ -1,14 +1,16 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.ValidationUtils;
+import io.reflectoring.coderadar.analyzer.domain.MetricName;
+import io.reflectoring.coderadar.analyzer.domain.MetricNameMapper;
+import io.reflectoring.coderadar.domain.MetricTree;
+import io.reflectoring.coderadar.domain.MetricTreeNodeType;
+import io.reflectoring.coderadar.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.query.domain.MetricTree;
-import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
-import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricTreeForCommitPort;
 import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitCommand;
 import java.util.*;
@@ -22,9 +24,12 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
   private final MetricQueryRepository metricQueryRepository;
   private final ProjectRepository projectRepository;
 
-  MetricTree get(ProjectEntity project, String commitHash, List<String> metrics) {
+  MetricTree get(ProjectEntity project, long commitHash, List<String> metrics) {
     List<Map<String, Object>> result =
-        metricQueryRepository.getMetricTreeForCommit(project.getId(), commitHash, metrics);
+        metricQueryRepository.getMetricTreeForCommit(
+            project.getId(),
+            commitHash,
+            metrics.stream().mapToInt(MetricNameMapper::mapToInt).toArray());
     List<ModuleEntity> moduleEntities = getAllModulesInProject(project.getModules());
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);
     MetricTree rootModule = processRootModule(result);
@@ -52,7 +57,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
     return get(
         projectEntity,
-        ValidationUtils.validateAndTrimCommitHash(command.getCommit()),
+        Long.parseUnsignedLong(ValidationUtils.validateAndTrimCommitHash(command.getCommit()), 16),
         command.getMetrics());
   }
 
@@ -84,7 +89,9 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
           for (String metric : metrics) {
             String[] temp = metric.split("=");
             MetricValueForCommit metricValueForCommit =
-                new MetricValueForCommit(temp[0], Long.parseLong(temp[1]));
+                new MetricValueForCommit(
+                    MetricName.valueOfInt(Integer.parseInt(temp[0])).getName(),
+                    Long.parseLong(temp[1]));
             metricTreeFile.getMetrics().add(metricValueForCommit);
             aggregatedMetrics.putIfAbsent(metricValueForCommit.getMetricName(), 0L);
             aggregatedMetrics.put(
@@ -128,7 +135,9 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
       for (String metric : metrics) {
         String[] temp = metric.split("=");
         MetricValueForCommit metricValueForCommit =
-            new MetricValueForCommit(temp[0], Long.parseLong(temp[1]));
+            new MetricValueForCommit(
+                MetricName.valueOfInt(Integer.parseInt(temp[0])).getName(),
+                Long.parseLong(temp[1]));
         metricTreeFile.getMetrics().add(metricValueForCommit);
       }
       rootModule.getChildren().add(metricTreeFile);

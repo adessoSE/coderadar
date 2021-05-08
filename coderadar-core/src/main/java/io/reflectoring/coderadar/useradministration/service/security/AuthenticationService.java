@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.useradministration.service.security;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
+import io.reflectoring.coderadar.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserRoleForProjectPort;
 import io.reflectoring.coderadar.useradministration.service.UserUnauthenticatedException;

@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.vcs.port.driven;
 
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.query.domain.DateRange;
+import io.reflectoring.coderadar.domain.Commit;
+import io.reflectoring.coderadar.domain.DateRange;
 import java.io.IOException;
 import java.util.List;
 

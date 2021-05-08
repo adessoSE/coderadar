@@ -2,13 +2,12 @@ package io.reflectoring.coderadar.analyzer.service;
 
 import com.google.common.collect.Maps;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.domain.AnalyzeCommitDto;
-import io.reflectoring.coderadar.analyzer.domain.AnalyzeFileDto;
-import io.reflectoring.coderadar.analyzer.domain.MetricValue;
+import io.reflectoring.coderadar.analyzer.domain.*;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.LongToHashMapper;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.util.*;
@@ -52,7 +51,7 @@ public class AnalyzeCommitService {
    * @return A map of File and corresponding FileMetrics
    */
   private Map<Long, FileMetrics> analyzeBulk(
-      String commitHash,
+      long commitHash,
       AnalyzeFileDto[] files,
       List<SourceCodeFileAnalyzerPlugin> analyzers,
       Project project) {
@@ -64,7 +63,7 @@ public class AnalyzeCommitService {
                   + "/projects/"
                   + project.getWorkdirName(),
               files,
-              commitHash);
+              LongToHashMapper.longToHash(commitHash));
       fileContents.forEach(
           (file, content) ->
               fileMetricsMap.put(
@@ -89,7 +88,7 @@ public class AnalyzeCommitService {
     for (Metric metric : fileMetrics.getMetrics()) {
       metricValues.add(
           new MetricValue(
-              metric.getId(),
+              MetricNameMapper.mapToInt(metric.getId()),
               fileMetrics.getMetricCount(metric),
               commitId,
               fileId,

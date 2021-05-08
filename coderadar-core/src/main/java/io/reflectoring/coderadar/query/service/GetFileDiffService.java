@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.domain.FileContentWithMetrics;
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
 import io.reflectoring.coderadar.query.port.driver.filediff.GetFileDiffCommand;
 import io.reflectoring.coderadar.query.port.driver.filediff.GetFileDiffUseCase;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;

@@ -2,12 +2,12 @@ package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.ValidationUtils;
+import io.reflectoring.coderadar.domain.*;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.query.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetDeltaTreeForTwoCommitsPort;
 import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoCommitsCommand;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
@@ -33,12 +33,14 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
         projectRepository
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    String commit1 = ValidationUtils.validateAndTrimCommitHash(command.getCommit1());
-    String commit2 = ValidationUtils.validateAndTrimCommitHash(command.getCommit2());
+    long commit1 =
+        Long.parseUnsignedLong(ValidationUtils.validateAndTrimCommitHash(command.getCommit1()), 16);
+    long commit2 =
+        Long.parseUnsignedLong(ValidationUtils.validateAndTrimCommitHash(command.getCommit2()), 16);
 
     // Swap the commits if commit1 was made after commit 2
     if (commitRepository.commitIsNewer(commit1, commit2)) {
-      String temp = commit1;
+      long temp = commit1;
       commit1 = commit2;
       commit2 = temp;
     }
@@ -51,8 +53,8 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     DeltaTree deltaTree = createDeltaTree(commit1Tree, commit2Tree);
     List<Pair<String, String>> renamedFiles =
         getRawCommitContentPort.getRenamesBetweenCommits(
-            commit1,
-            commit2,
+            command.getCommit1(),
+            command.getCommit2(),
             coderadarConfigurationProperties.getWorkdir()
                 + "/projects/"
                 + projectEntity.getWorkdirName());

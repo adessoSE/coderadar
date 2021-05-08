@@ -1,14 +1,14 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 
+import io.reflectoring.coderadar.domain.Project;
+import io.reflectoring.coderadar.domain.ProjectRole;
+import io.reflectoring.coderadar.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.ProjectMapper;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;

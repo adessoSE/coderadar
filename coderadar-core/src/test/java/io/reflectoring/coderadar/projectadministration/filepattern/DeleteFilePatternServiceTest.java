@@ -4,8 +4,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.domain.FilePattern;
+import io.reflectoring.coderadar.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.DeleteFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.DeleteFilePatternService;

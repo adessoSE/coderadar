@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 
+import io.reflectoring.coderadar.domain.Commit;
 import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
 
 public class CommitBaseDataMapper implements Mapper<Commit, CommitEntity> {
 

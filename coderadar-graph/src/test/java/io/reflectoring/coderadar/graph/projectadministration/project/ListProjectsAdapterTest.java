@@ -2,10 +2,10 @@ package io.reflectoring.coderadar.graph.projectadministration.project;
 
 import static org.mockito.Mockito.*;
 
+import io.reflectoring.coderadar.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.ListProjectsAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;

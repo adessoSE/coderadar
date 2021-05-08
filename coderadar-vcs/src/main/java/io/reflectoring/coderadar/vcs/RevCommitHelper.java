@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.vcs;
 
-import io.reflectoring.coderadar.query.domain.DateRange;
+import io.reflectoring.coderadar.domain.DateRange;
 import java.io.File;
 import java.time.Instant;
 import java.time.LocalDate;

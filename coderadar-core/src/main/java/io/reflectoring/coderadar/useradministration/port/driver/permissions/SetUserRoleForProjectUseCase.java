@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.useradministration.port.driver.permissions;
 
-import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
+import io.reflectoring.coderadar.domain.ProjectRole;
 
 public interface SetUserRoleForProjectUseCase {
 

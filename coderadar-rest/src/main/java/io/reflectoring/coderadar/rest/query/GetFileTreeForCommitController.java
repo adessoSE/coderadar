@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.query.domain.FileTree;
+import io.reflectoring.coderadar.domain.FileTree;
 import io.reflectoring.coderadar.query.port.driver.GetFileTreeForCommitUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;

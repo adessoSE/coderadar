@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.query.port.driver;
 
-import io.reflectoring.coderadar.query.domain.FileTree;
+import io.reflectoring.coderadar.domain.FileTree;
 
 public interface GetFileTreeForCommitUseCase {
 

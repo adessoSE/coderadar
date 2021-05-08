@@ -5,10 +5,10 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import io.reflectoring.coderadar.domain.FileContentWithMetrics;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
-import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
 import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
@@ -120,13 +120,13 @@ class GetFileContentWithMetricsControllerTest extends ControllerTestTemplate {
     Assertions.assertTrue(fileContentWithMetrics.getMetrics().get(0).getFindings().isEmpty());
 
     Assertions.assertEquals(
-        "coderadar:size:loc:java", fileContentWithMetrics.getMetrics().get(1).getName());
-    Assertions.assertEquals(17, fileContentWithMetrics.getMetrics().get(1).getValue());
+        "coderadar:size:sloc:java", fileContentWithMetrics.getMetrics().get(1).getName());
+    Assertions.assertEquals(14, fileContentWithMetrics.getMetrics().get(1).getValue());
     Assertions.assertTrue(fileContentWithMetrics.getMetrics().get(1).getFindings().isEmpty());
 
     Assertions.assertEquals(
-        "coderadar:size:sloc:java", fileContentWithMetrics.getMetrics().get(2).getName());
-    Assertions.assertEquals(14, fileContentWithMetrics.getMetrics().get(2).getValue());
+        "coderadar:size:loc:java", fileContentWithMetrics.getMetrics().get(2).getName());
+    Assertions.assertEquals(17, fileContentWithMetrics.getMetrics().get(2).getValue());
     Assertions.assertTrue(fileContentWithMetrics.getMetrics().get(2).getFindings().isEmpty());
   }
 }

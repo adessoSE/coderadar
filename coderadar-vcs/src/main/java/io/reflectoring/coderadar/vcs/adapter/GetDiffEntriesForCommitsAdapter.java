@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
+import io.reflectoring.coderadar.domain.DiffEntry;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.UnableToGetDiffsFromCommitsException;
-import io.reflectoring.coderadar.vcs.domain.DiffEntry;
 import io.reflectoring.coderadar.vcs.port.driven.GetDiffEntriesForCommitsPort;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

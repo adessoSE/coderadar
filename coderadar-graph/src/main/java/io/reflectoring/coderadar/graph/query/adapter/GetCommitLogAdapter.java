@@ -1,14 +1,15 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import com.google.common.collect.Maps;
+import io.reflectoring.coderadar.domain.CommitLog;
+import io.reflectoring.coderadar.domain.CommitLogAuthor;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
-import io.reflectoring.coderadar.query.domain.CommitLog;
-import io.reflectoring.coderadar.query.domain.CommitLogAuthor;
 import io.reflectoring.coderadar.query.port.driven.GetCommitLogPort;
 import java.util.*;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,8 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
     for (BranchEntity ref : branches) {
       // most commits will have at most 2 branches/tags on them
       List<String> refNames =
-          commitToRefMap.computeIfAbsent(ref.getCommitHash(), k -> new ArrayList<>(2));
+          commitToRefMap.computeIfAbsent(
+              Long.toHexString(ref.getCommitHash()), k -> new ArrayList<>(2));
       if (!refNames.contains(ref.getName())) {
         if (ref.isTag()) {
           refNames.add("tag: " + ref.getName());
@@ -49,9 +51,10 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
               .setEmail(commit.getAuthorEmail())
               .setTimestamp(commit.getTimestamp());
 
+      String hash = Long.toHexString(commit.getHash());
       CommitLog commitLog =
           new CommitLog()
-              .setHash(commit.getHash())
+              .setHash(hash)
               .setSubject(
                   commit.getComment().substring(0, Math.min(100, commit.getComment().length())))
               .setAuthor(author)
@@ -59,12 +62,17 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
 
       Object[] parents = (Object[]) commitWithParents.get("parents");
       if (parents.length > 0) {
-        commitLog.setParents((String[]) parents);
+        String[] array = new String[parents.length];
+        commitLog.setParents(
+            Arrays.stream((Long[]) parents)
+                .map(Long::toHexString)
+                .collect(Collectors.toList())
+                .toArray(array));
       } else {
         commitLog.setParents(new String[0]);
       }
 
-      List<String> refsOnCommit = commitToRefMap.get(commit.getHash());
+      List<String> refsOnCommit = commitToRefMap.get(hash);
       if (refsOnCommit != null) {
         commitLog.setRefs(refsOnCommit);
       }

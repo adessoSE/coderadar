@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
+import io.reflectoring.coderadar.domain.FileTree;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
-import io.reflectoring.coderadar.query.domain.FileTree;
 import io.reflectoring.coderadar.query.port.driven.GetFileTreeForCommitPort;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ public class GetFileTreeForCommitAdapter implements GetFileTreeForCommitPort {
   private final MetricQueryRepository metricQueryRepository;
 
   @Override
-  public FileTree getFileTreeForCommit(long projectId, String commitHash, boolean changeFilesOnly) {
+  public FileTree getFileTreeForCommit(long projectId, long commitHash, boolean changeFilesOnly) {
     List<String> filepaths;
     if (changeFilesOnly) {
       filepaths = metricQueryRepository.getFilesChangedInCommit(projectId, commitHash);

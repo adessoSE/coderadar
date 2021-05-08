@@ -6,13 +6,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.domain.InclusionType;
+import io.reflectoring.coderadar.domain.MetricTree;
+import io.reflectoring.coderadar.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
-import io.reflectoring.coderadar.query.domain.MetricTree;
-import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
@@ -121,8 +121,8 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals(MetricTreeNodeType.MODULE, metricTree.getType());
     Assertions.assertEquals(3, metricTree.getMetrics().size());
     Assertions.assertEquals(8L, metricTree.getMetrics().get(0).getValue());
-    Assertions.assertEquals(18L, metricTree.getMetrics().get(1).getValue());
-    Assertions.assertEquals(15L, metricTree.getMetrics().get(2).getValue());
+    Assertions.assertEquals(15L, metricTree.getMetrics().get(1).getValue());
+    Assertions.assertEquals(18L, metricTree.getMetrics().get(2).getValue());
 
     MetricTree firstChild = metricTree.getChildren().get(0);
 
@@ -130,8 +130,8 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals(MetricTreeNodeType.FILE, firstChild.getType());
     Assertions.assertTrue(firstChild.getChildren().isEmpty());
     Assertions.assertEquals(7L, firstChild.getMetrics().get(0).getValue());
-    Assertions.assertEquals(17L, firstChild.getMetrics().get(1).getValue());
-    Assertions.assertEquals(14L, firstChild.getMetrics().get(2).getValue());
+    Assertions.assertEquals(14L, firstChild.getMetrics().get(1).getValue());
+    Assertions.assertEquals(17L, firstChild.getMetrics().get(2).getValue());
 
     MetricTree secondChild = metricTree.getChildren().get(1);
 
@@ -178,8 +178,8 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals(MetricTreeNodeType.MODULE, metricTree.getType());
     Assertions.assertEquals(3, metricTree.getMetrics().size());
     Assertions.assertEquals(8L, metricTree.getMetrics().get(0).getValue());
-    Assertions.assertEquals(18L, metricTree.getMetrics().get(1).getValue());
-    Assertions.assertEquals(15L, metricTree.getMetrics().get(2).getValue());
+    Assertions.assertEquals(15L, metricTree.getMetrics().get(1).getValue());
+    Assertions.assertEquals(18L, metricTree.getMetrics().get(2).getValue());
 
     MetricTree firstChild = metricTree.getChildren().get(0);
 
@@ -187,8 +187,8 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals(MetricTreeNodeType.FILE, firstChild.getType());
     Assertions.assertTrue(firstChild.getChildren().isEmpty());
     Assertions.assertEquals(7L, firstChild.getMetrics().get(0).getValue());
-    Assertions.assertEquals(17L, firstChild.getMetrics().get(1).getValue());
-    Assertions.assertEquals(14L, firstChild.getMetrics().get(2).getValue());
+    Assertions.assertEquals(14L, firstChild.getMetrics().get(1).getValue());
+    Assertions.assertEquals(17L, firstChild.getMetrics().get(2).getValue());
 
     MetricTree secondChild = metricTree.getChildren().get(1);
 

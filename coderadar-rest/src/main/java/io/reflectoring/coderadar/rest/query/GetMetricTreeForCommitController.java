@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.query.domain.MetricTree;
+import io.reflectoring.coderadar.domain.MetricTree;
 import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitCommand;
 import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;

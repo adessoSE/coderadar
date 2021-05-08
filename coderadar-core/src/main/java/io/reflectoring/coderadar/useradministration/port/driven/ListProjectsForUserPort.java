@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.useradministration.port.driven;
 
-import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
+import io.reflectoring.coderadar.domain.Project;
+import io.reflectoring.coderadar.domain.ProjectWithRoles;
 import java.util.List;
 
 public interface ListProjectsForUserPort {

@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.query;
 
-import static io.reflectoring.coderadar.rest.GetCommitResponseMapper.mapCommits;
+import static io.reflectoring.coderadar.rest.CommitResponseMapper.mapCommits;
 
-import io.reflectoring.coderadar.query.domain.ContributorsForFile;
-import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
+import io.reflectoring.coderadar.domain.ContributorsForFile;
+import io.reflectoring.coderadar.domain.FileAndCommitsForTimePeriod;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetCriticalFilesUseCase;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFilesWithContributorsCommand;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFrequentlyChangedFilesCommand;

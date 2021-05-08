@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.useradministration;
 
 import static org.mockito.Mockito.*;
 
-import io.reflectoring.coderadar.useradministration.domain.User;
+import io.reflectoring.coderadar.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.ChangePasswordPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort;
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordCommand;

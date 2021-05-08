@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.useradministration.service.teams.get;
 
+import io.reflectoring.coderadar.domain.Team;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.port.driven.ListTeamsForProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListTeamsForProjectUseCase;
 import java.util.List;

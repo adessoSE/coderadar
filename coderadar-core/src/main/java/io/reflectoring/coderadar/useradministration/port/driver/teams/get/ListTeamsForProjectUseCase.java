@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.useradministration.port.driver.teams.get;
 
-import io.reflectoring.coderadar.useradministration.domain.Team;
+import io.reflectoring.coderadar.domain.Team;
 import java.util.List;
 
 public interface ListTeamsForProjectUseCase {

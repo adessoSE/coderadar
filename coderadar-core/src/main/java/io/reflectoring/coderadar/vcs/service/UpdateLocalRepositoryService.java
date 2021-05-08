@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.vcs.service;
 
-import io.reflectoring.coderadar.projectadministration.domain.Branch;
+import io.reflectoring.coderadar.domain.Branch;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.UpdateLocalRepositoryPort;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;

@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.filepattern;
 
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.domain.FilePattern;
 
 public interface CreateFilePatternPort {
   /**

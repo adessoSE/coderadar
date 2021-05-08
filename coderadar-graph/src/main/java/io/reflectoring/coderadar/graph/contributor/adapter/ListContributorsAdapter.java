@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.graph.contributor.adapter;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
+import io.reflectoring.coderadar.domain.Contributor;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
@@ -32,7 +32,7 @@ public class ListContributorsAdapter implements ListContributorsPort {
 
   @Override
   public List<Contributor> listAllByProjectIdAndPathInCommit(
-      long projectId, String commitHash, String path) {
+      long projectId, long commitHash, String path) {
     if (fileRepository.fileWithPathExists(projectId, path)) {
       return mapper.mapNodeEntities(
           contributorQueryRepository.findAllByProjectIdAndFilepathInCommit(
