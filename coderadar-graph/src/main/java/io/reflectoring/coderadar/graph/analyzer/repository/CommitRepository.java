@@ -18,7 +18,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @param projectId The project id.
    */
   @Transactional
-  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} SET c.analyzed = false")
+  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = $0 SET c.analyzed = false")
   void resetAnalyzedStatus(long projectId);
 
   /**
@@ -32,10 +32,10 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @return A list of commit entities with initialized changedFiles except deletes.
    */
   @Query(
-      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
+      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = $0 AND b.name = $1 WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c WHERE NOT c.analyzed "
-          + "OPTIONAL MATCH (c)<-[:CHANGED_IN]-(f) WHERE any(x IN {2} WHERE f.path =~ x) "
-          + "AND none(x IN {3} WHERE f.path =~ x) WITH c, collect({path: f.path, id: ID(f)}) as files ORDER BY c.timestamp ASC "
+          + "OPTIONAL MATCH (c)<-[:CHANGED_IN]-(f) WHERE any(x IN $2 WHERE f.path =~ x) "
+          + "AND none(x IN $3 WHERE f.path =~ x) WITH c, collect({path: f.path, id: ID(f)}) as files ORDER BY c.timestamp ASC "
           + "RETURN {id: ID(c), hash: c.hash} as commit, files")
   @NonNull
   List<Map<String, Object>> findByProjectIdNonAnalyzedWithFiles(
@@ -52,13 +52,13 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @return All commits in the given project for the given branch.
    */
   @Query(
-      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
+      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = $0 AND b.name = $1 WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
           + "RETURN node ORDER BY node.timestamp DESC")
   List<CommitEntity> findByProjectIdAndBranchName(long projectId, @NonNull String branch);
 
   @Query(
-      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
+      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = $0 AND b.name = $1 WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
           + "RETURN node.hash as hash, node.author as author, node.authorEmail as authorEmail, "
           + "node.comment as comment, node.timestamp as timestamp, node.analyzed as analyzed ORDER BY timestamp DESC")
@@ -66,8 +66,8 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       long projectId, @NonNull String branch);
 
   @Query(
-      "MATCH (co)-[:WORKS_ON]->(p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE toLower({2}) IN co.emails "
-          + "AND ID(p) = {0} AND b.name = {1} WITH co.emails as emails, c LIMIT 1 "
+      "MATCH (co)-[:WORKS_ON]->(p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE toLower($2) IN co.emails "
+          + "AND ID(p) = $0 AND b.name = $1 WITH co.emails as emails, c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
           + "WHERE toLower(c.authorEmail) IN emails "
           + "RETURN c.hash as hash, c.author as author, c.authorEmail as authorEmail, "
@@ -81,7 +81,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @param projectId The project id.
    * @return A list of commits in the project.
    */
-  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN c")
+  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = $0 RETURN c")
   @NonNull
   List<CommitEntity> findByProjectId(long projectId);
 
@@ -92,7 +92,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @return A list of commits in the project.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} WITH c "
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = $0 WITH c "
           + "OPTIONAL MATCH (c)-[r:IS_CHILD_OF]->(c1) "
           + "WITH c as commit, c1.hash as parent ORDER BY r.parentOrder "
           + "RETURN commit, collect(parent) as parents "
@@ -106,7 +106,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @param commitId The commit id.
    */
   @Transactional
-  @Query("MATCH (c) WHERE ID(c) = {0} SET c.analyzed = true")
+  @Query("MATCH (c) WHERE ID(c) = $0 SET c.analyzed = true")
   void setCommitAsAnalyzed(long commitId);
 
   /**
@@ -116,7 +116,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    *     commit.
    */
   @Query(
-      "UNWIND {0} as c "
+      "UNWIND $0 as c "
           + "MATCH (c1) WHERE ID(c1) = c[0] "
           + "MATCH (c2) WHERE ID(c2) = c[1] "
           + "CREATE (c1)-[:IS_CHILD_OF {parentOrder: c[2]}]->(c2)")
@@ -130,7 +130,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    *     (fileId) as well as the change type (changeType).
    */
   @Query(
-      "UNWIND {0} as x "
+      "UNWIND $0 as x "
           + "MATCH (c) WHERE ID(c) = x[0] "
           + "MATCH (f) WHERE ID(f) = x[1] "
           + "CREATE (f)-[:CHANGED_IN]->(c)")
@@ -138,7 +138,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   void createFileRelationships(@NonNull List<long[]> fileRels);
 
   @Query(
-      "UNWIND {0} as x "
+      "UNWIND $0 as x "
           + "MATCH (c) WHERE ID(c) = x[0] "
           + "MATCH (f) WHERE ID(f) = x[1] "
           + "CREATE (f)-[:DELETED_IN]->(c)")
@@ -151,27 +151,27 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @return True if commit1 was made after commit 2, false otherwise
    */
   @Query(
-      "MATCH (c1:CommitEntity) WHERE c1.hash = {0} WITH c1 LIMIT 1 "
-          + "MATCH (c2:CommitEntity) WHERE c2.hash = {1} WITH c1, c2 LIMIT 1 "
+      "MATCH (c1:CommitEntity) WHERE c1.hash = $0 WITH c1 LIMIT 1 "
+          + "MATCH (c2:CommitEntity) WHERE c2.hash = $1 WITH c1, c2 LIMIT 1 "
           + "RETURN c1.timestamp > c2.timestamp")
   boolean commitIsNewer(long commit1, long commit2);
 
-  @Query("MATCH (c)-[:IS_CHILD_OF]->(c2) WHERE ID(c) = {0} RETURN c2")
+  @Query("MATCH (c)-[:IS_CHILD_OF]->(c2) WHERE ID(c) = $0 RETURN c2")
   List<CommitEntity> getCommitParents(long commitId);
 
-  @Query("MATCH (c2)-[:IS_CHILD_OF]->(c) WHERE ID(c) = {0} RETURN c2")
+  @Query("MATCH (c2)-[:IS_CHILD_OF]->(c) WHERE ID(c) = $0 RETURN c2")
   List<CommitEntity> getCommitChildren(long commitId);
 
   @Query(
-      "MATCH (c) WHERE ID(c) = {0} WITH c "
+      "MATCH (c) WHERE ID(c) = $0 WITH c "
           + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->(c) "
           + "WHERE NOT EXISTS((c)--(f)-[:CHANGED_IN]->()) DETACH DELETE c, f")
   @Transactional
   void deleteCommitAndAddedOrRenamedFiles(long commitId);
 
   @Query(
-      "MATCH (co)-[:WORKS_ON]->(p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE toLower({2}) IN co.emails "
-          + "AND ID(p) = {0} AND b.name = {1} WITH co.emails as emails, c LIMIT 1 "
+      "MATCH (co)-[:WORKS_ON]->(p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE toLower($2) IN co.emails "
+          + "AND ID(p) = $0 AND b.name = $1 WITH co.emails as emails, c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
           + "WHERE toLower(c.authorEmail) IN emails "
           + "RETURN c ORDER BY c.timestamp DESC")

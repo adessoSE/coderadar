@@ -13,7 +13,7 @@ public interface RefreshTokenRepository extends Neo4jRepository<RefreshTokenEnti
    * @param token The token to look for.
    * @return The RefreshTokenEntity matching the given token.
    */
-  @Query("MATCH (r:RefreshTokenEntity) WHERE r.token = {0} RETURN r")
+  @Query("MATCH (r:RefreshTokenEntity) WHERE r.token = $0 RETURN r")
   RefreshTokenEntity findByToken(@NonNull String token);
 
   /**
@@ -21,12 +21,12 @@ public interface RefreshTokenRepository extends Neo4jRepository<RefreshTokenEnti
    *
    * @param userId The user id.
    */
-  @Query("MATCH (r:RefreshTokenEntity)<-[:HAS]-(u) WHERE ID(u) = {0} DETACH DELETE r")
+  @Query("MATCH (r:RefreshTokenEntity)<-[:HAS]-(u) WHERE ID(u) = $0 DETACH DELETE r")
   @Transactional
   void deleteByUser(long userId);
 
   /** @param token The token to save. */
-  @Query("MATCH (u) WHERE ID(u) = {1} CREATE (u)-[:HAS]->(r:RefreshTokenEntity {token: {0}})")
+  @Query("MATCH (u) WHERE ID(u) = $1 CREATE (u)-[:HAS]->(r:RefreshTokenEntity {token: $0})")
   @Transactional
   void saveToken(String token, long userId);
 }

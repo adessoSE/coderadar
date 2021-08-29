@@ -20,7 +20,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @return The number of deleted metrics, a maximum of 10000 at a time.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} "
+      "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = $0 "
           + "WITH mv LIMIT 10000 DETACH DELETE mv RETURN COUNT(mv)")
   @Transactional
   int deleteProjectMetrics(long projectId);
@@ -33,7 +33,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @return The number of deleted files, a maximum of 10000 at a time.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} WITH f LIMIT 10000 DETACH DELETE f RETURN COUNT(f)")
+      "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = $0 WITH f LIMIT 10000 DETACH DELETE f RETURN COUNT(f)")
   @Transactional
   int deleteProjectFiles(long projectId);
 
@@ -42,7 +42,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    *
    * @param projectId The id of the project.
    */
-  @Query("MATCH (p)-[:CONTAINS*]->(m:ModuleEntity) WHERE ID(p) = {0} WITH m DETACH DELETE m")
+  @Query("MATCH (p)-[:CONTAINS*]->(m:ModuleEntity) WHERE ID(p) = $0 WITH m DETACH DELETE m")
   @Transactional
   void deleteProjectModules(long projectId);
 
@@ -51,7 +51,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    *
    * @param projectId The project id.
    */
-  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} DETACH DELETE c")
+  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = $0 DETACH DELETE c")
   @Transactional
   void deleteProjectCommits(long projectId);
 
@@ -60,7 +60,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    *
    * @param projectId The project id.
    */
-  @Query("MATCH (p)-[:HAS]->(a) WHERE ID(p) = {0} DETACH DELETE a")
+  @Query("MATCH (p)-[:HAS]->(a) WHERE ID(p) = $0 DETACH DELETE a")
   @Transactional
   void deleteProjectConfiguration(long projectId);
 
@@ -69,7 +69,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    *
    * @param projectId The project id.
    */
-  @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} DETACH DELETE b")
+  @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = $0 DETACH DELETE b")
   @Transactional
   void deleteProjectBranches(long projectId);
 
@@ -82,7 +82,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param name The name of the project.
    * @return The project with given name as long as it is not currently being deleted.
    */
-  @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE RETURN p LIMIT 1")
+  @Query("MATCH (p:ProjectEntity) WHERE p.name = $0 AND p.isBeingDeleted = FALSE RETURN p LIMIT 1")
   @NonNull
   Optional<ProjectEntity> findByName(@NonNull String name);
 
@@ -90,7 +90,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param id The project id.
    * @return The project with the given id as long as it is not being deleted.
    */
-  @Query("MATCH (p) WHERE ID(p) = {0} AND p.isBeingDeleted = FALSE RETURN p")
+  @Query("MATCH (p) WHERE ID(p) = $0 AND p.isBeingDeleted = FALSE RETURN p")
   @NonNull
   Optional<ProjectEntity> findById(long id);
 
@@ -101,7 +101,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    *     GraphEntityMapper complains about unsaturated relationships for some reason.
    */
   @Query(
-      "MATCH (p) WHERE ID(p) = {0} AND p.isBeingDeleted = FALSE WITH p "
+      "MATCH (p) WHERE ID(p) = $0 AND p.isBeingDeleted = FALSE WITH p "
           + "CALL apoc.path.subgraphAll(p, {relationshipFilter:'CONTAINS>', labelFilter: '+ModuleEntity'}) "
           + "YIELD nodes, relationships RETURN p, nodes, relationships")
   @NonNull
@@ -111,7 +111,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param id The project id.
    * @return True if the project is being processed, false otherwise.
    */
-  @Query("MATCH (p) WHERE ID(p) = {0} RETURN p.isBeingProcessed")
+  @Query("MATCH (p) WHERE ID(p) = $0 RETURN p.isBeingProcessed")
   @NonNull
   Boolean isBeingProcessed(long id);
 
@@ -121,7 +121,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param id The project id.
    * @param value The status.
    */
-  @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingProcessed = {1}")
+  @Query("MATCH (p) WHERE ID(p) = $0 SET p.isBeingProcessed = $1")
   @Transactional
   void setBeingProcessed(long id, boolean value);
 
@@ -129,7 +129,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param id The project id.
    * @return True if a project with the given id exists, false otherwise.
    */
-  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} RETURN COUNT(*) > 0")
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = $0 RETURN COUNT(*) > 0")
   boolean existsById(long id);
 
   /**
@@ -137,7 +137,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @return True if a project with the given name exists and the project is not being deleted.
    */
   @Query(
-      "MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE WITH p LIMIT 1 RETURN COUNT(*) > 0")
+      "MATCH (p:ProjectEntity) WHERE p.name = $0 AND p.isBeingDeleted = FALSE WITH p LIMIT 1 RETURN COUNT(*) > 0")
   boolean existsByName(@NonNull String name);
 
   /**
@@ -146,7 +146,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param id The project id.
    * @param status The status.
    */
-  @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingDeleted = {1}")
+  @Query("MATCH (p) WHERE ID(p) = $0 SET p.isBeingDeleted = $1")
   @Transactional
   void setBeingDeleted(long id, @NonNull Boolean status);
 
@@ -158,8 +158,8 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param fileIds A list of file ids.
    */
   @Query(
-      "MATCH (p) WHERE ID(p) = {0} "
-          + "MATCH (f) WHERE ID(f) IN {1} "
+      "MATCH (p) WHERE ID(p) = $0 "
+          + "MATCH (f) WHERE ID(f) IN $1 "
           + "CREATE (p)-[r:CONTAINS]->(f)")
   @Transactional
   void attachFilesWithIds(long projectId, @NonNull List<Long> fileIds);
@@ -172,14 +172,14 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param commitIds A list of file ids.
    */
   @Query(
-      "MATCH (p) WHERE ID(p) = {0} "
-          + "MATCH (c) WHERE ID(c) IN {1} "
+      "MATCH (p) WHERE ID(p) = $0 "
+          + "MATCH (c) WHERE ID(c) IN $1 "
           + "CREATE (p)-[r:CONTAINS_COMMIT]->(c)")
   @Transactional
   void attachCommitsWithIds(long projectId, @NonNull List<Long> commitIds);
 
   /** @param projectId The id of the project */
-  @Query("MATCH (p)<-[r:WORKS_ON]-() WHERE ID(p) = {0} DELETE r")
+  @Query("MATCH (p)<-[r:WORKS_ON]-() WHERE ID(p) = $0 DELETE r")
   @Transactional
   void deleteContributorRelationships(long projectId);
 
@@ -188,7 +188,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @return All projects a user is assigned to.
    */
   @Query(
-      "MATCH (u:UserEntity) WHERE ID(u) = {0} WITH u "
+      "MATCH (u:UserEntity) WHERE ID(u) = $0 WITH u "
           + "OPTIONAL MATCH (u)-[r1:ASSIGNED_TO]->(p1:ProjectEntity) WHERE p1.isBeingDeleted = FALSE "
           + "WITH p1, u, r1 "
           + "MATCH (p2:ProjectEntity)<-[r2:ASSIGNED_TO]-(t)<-[:IS_IN*0..1]-(u)  WHERE p2.isBeingDeleted = FALSE WITH p1, r1, p2, r2 "
@@ -201,10 +201,9 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @return All projects a team is assigned to.
    */
   @Query(
-      "MATCH (t)-[:ASSIGNED_TO]->(p) WHERE ID(t) = {0} AND p.isBeingDeleted = FALSE RETURN p ORDER BY toLower(p.name)")
+      "MATCH (t)-[:ASSIGNED_TO]->(p) WHERE ID(t) = $0 AND p.isBeingDeleted = FALSE RETURN p ORDER BY toLower(p.name)")
   List<ProjectEntity> listProjectsByTeamId(long teamId);
 
-  @Query(
-      "MATCH (u)-[:ASSIGNED_TO {creator: true, role: \"admin\"}]->(p) WHERE ID(u) = {0} RETURN p")
+  @Query("MATCH (u)-[:ASSIGNED_TO {creator: true, role: \"admin\"}]->(p) WHERE ID(u) = $0 RETURN p")
   List<ProjectEntity> findProjectsCreatedByUser(long userId);
 }

@@ -18,7 +18,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    * @param projectId The project id.
    * @return All of the metric values in a project.
    */
-  @Query("MATCH (p)-[:CONTAINS*]->()-[:MEASURED_BY]->(m) WHERE ID(p) = {0} RETURN m")
+  @Query("MATCH (p)-[:CONTAINS*]->()-[:MEASURED_BY]->(m) WHERE ID(p) = $0 RETURN m")
   List<MetricValueEntity> findByProjectId(long projectId);
 
   /**
@@ -30,7 +30,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    *     and its findings.
    */
   @Query(
-      "MATCH (c) WHERE ID(c) = {0} WITH c UNWIND {1} as x "
+      "MATCH (c) WHERE ID(c) = $0 WITH c UNWIND $1 as x "
           + "MATCH (f) WHERE ID(f) = x[3] "
           + "CREATE (f)-[:MEASURED_BY]->(m:MetricValueEntity {value: x[0], name: x[1], findings: x[2]})-[:VALID_FOR]->(c)")
   @Transactional
@@ -44,7 +44,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    * @return All files and their corresponding metrics for the head commit of the given branch
    */
   @Query(
-      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
+      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = $0 AND b.name = $1 WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
           + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN]->(c) RETURN collect(f) as renames', {commits: commits}) "
           + "YIELD value WITH commits, value.renames as renames "
@@ -56,7 +56,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "RETURN  id, collect({name: metric.name, value: metric.value}) as metrics")
   List<Map<String, Object>> getLastMetricsForFiles(long projectId, @NonNull String branchName);
 
-  @Query("MATCH (c)<-[:VALID_FOR]-(m) WHERE ID(c) = {0} DETACH DELETE m")
+  @Query("MATCH (c)<-[:VALID_FOR]-(m) WHERE ID(c) = $0 DETACH DELETE m")
   @Transactional
   void deleteMetricsForCommit(long id);
 }

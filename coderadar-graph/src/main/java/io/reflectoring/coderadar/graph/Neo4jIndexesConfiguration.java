@@ -15,16 +15,24 @@ public class Neo4jIndexesConfiguration {
   @PostConstruct
   public void createIndexesAndConstraints() {
     Session session = sessionFactory.openSession();
-    session.query("CREATE INDEX ON :ProjectEntity(name)", Collections.emptyMap());
-    session.query("CREATE INDEX ON :CommitEntity(hash)", Collections.emptyMap());
-    session.query("CREATE INDEX ON :BranchEntity(name)", Collections.emptyMap());
-
     session.query(
-        "CREATE CONSTRAINT ON (r:RefreshTokenEntity) ASSERT r.token IS UNIQUE",
+        "CREATE INDEX project_name IF NOT EXISTS FOR (p:ProjectEntity) ON (p.name)",
         Collections.emptyMap());
     session.query(
-        "CREATE CONSTRAINT ON (u:UserEntity) ASSERT u.username IS UNIQUE", Collections.emptyMap());
+        "CREATE INDEX commit_hash IF NOT EXISTS FOR (c:CommitEntity) ON (c.hash)",
+        Collections.emptyMap());
     session.query(
-        "CREATE CONSTRAINT ON (t:TeamEntity) ASSERT t.name IS UNIQUE", Collections.emptyMap());
+        "CREATE INDEX branch_name IF NOT EXISTS FOR (b:BranchEntity) ON (b.name)",
+        Collections.emptyMap());
+
+    session.query(
+        "CREATE CONSTRAINT refresh_token IF NOT EXISTS ON (r:RefreshTokenEntity) ASSERT r.token IS UNIQUE",
+        Collections.emptyMap());
+    session.query(
+        "CREATE CONSTRAINT username IF NOT EXISTS ON (u:UserEntity) ASSERT u.username IS UNIQUE",
+        Collections.emptyMap());
+    session.query(
+        "CREATE CONSTRAINT team_name IF NOT EXISTS ON (t:TeamEntity) ASSERT t.name IS UNIQUE",
+        Collections.emptyMap());
   }
 }
